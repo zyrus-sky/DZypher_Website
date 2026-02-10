@@ -1,0 +1,171 @@
+@import url('https://fonts.cdnfonts.com/css/neuropol-x-free');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      transform: translate(0);
+    }
+
+    20% {
+      transform: translate(-2px, 2px);
+    }
+
+    40% {
+      transform: translate(-2px, -2px);
+    }
+
+    60% {
+      transform: translate(2px, 2px);
+    }
+
+    80% {
+      transform: translate(2px, -2px);
+    }
+
+    100% {
+      transform: translate(0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      transform: translate(0);
+    }
+
+    20% {
+      transform: translate(2px, -2px);
+    }
+
+    40% {
+      transform: translate(2px, 2px);
+    }
+
+    60% {
+      transform: translate(-2px, -2px);
+    }
+
+    80% {
+      transform: translate(-2px, 2px);
+    }
+
+    100% {
+      transform: translate(0);
+    }
+  }
+
+  .animate-glitch-1 {
+    animation: glitch-1 2.5s infinite linear alternate-reverse;
+  }
+
+  .animate-glitch-2 {
+    animation: glitch-2 3s infinite linear alternate-reverse;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+  }
+
+  /* Reveal Animations (triggered by .is-visible class) */
+  .reveal-fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .reveal-fade-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 1s ease-out, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-scale.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .reveal-blur {
+    opacity: 0;
+    filter: blur(10px);
+    transition: opacity 1.2s ease, filter 1.2s ease;
+  }
+
+  .reveal-blur.is-visible {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  /* Stagger delays */
+  .delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .delay-200 {
+    transition-delay: 200ms;
+  }
+
+  .delay-300 {
+    transition-delay: 300ms;
+  }
+
+  .delay-500 {
+    transition-delay: 500ms;
+  }
+}
+
+/* Global Dark Scrollbar - Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #57534e transparent;
+  /* stone-600 */
+}
+
+/* Global Dark Scrollbar - Webkit (Chrome/Edge/Safari) */
+::-webkit-scrollbar {
+  width: 6px;
+  /* slightly thinner */
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  /* Transparent track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #57534e;
+  /* stone-600 */
+  border-radius: 10px;
+  border: transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #78716c;
+  /* stone-500 */
+}
+
+/* Cursor restored for debugging */

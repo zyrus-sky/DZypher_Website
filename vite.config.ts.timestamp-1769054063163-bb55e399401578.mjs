@@ -1,0 +1,15 @@
+// vite.config.ts
+import { sveltekit } from "file:///d:/DZypher/DZypher_Website/node_modules/@sveltejs/kit/src/exports/vite/index.js";
+import { defineConfig } from "file:///d:/DZypher/DZypher_Website/node_modules/vite/dist/node/index.js";
+var vite_config_default = defineConfig({
+  plugins: [sveltekit()],
+  server: {
+    host: true,
+    // Listen on all addresses
+    allowedHosts: ["seven-pumas-shout.loca.lt", ".loca.lt"]
+  }
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcudHMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCJkOlxcXFxEWnlwaGVyXFxcXERaeXBoZXJfV2Vic2l0ZVwiO2NvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9maWxlbmFtZSA9IFwiZDpcXFxcRFp5cGhlclxcXFxEWnlwaGVyX1dlYnNpdGVcXFxcdml0ZS5jb25maWcudHNcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfaW1wb3J0X21ldGFfdXJsID0gXCJmaWxlOi8vL2Q6L0RaeXBoZXIvRFp5cGhlcl9XZWJzaXRlL3ZpdGUuY29uZmlnLnRzXCI7aW1wb3J0IHsgc3ZlbHRla2l0IH0gZnJvbSAnQHN2ZWx0ZWpzL2tpdC92aXRlJztcclxuaW1wb3J0IHsgZGVmaW5lQ29uZmlnIH0gZnJvbSAndml0ZSc7XHJcblxyXG5leHBvcnQgZGVmYXVsdCBkZWZpbmVDb25maWcoe1xyXG4gICAgcGx1Z2luczogW3N2ZWx0ZWtpdCgpXSxcclxuICAgIHNlcnZlcjoge1xyXG4gICAgICAgIGhvc3Q6IHRydWUsIC8vIExpc3RlbiBvbiBhbGwgYWRkcmVzc2VzXHJcbiAgICAgICAgYWxsb3dlZEhvc3RzOiBbJ3NldmVuLXB1bWFzLXNob3V0LmxvY2EubHQnLCAnLmxvY2EubHQnXVxyXG4gICAgfVxyXG59KTtcclxuIl0sCiAgIm1hcHBpbmdzIjogIjtBQUFzUSxTQUFTLGlCQUFpQjtBQUNoUyxTQUFTLG9CQUFvQjtBQUU3QixJQUFPLHNCQUFRLGFBQWE7QUFBQSxFQUN4QixTQUFTLENBQUMsVUFBVSxDQUFDO0FBQUEsRUFDckIsUUFBUTtBQUFBLElBQ0osTUFBTTtBQUFBO0FBQUEsSUFDTixjQUFjLENBQUMsNkJBQTZCLFVBQVU7QUFBQSxFQUMxRDtBQUNKLENBQUM7IiwKICAibmFtZXMiOiBbXQp9Cg==
