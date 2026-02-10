@@ -5,10 +5,26 @@
     import { onMount } from "svelte";
     import { reveal, typewriter } from "$lib/actions";
     import { countdownStore, fetchCountdownData } from "$lib/stores";
+    import { generateGoogleCalendarUrl } from "$lib/calendarUtils";
 
     onMount(() => {
         fetchCountdownData();
     });
+
+    function getCountdownCalLink(title: string, dateStr: string): string {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return "#";
+
+        // Default start time: 9 AM
+        date.setHours(9, 0, 0, 0);
+
+        return generateGoogleCalendarUrl({
+            title: title || "Vortix '26",
+            description: "Join us for Vortix '26 - The Ultimate Tech Fest!",
+            start: date,
+            location: "https://maps.app.goo.gl/uhLvwKTpvyLjnh3UA",
+        });
+    }
 </script>
 
 <div
@@ -44,12 +60,26 @@
         >
     </p>
 
-    <div class="w-full mt-8 reveal-fade-up delay-500" use:reveal>
+    <div
+        class="w-full mt-8 reveal-fade-up delay-500 flex flex-col items-center"
+        use:reveal
+    >
         {#if $countdownStore}
             <Countdown
                 targetDate={$countdownStore.date}
                 title={$countdownStore.title}
             />
+
+            <a
+                href={getCountdownCalLink(
+                    $countdownStore.title,
+                    $countdownStore.date,
+                )}
+                target="_blank"
+                class="mt-6 px-6 py-2 bg-white/5 hover:bg-red-900/40 text-stone-300 hover:text-white border border-white/10 hover:border-red-500/50 rounded-full transition-all text-sm font-semibold backdrop-blur-sm flex items-center gap-2"
+            >
+                <i class="far fa-calendar-plus"></i> Add to Google Calendar
+            </a>
         {/if}
     </div>
 

@@ -2,26 +2,18 @@
     import { onMount } from "svelte";
     import { reveal } from "$lib/actions";
     import TiltCard from "$lib/components/TiltCard.svelte";
-    import Calendar from "$lib/components/Calendar.svelte";
+    // import Calendar from "$lib/components/Calendar.svelte"; // Removed
     import { fetchEventsLive, type Event } from "$lib/csvParser";
+    import { generateGoogleCalendarUrl } from "$lib/calendarUtils";
 
     let allEvents: Event[] = [];
     let loading = true;
-
-    // Filtering Logic
-    let currentMonth = 0;
-    let currentYear = 2026;
     let eventsContainer: HTMLElement;
 
     onMount(async () => {
         allEvents = await fetchEventsLive();
         loading = false;
     });
-
-    function handleMonthChange(event: CustomEvent) {
-        currentMonth = event.detail.month;
-        currentYear = event.detail.year;
-    }
 
     // Helper to parse date
     function parseDate(dateStr: string): Date | null {
@@ -61,8 +53,26 @@
         return null;
     }
 
-    // Derived filtered events
-    $: filteredEvents = allEvents; // SHOW ALL EVENTS FOR DEBUGGING
+    // Helper to get Google Cal Link
+    function getGoogleCalLink(event: Event): string {
+        const date = parseDate(event.date);
+        if (!date) return "#"; // Or some error handling
+
+        // Default start time: 9 AM if not specified (parsing logic above doesn't really handle time well, so assuming date only -> 00:00)
+        // Let's set a default time like 9 AM for the event
+        const startDate = new Date(date);
+        startDate.setHours(9, 0, 0, 0);
+
+        return generateGoogleCalendarUrl({
+            title: event.title,
+            description: event.description,
+            start: startDate,
+            location: "https://maps.app.goo.gl/uhLvwKTpvyLjnh3UA",
+        });
+    }
+
+    // Show all events (no more month filtering from calendar sidebar)
+    $: filteredEvents = allEvents;
 </script>
 
 <div
@@ -76,21 +86,10 @@
             Programs & Events
         </h1>
 
-        <div class="flex flex-col lg:flex-row gap-8 items-start h-full">
-            <!-- Left Sidebar: Calendar -->
+        <div class="flex flex-col items-center h-full">
+            <!-- Event List - Full Width/Centered -->
             <div
-                class="w-full lg:w-1/3 lg:sticky lg:top-8 order-1 lg:order-none z-10 shrink-0"
-            >
-                <Calendar
-                    events={allEvents}
-                    on:monthChange={handleMonthChange}
-                />
-            </div>
-
-            <!-- Right Content: Event List -->
-            <!-- Fixed Height with Scroll for proper internal scrolling within the section -->
-            <div
-                class="w-full lg:w-2/3 space-y-6 order-2 lg:order-none overflow-y-auto max-h-[60vh] md:max-h-[70vh] custom-scrollbar pr-2"
+                class="w-full max-w-4xl space-y-6 overflow-y-auto max-h-[60vh] md:max-h-[70vh] custom-scrollbar pr-2"
                 bind:this={eventsContainer}
             >
                 {#if loading}
@@ -105,9 +104,7 @@
                     <div
                         class="text-center py-12 border border-white/10 rounded-2xl bg-black/30"
                     >
-                        <p class="text-stone-400">
-                            No events scheduled for this month.
-                        </p>
+                        <p class="text-stone-400">No events scheduled.</p>
                     </div>
                 {/if}
 
@@ -163,7 +160,7 @@
                                             class="flex items-center text-sm text-red-400 gap-2 font-mono"
                                         >
                                             <i class="far fa-calendar"></i>
-                                            <span>{event.date} (Raw)</span>
+                                            <span>{event.date}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -187,16 +184,15 @@
                                             Closed
                                         </button>
                                     {/if}
-                                    {#if event.calendar_link}
-                                        <a
-                                            href={event.calendar_link}
-                                            target="_blank"
-                                            class="block w-full md:w-auto px-4 py-2 mt-2 text-sm text-stone-400 hover:text-white border border-white/10 hover:border-red-500 rounded-lg transition-colors text-center"
-                                        >
-                                            <i class="far fa-calendar-plus mr-2"
-                                            ></i> Add to Cal
-                                        </a>
-                                    {/if}
+
+                                    <a
+                                        href={getGoogleCalLink(event)}
+                                        target="_blank"
+                                        class="block w-full md:w-auto px-4 py-2 mt-2 text-sm text-stone-400 hover:text-white border border-white/10 hover:border-red-500 rounded-lg transition-colors text-center"
+                                    >
+                                        <i class="far fa-calendar-plus mr-2"
+                                        ></i> Add to Google Cal
+                                    </a>
                                 </div>
                             </div>
                         </div>
