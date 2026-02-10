@@ -244,3 +244,32 @@ function parseSmartDate(val: string): { date: string, link: string } {
     if (date === 'TBA' && !val.includes('http')) date = val;
     return { date, link };
 }
+
+export function parseFlexibleDate(dateStr: string): string {
+    if (!dateStr) return '';
+
+    // If it's already an ISO string or recognized format that Date parses correctly
+    if (!isNaN(Date.parse(dateStr)) && dateStr.includes(',')) {
+        return dateStr;
+    }
+
+    const currentYear = new Date().getFullYear();
+    const cleanDate = dateStr.trim();
+
+    // Regular Expressions for different formats
+    const dayMonthRegex = /^(\d{1,2})\s+([a-zA-Z]+)$/; // "20 Feb", "20 February"
+    const dayMonthYearRegex = /^(\d{1,2})\s+([a-zA-Z]+)\s+(\d{4})$/; // "20 Feb 2026"
+
+    // Check for "DD MMM" or "DD Month" (e.g., "20 Feb")
+    const matchDayMonth = cleanDate.match(dayMonthRegex);
+    if (matchDayMonth) {
+        return `${matchDayMonth[1]} ${matchDayMonth[2]} ${currentYear}`;
+    }
+
+    // Check if it's already full date "20 Feb 2026", just return it
+    if (cleanDate.match(dayMonthYearRegex)) {
+        return cleanDate;
+    }
+
+    return cleanDate;
+}

@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Fanfic } from './csvParser';
-import { parseCSVLines, TEAM_CSV_URL, GALLERY_CSV_URL, COUNTDOWN_CSV_URL } from './csvParser';
+import { parseCSVLines, TEAM_CSV_URL, GALLERY_CSV_URL, COUNTDOWN_CSV_URL, parseFlexibleDate } from './csvParser';
 import type { TeamMember, GalleryItem, CountdownItem } from './data';
 
 export const isMenuOpen = writable(false);
@@ -93,9 +93,13 @@ export async function fetchCountdownData() {
             // Title,Date
             const row = rows[1];
             if (row.length >= 2) {
+                const rawDate = row[1];
+                const cleanDate = parseFlexibleDate(rawDate);
+                console.log("Countdown Date Parsed:", cleanDate, "from", rawDate); // Debugging
+
                 countdownStore.set({
                     title: row[0],
-                    date: row[1]
+                    date: cleanDate
                 });
             }
         }
