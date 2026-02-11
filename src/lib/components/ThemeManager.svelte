@@ -87,6 +87,10 @@
         }
 
         // Also set the surface/neutral tones if we want to be thorough, but maybe just start with primary for now.
+        console.log("ThemeManager applied colors:", {
+            sourceHex,
+            primary500: theme.palettes.primary.tone(40),
+        });
     }
 </script>
 

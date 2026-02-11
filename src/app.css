@@ -4,6 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Forced rebuild trigger */
+
 @layer utilities {
   .text-glow {
     text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);

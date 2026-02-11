@@ -58,6 +58,7 @@
                             href={url}
                             target="_blank"
                             class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-stone-400 hover:text-white hover:bg-primary-600 transition-all"
+                            aria-label="Visit our {key} page"
                         >
                             <i class="fab fa-{key}"></i>
                         </a>
@@ -88,28 +89,28 @@
                 <ul class="space-y-3">
                     <li>
                         <a
-                            href="javascript:void(0)"
+                            href="/"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Blog</a
                         >
                     </li>
                     <li>
                         <a
-                            href="javascript:void(0)"
+                            href="/"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Documentation</a
                         >
                     </li>
                     <li>
                         <a
-                            href="javascript:void(0)"
+                            href="/"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Privacy Policy</a
                         >
                     </li>
                     <li>
                         <a
-                            href="javascript:void(0)"
+                            href="/"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Terms of Service</a
                         >

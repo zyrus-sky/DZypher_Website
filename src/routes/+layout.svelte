@@ -117,6 +117,29 @@
 <Background />
 <SplashScreen />
 <CustomCursor />
+
+<!-- DEBUG BANNER -->
+<div
+    class="fixed top-0 left-0 w-full bg-black/90 text-white z-[9999] p-2 text-xs font-mono border-b border-white/20 select-text"
+>
+    <div class="flex flex-wrap gap-4">
+        <span>Store Logo: <strong>{$themeStore?.logo}</strong></span>
+        <span>Store Color[0]: <strong>{$themeStore?.colors?.[0]}</strong></span>
+        <span>
+            CSS --color-primary-500:
+            <span
+                style="background-color: rgb(var(--color-primary-500-rgb)); padding: 2px 4px;"
+            >
+                (Sample)
+            </span>
+        </span>
+        <button
+            class="bg-white/10 px-2 rounded"
+            onclick={() => console.log($themeStore)}>Log Store</button
+        >
+    </div>
+</div>
+
 <BookReader />
 <ProgressBar />
 

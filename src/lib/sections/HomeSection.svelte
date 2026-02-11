@@ -77,10 +77,8 @@
                         />
                         <!-- Glitch Layers -->
                         <img
-                            src="/assets/Vortix_text.svg"
-                            alt=""
                             class="absolute top-0 left-0 w-full md:w-[800px] h-auto object-contain opacity-0 group-hover:opacity-50 group-hover:animate-glitch-1 z-10 mix-blend-screen pointer-events-none"
-                            style="transform: translateZ(-10px); filter: drop-shadow(5px 0 0 red);"
+                            style="transform: translateZ(-10px); filter: drop-shadow(5px 0 0 rgb(var(--color-primary-500-rgb)));"
                         />
                         <img
                             src="/assets/Vortix_text.svg"
