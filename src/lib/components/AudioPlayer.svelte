@@ -1,12 +1,14 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { fade, slide } from "svelte/transition";
 
-    let isPlaying = false;
-    let isMuted = false;
-    let volume = 0.5;
+    // Svelte 5: Props using $props()
+    let {}: {} = $props();
+
+    let isPlaying = $state(false);
+    let isMuted = $state(false);
+    let volume = $state(0.5);
     let audio: HTMLAudioElement;
-    let showControls = false;
+    let showControls = $state(false);
 
     const track = {
         title: "Cyberpunk Ambient",
@@ -39,7 +41,8 @@
         if (audio) audio.volume = volume;
     }
 
-    onMount(() => {
+    // Svelte 5: Use $effect for side effects
+    $effect(() => {
         if (audio) {
             audio.volume = volume;
             audio.loop = true;
@@ -51,7 +54,7 @@
     <!-- Main Toggle Button -->
     <button
         class="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white flex items-center justify-center hover:bg-primary-900/50 hover:border-primary-500/50 transition-all shadow-lg group"
-        on:click={() => (showControls = !showControls)}
+        onclick={() => (showControls = !showControls)}
     >
         <div class="relative w-full h-full flex items-center justify-center">
             {#if isPlaying}
@@ -88,7 +91,7 @@
                 <div class="flex gap-2">
                     <button
                         class="text-gray-400 hover:text-white"
-                        on:click={toggleMute}
+                        onclick={toggleMute}
                     >
                         <i
                             class="fas {isMuted
@@ -98,7 +101,7 @@
                     </button>
                     <button
                         class="text-gray-400 hover:text-white"
-                        on:click={togglePlay}
+                        onclick={togglePlay}
                     >
                         <i
                             class="fas {isPlaying
@@ -115,7 +118,7 @@
                 max="1"
                 step="0.01"
                 bind:value={volume}
-                on:input={handleVolumeChange}
+                oninput={handleVolumeChange}
                 class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-primary-500 [&::-webkit-slider-thumb]:rounded-full"
             />
         </div>
