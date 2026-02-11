@@ -125,7 +125,10 @@
                     announcements.
                 </p>
                 <form
-                    on:submit|preventDefault={handleSubscribe}
+                    onsubmit={(e) => {
+                        e.preventDefault();
+                        handleSubscribe(e);
+                    }}
                     class="space-y-3"
                 >
                     <input
