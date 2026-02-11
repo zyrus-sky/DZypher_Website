@@ -4,8 +4,8 @@
     import MemberModal from "$lib/components/MemberModal.svelte";
     import { reveal } from "$lib/actions";
 
-    let selectedMember: any = null;
-    let isModalOpen = false;
+    let selectedMember = $state<any>(null);
+    let isModalOpen = $state(false);
 
     function openModal(member: any) {
         selectedMember = member;
