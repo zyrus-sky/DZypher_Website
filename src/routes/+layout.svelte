@@ -15,7 +15,6 @@
     function closeMenu() {
         $isMenuOpen = false;
     }
-    import { onMount } from "svelte";
     import { initTheme, loadThemeFromStorage, themeStore } from "$lib/stores";
     import ThemeManager from "$lib/components/ThemeManager.svelte";
     import ThemeSwitcher from "$lib/components/ThemeSwitcher.svelte";
@@ -35,7 +34,8 @@
 
     let activeSection = "";
 
-    onMount(() => {
+    // Svelte 5: Use $effect instead of onMount
+    $effect(() => {
         initTheme(); // Fetch fresh theme
 
         // Lenis Smooth Scroll
@@ -129,7 +129,7 @@
             <a
                 href="/"
                 class="text-xl font-bold tracking-tighter text-red-500 relative z-50 hover:text-red-400 transition-colors cursor-pointer block"
-                on:click={closeMenu}
+                onclick={closeMenu}
             >
                 {$themeStore?.logo || "DZypher"}
             </a>
@@ -218,7 +218,7 @@
     >
         <button
             class="absolute top-8 right-8 text-stone-400 hover:text-white transition-colors"
-            on:click={closeMenu}
+            onclick={closeMenu}
             aria-label="Close Menu"
         >
             <i class="fas fa-times text-3xl"></i>
@@ -226,43 +226,43 @@
 
         <a
             href="/"
-            on:click={closeMenu}
+            onclick={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Home</a
         >
         <a
             href="/#programs"
-            on:click={closeMenu}
+            onclick={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Programs</a
         >
         <a
             href="/#roadmap"
-            on:click={closeMenu}
+            onclick={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Roadmap</a
         >
         <a
             href="/#gallery"
-            on:click={closeMenu}
+            onclick={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Showcase</a
         >
         <a
             href="/#resources"
-            on:click={closeMenu}
+            onclick={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Library</a
         >
         <a
             href="/#team"
-            on:click={closeMenu}
+            onclick={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Team</a
         >
         <a
             href="/#fanficx"
-            on:click={closeMenu}
+            onclick={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-red-500"
             >Fanficx</a
         >
