@@ -1,18 +1,19 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { reveal } from "$lib/actions";
     import TiltCard from "$lib/components/TiltCard.svelte";
-    // import Calendar from "$lib/components/Calendar.svelte"; // Removed
     import { fetchEventsLive, type Event } from "$lib/csvParser";
     import { generateGoogleCalendarUrl } from "$lib/calendarUtils";
 
-    let allEvents: Event[] = [];
-    let loading = true;
-    let eventsContainer: HTMLElement;
+    let allEvents = $state<Event[]>([]);
+    let loading = $state(true);
+    let eventsContainer = $state<HTMLElement>();
 
-    onMount(async () => {
-        allEvents = await fetchEventsLive();
-        loading = false;
+    // Svelte 5: Use $effect for async data loading
+    $effect(() => {
+        (async () => {
+            allEvents = await fetchEventsLive();
+            loading = false;
+        })();
     });
 
     // Helper to parse date
