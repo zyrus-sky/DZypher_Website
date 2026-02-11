@@ -1,5 +1,6 @@
 <script lang="ts">
   import { afterNavigate } from "$app/navigation";
+  import { untrack } from "svelte";
 
   let canvas = $state<HTMLCanvasElement>();
   let ctx = $state<CanvasRenderingContext2D | null>();
@@ -158,46 +159,47 @@
   $effect(() => {
     if (!canvas) return;
 
-    ctx = canvas.getContext("2d", { alpha: true }); // Re-added alpha: true
-    if (!ctx) return;
+    untrack(() => {
+      ctx = canvas!.getContext("2d", { alpha: true });
+      if (!ctx) return;
 
-    // Initial setup
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    // Initialize stars
-    initStars(); // Use existing initStars function
-
-    // Start animation
-    animate();
-
-    // Event listeners
-    const handleResize = () => {
-      // Define handleResize locally for cleanup
+      // Initial setup
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
+      canvas!.width = width;
+      canvas!.height = height;
+
+      // Initialize stars
       initStars();
-    };
 
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("mousemove", handleMouseMove);
-    if (typeof DeviceOrientationEvent !== "undefined") {
-      window.addEventListener("deviceorientation", handleOrientation);
-    }
+      // Start animation
+      animate();
 
-    // Cleanup
-    return () => {
-      cancelAnimationFrame(animationFrame);
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", handleMouseMove);
+      // Event listeners
+      const handleResize = () => {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas!.width = width;
+        canvas!.height = height;
+        initStars();
+      };
+
+      window.addEventListener("resize", handleResize);
+      window.addEventListener("mousemove", handleMouseMove);
       if (typeof DeviceOrientationEvent !== "undefined") {
-        window.removeEventListener("deviceorientation", handleOrientation);
+        window.addEventListener("deviceorientation", handleOrientation);
       }
-    };
+
+      // Cleanup function (will be called when effect is destroyed)
+      return () => {
+        if (animationFrame) cancelAnimationFrame(animationFrame);
+        window.removeEventListener("resize", handleResize);
+        window.removeEventListener("mousemove", handleMouseMove);
+        if (typeof DeviceOrientationEvent !== "undefined") {
+          window.removeEventListener("deviceorientation", handleOrientation);
+        }
+      };
+    });
   });
 </script>
 
