@@ -1,22 +1,27 @@
 <script lang="ts">
     import { fade, scale } from "svelte/transition";
-    import { createEventDispatcher } from "svelte";
 
-    export let member: any;
-    export let isOpen = false;
-
-    const dispatch = createEventDispatcher();
+    // Svelte 5: Props using $props()
+    let {
+        member,
+        isOpen = false,
+        onclose,
+    }: {
+        member: any;
+        isOpen?: boolean;
+        onclose?: () => void;
+    } = $props();
 
     function close() {
-        dispatch("close");
+        onclose?.();
     }
 </script>
 
 {#if isOpen && member}
     <div
         class="fixed inset-0 z-[110] bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
-        on:click|self={close}
-        on:keydown={(e) => e.key === "Escape" && close()}
+        onclick={(e) => e.target === e.currentTarget && close()}
+        onkeydown={(e) => e.key === "Escape" && close()}
         role="dialog"
         aria-modal="true"
         transition:fade={{ duration: 200 }}
@@ -28,7 +33,7 @@
             <!-- Close Button -->
             <button
                 class="absolute top-4 right-4 text-gray-400 hover:text-white z-20 bg-black/20 p-2 rounded-full backdrop-blur-sm"
-                on:click={close}
+                onclick={close}
             >
                 <i class="fas fa-times"></i>
             </button>

@@ -1,8 +1,10 @@
 <script lang="ts">
     import { spring } from "svelte/motion";
 
-    export let strength = 0.5; // How strong the magnetic pull is (0-1)
+    // Svelte 5: Props using $props()
+    let { strength = 0.5 }: { strength?: number } = $props();
 
+    // Svelte 5: Reactive state using $state()
     let coords = spring(
         { x: 0, y: 0 },
         {
@@ -29,8 +31,8 @@
 
 <div
     class="inline-block"
-    on:mousemove={handleMouseMove}
-    on:mouseleave={handleMouseLeave}
+    onmousemove={handleMouseMove}
+    onmouseleave={handleMouseLeave}
     style="transform: translate({$coords.x}px, {$coords.y}px)"
     role="button"
     tabindex="0"

@@ -1,16 +1,19 @@
-<script>
+<script lang="ts">
     import { isMenuOpen, themeStore } from "$lib/stores";
     import { spring } from "svelte/motion";
 
-    export let className = "";
+    // Svelte 5: Props using $props()
+    let { className = "" }: { className?: string } = $props();
 
     // Tilt State
     let rotateX = spring(0, { stiffness: 0.1, damping: 0.3 });
     let rotateY = spring(0, { stiffness: 0.1, damping: 0.3 });
 
-    // @ts-ignore
-    function handleMouseMove(e) {
-        const rect = e.currentTarget.getBoundingClientRect();
+    function handleMouseMove(e: MouseEvent) {
+        const target = e.currentTarget as HTMLElement;
+        if (!target) return;
+
+        const rect = target.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
@@ -31,8 +34,8 @@
 
 <div
     class={`relative ${className} {$isMenuOpen ? 'logo-particle-mode' : ''} transition-transform duration-100 ease-out perspective-container`}
-    on:mousemove={handleMouseMove}
-    on:mouseleave={handleMouseLeave}
+    onmousemove={handleMouseMove}
+    onmouseleave={handleMouseLeave}
     role="img"
 >
     <!-- 3D Container -->
@@ -74,8 +77,7 @@
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
             >
-                <!-- Retaining DZypher Paths (Use existing definitions but re-write here if I have them) -->
-                <!-- Since I am overwriting the file, I must include DZypher paths. Step 953 lines 90-221 -->
+                <!-- DZypher SVG paths preserved from original -->
                 <path
                     fill-rule="evenodd"
                     clip-rule="evenodd"
