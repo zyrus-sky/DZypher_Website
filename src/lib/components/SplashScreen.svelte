@@ -162,6 +162,10 @@
 
     // Svelte 5: Use $effect instead of onMount
     $effect(() => {
+        // Initialize animated paths based on current theme
+        const isVortix = $themeStore?.logo?.includes("VORTIX") ?? false;
+        animatedPaths = generatePaths(isVortix);
+
         // Small delay to ensure browser paints background before starting animation
         setTimeout(() => {
             showLogo = true;
