@@ -74,7 +74,7 @@
     }
 
     // Show all events (no more month filtering from calendar sidebar)
-    $: filteredEvents = allEvents;
+    let filteredEvents = $derived(allEvents);
 </script>
 
 <div
