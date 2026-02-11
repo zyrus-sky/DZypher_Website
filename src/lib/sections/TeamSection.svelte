@@ -18,11 +18,7 @@
     });
 </script>
 
-<MemberModal
-    bind:isOpen={isModalOpen}
-    member={selectedMember}
-    on:close={() => (isModalOpen = false)}
-/>
+<MemberModal bind:isOpen={isModalOpen} member={selectedMember} />
 
 <div
     id="team"
@@ -56,7 +52,7 @@
                             onclick={() => openModal(member)}
                             role="button"
                             tabindex="0"
-                            on:keydown={(e) =>
+                            onkeydown={(e) =>
                                 e.key === "Enter" && openModal(member)}
                         >
                             <TiltCard>
@@ -119,7 +115,7 @@
                             onclick={() => openModal(member)}
                             role="button"
                             tabindex="0"
-                            on:keydown={(e) =>
+                            onkeydown={(e) =>
                                 e.key === "Enter" && openModal(member)}
                         >
                             <TiltCard>
