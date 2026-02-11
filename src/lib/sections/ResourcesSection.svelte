@@ -20,7 +20,7 @@
     <div class="container mx-auto px-6">
         <div class="text-center mb-12">
             <h1
-                class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-blue-500 mb-4"
+                class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-blue-500 mb-4"
             >
                 Cheatsheet Library
             </h1>
@@ -35,7 +35,7 @@
                 <button
                     class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-white/10
                     {selectedCategory === category
-                        ? 'bg-red-600 text-white border-red-500 shadow-[0_0_15px_rgba(220,38,38,0.4)]'
+                        ? 'bg-primary-600 text-white border-primary-500 shadow-[0_0_15px_var(--color-primary-500)]'
                         : 'bg-black/30 text-stone-400 hover:bg-white/10 hover:text-white'}"
                     on:click={() => (selectedCategory = category)}
                 >

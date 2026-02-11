@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
-import type { Fanfic } from './csvParser';
-import { parseCSVLines, TEAM_CSV_URL, GALLERY_CSV_URL, COUNTDOWN_CSV_URL, parseFlexibleDate } from './csvParser';
+import type { Fanfic, ThemeData } from './csvParser';
+import { parseCSVLines, TEAM_CSV_URL, GALLERY_CSV_URL, COUNTDOWN_CSV_URL, parseFlexibleDate, fetchThemeLive } from './csvParser';
 import type { TeamMember, GalleryItem, CountdownItem } from './data';
 
 export const isMenuOpen = writable(false);
@@ -9,7 +9,8 @@ export const selectedFanfic = writable<Fanfic | null>(null);
 // Data Stores
 export const teamStore = writable<{ faculty: TeamMember[], core: TeamMember[] }>({ faculty: [], core: [] });
 export const galleryStore = writable<GalleryItem[]>([]);
-export const countdownStore = writable<CountdownItem | null>(null);
+export const countdownStore = writable<{ title: string, date: string } | null>(null);
+export const themeStore = writable<ThemeData | null>(null);
 
 // Helper to fix Google Drive Image Links
 function fixDriveLink(url: string) {
@@ -105,5 +106,37 @@ export async function fetchCountdownData() {
         }
     } catch (e) {
         console.error("Failed to fetch countdown data", e);
+    }
+}
+
+export function loadThemeFromStorage() {
+    try {
+        const stored = localStorage.getItem('themeData');
+        if (stored) {
+            const data: ThemeData = JSON.parse(stored);
+            if (data && data.colors && data.logo) {
+                themeStore.set(data);
+                console.log("Theme loaded from storage:", data);
+            }
+        }
+    } catch (e) {
+        console.error("Failed to load theme from storage", e);
+    }
+}
+
+export async function initTheme() {
+    // Try to load from storage first if not already loaded (optional, but good for redundancy)
+    // loadThemeFromStorage(); 
+
+    const theme = await fetchThemeLive();
+    if (theme) {
+        themeStore.set(theme);
+        console.log("Theme loaded live:", theme);
+
+        try {
+            localStorage.setItem('themeData', JSON.stringify(theme));
+        } catch (e) {
+            console.error("Failed to save theme to storage", e);
+        }
     }
 }

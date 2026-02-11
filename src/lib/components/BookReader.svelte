@@ -185,15 +185,15 @@
                                 .title.length > 20
                                 ? 'text-xl'
                                 : 'text-3xl'} {theme === 'light'
-                                ? 'text-red-900'
-                                : 'text-red-400'}"
+                                ? 'text-primary-900'
+                                : 'text-primary-400'}"
                         >
                             {$selectedFanfic.title}
                         </h2>
                         <div
                             class="w-16 h-1 mb-6 {theme === 'light'
-                                ? 'bg-red-900/20'
-                                : 'bg-red-400/20'}"
+                                ? 'bg-primary-900/20'
+                                : 'bg-primary-400/20'}"
                         ></div>
                         <p
                             class="font-serif italic transition-colors {theme ===
@@ -256,8 +256,8 @@
                         <i
                             class="fas fa-circle-notch fa-spin text-2xl {theme ===
                             'light'
-                                ? 'text-red-900/50'
-                                : 'text-red-500/50'}"
+                                ? 'text-primary-900/50'
+                                : 'text-primary-500/50'}"
                         ></i>
                     </div>
                 {:else}
@@ -291,8 +291,8 @@
                         <button
                             class="font-bold disabled:opacity-30 transition {theme ===
                             'light'
-                                ? 'text-red-900 hover:text-red-700'
-                                : 'text-red-400 hover:text-red-300'}"
+                                ? 'text-primary-900 hover:text-primary-700'
+                                : 'text-primary-400 hover:text-primary-300'}"
                             disabled={currentPage === 0}
                             on:click={prevPage}
                         >
@@ -310,8 +310,8 @@
                         <button
                             class="font-bold disabled:opacity-30 transition {theme ===
                             'light'
-                                ? 'text-red-900 hover:text-red-700'
-                                : 'text-red-400 hover:text-red-300'}"
+                                ? 'text-primary-900 hover:text-primary-700'
+                                : 'text-primary-400 hover:text-primary-300'}"
                             disabled={currentPage >= pages.length - 1}
                             on:click={nextPage}
                         >

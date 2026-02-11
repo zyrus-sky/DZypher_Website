@@ -88,10 +88,7 @@
 
         <div class="flex flex-col items-center h-full">
             <!-- Event List - Full Width/Centered -->
-            <div
-                class="w-full max-w-4xl space-y-6 overflow-y-auto max-h-[60vh] md:max-h-[70vh] custom-scrollbar pr-2"
-                bind:this={eventsContainer}
-            >
+            <div class="w-full max-w-4xl space-y-6" bind:this={eventsContainer}>
                 {#if loading}
                     <div class="space-y-6">
                         {#each Array(3) as _}
@@ -108,7 +105,7 @@
                     </div>
                 {/if}
 
-                {#each filteredEvents as event (event.title)}
+                {#each filteredEvents.slice(0, 3) as event (event.title)}
                     <TiltCard>
                         <div
                             class="h-full relative overflow-hidden rounded-2xl border border-red-900/30 bg-gradient-to-r from-red-950/10 to-black p-6 md:p-8 hover:border-red-500/40 transition-all group"
@@ -198,6 +195,18 @@
                         </div>
                     </TiltCard>
                 {/each}
+
+                <!-- View More Button -->
+                <div class="flex justify-center pt-8">
+                    <a
+                        href="/events"
+                        class="px-8 py-3 bg-white/5 border border-white/10 rounded-full text-white font-bold hover:bg-white/10 hover:border-red-500/50 hover:text-red-400 transition-all duration-300 group"
+                    >
+                        View All Events <i
+                            class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"
+                        ></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

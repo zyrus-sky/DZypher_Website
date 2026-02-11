@@ -30,7 +30,7 @@
     <div class="container mx-auto px-6 text-center">
         <h1
             use:reveal
-            class="reveal-fade-up text-4xl md:text-6xl font-bold text-red-500 mb-4 font-alan-sans tracking-widest uppercase"
+            class="reveal-fade-up text-4xl md:text-6xl font-bold text-primary-500 mb-4 font-alan-sans tracking-widest uppercase"
         >
             Fanficx
         </h1>
@@ -39,16 +39,18 @@
         </p>
 
         {#if loading}
-            <div class="p-12 border border-red-500/20 rounded-2xl bg-black/80">
+            <div
+                class="p-12 border border-primary-500/20 rounded-2xl bg-black/80"
+            >
                 <p class="text-xl text-stone-500 animate-pulse">
                     Scanning Library...
                 </p>
             </div>
         {:else if fanfics.length === 0}
             <div
-                class="p-12 border border-red-500/20 rounded-2xl bg-black/80 max-w-lg mx-auto"
+                class="p-12 border border-primary-500/20 rounded-2xl bg-black/80 max-w-lg mx-auto"
             >
-                <i class="fas fa-book-open text-4xl text-red-900 mb-4"></i>
+                <i class="fas fa-book-open text-4xl text-primary-900 mb-4"></i>
                 <p class="text-stone-400">No stories found yet.</p>
                 <p class="text-stone-600 text-sm mt-2">
                     Check the Google Sheet 'fanficx' tab.
@@ -77,11 +79,11 @@
                                     class="absolute inset-0 p-4 flex flex-col justify-between"
                                 >
                                     <div
-                                        class="border border-red-900/30 inset-2 absolute rounded"
+                                        class="border border-primary-900/30 inset-2 absolute rounded"
                                     ></div>
 
                                     <h3
-                                        class="font-alan-sans text-xl md:text-2xl text-red-100 mt-4 leading-tight drop-shadow-lg p-2 font-bold"
+                                        class="font-alan-sans text-xl md:text-2xl text-primary-100 mt-4 leading-tight drop-shadow-lg p-2 font-bold"
                                     >
                                         {fic.title}
                                     </h3>

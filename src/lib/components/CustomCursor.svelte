@@ -10,18 +10,30 @@
         },
     );
 
+    let trailCoords = spring(
+        { x: -50, y: -50 },
+        {
+            stiffness: 0.05,
+            damping: 0.2,
+        },
+    );
+
     let size = spring(10, { stiffness: 0.3, damping: 0.6 });
     let isHovering = false;
 
+    // @ts-ignore
     function handleMouseMove(e) {
         // @ts-ignore
         coords.set({ x: e.clientX, y: e.clientY });
+        // @ts-ignore
+        trailCoords.set({ x: e.clientX, y: e.clientY });
     }
 
     function handleMouseDown() {
         size.set(20);
     }
 
+    // ... rest of the functions
     function handleMouseUp() {
         size.set(isHovering ? 50 : 10);
     }
@@ -63,19 +75,26 @@
     });
 </script>
 
-<div
-    class="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block"
-    style="transform: translate({$coords.x}px, {$coords.y}px)"
->
+<div class="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block">
+    <!-- Trail Cursor -->
     <div
-        class="relative -translate-x-1/2 -translate-y-1/2 rounded-full border border-red-500 bg-red-500/10 backdrop-blur-[1px]"
-        style="width: {$size}px; height: {$size}px; transition: width 0.1s, height 0.1s"
+        class="absolute -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-red-400/50 blur-[2px]"
+        style="transform: translate({$trailCoords.x}px, {$trailCoords.y}px)"
+    ></div>
+
+    <!-- Main Cursor -->
+    <div
+        class="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-red-500 bg-red-500/10 backdrop-blur-[1px]"
+        style="transform: translate({$coords.x}px, {$coords.y}px); width: {$size}px; height: {$size}px; transition: width 0.1s, height 0.1s"
     >
         <div
             class="absolute inset-0 rounded-full bg-red-500 opacity-40 blur-md"
         ></div>
     </div>
+
+    <!-- Dot -->
     <div
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-white rounded-full shadow-[0_0_10px_red]"
+        class="absolute -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-white rounded-full shadow-[0_0_10px_red]"
+        style="transform: translate({$coords.x}px, {$coords.y}px)"
     ></div>
 </div>

@@ -273,3 +273,52 @@ export function parseFlexibleDate(dateStr: string): string {
 
     return cleanDate;
 }
+
+const THEME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkAWq7TMm6Zn_ADLHbPYCEncybc4pA652fnQ5xaUzL4oWtQZfV1cJWFyjSeUHJ22v8SEedMS1bOaDK/pub?gid=98630973&single=true&output=csv";
+
+export interface ThemeData {
+    colors: string[];
+    logo: string;
+}
+
+export async function fetchThemeLive(): Promise<ThemeData | null> {
+    try {
+        const response = await fetch(`${THEME_CSV_URL}&t=${Date.now()}`);
+        const text = await response.text();
+
+        // Expected format:
+        // Header: THEME,logo
+        // Row 1: "hex1\nhex2...", VORTIX
+
+        // Robust Parsing
+        // Find logo: Look for "VORTIX" anywhere
+        let logo = "DZypher";
+        if (text.includes("VORTIX") || text.includes("vortix")) {
+            logo = "VORTIX";
+        }
+
+        // Find colors: Look for #XXXXXX patterns
+        // We expect 4 colors.
+        const colorRegex = /#[0-9a-fA-F]{6}/g;
+        const matches = text.match(colorRegex);
+
+        let colors: string[] = [];
+        if (matches && matches.length >= 4) {
+            // Take the first 4 unique or just first 4?
+            // The sheet has 4 colors.
+            colors = matches.slice(0, 4);
+        }
+
+        console.log("Parsed Theme:", { colors, logo });
+
+        if (colors.length > 0) {
+            return { colors, logo };
+        }
+
+        return null;
+
+    } catch (e) {
+        console.error("Error fetching theme:", e);
+        return null;
+    }
+}

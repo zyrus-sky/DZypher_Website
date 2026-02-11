@@ -23,6 +23,22 @@
   let mouseY = 0;
   let warpSpeed = 0;
 
+  let tiltX = 0;
+  let tiltY = 0;
+
+  function handleOrientation(e: DeviceOrientationEvent) {
+    if (width > 768) return; // Only relevant for mobile
+
+    // gamma is left/right tilt [-90,90]
+    // beta is front/back tilt [-180,180]
+    const gamma = e.gamma || 0;
+    const beta = e.beta || 0;
+
+    // Normalize: Holding phone approx 45deg is "zero"
+    tiltX = gamma;
+    tiltY = beta - 45;
+  }
+
   function handleMouseMove(e: MouseEvent) {
     mouseX = e.clientX;
     mouseY = e.clientY;
@@ -36,50 +52,81 @@
     }, 100);
   });
 
+  function initStars() {
+    stars = [];
+    const isMobile = width < 768;
+    // drastically reduce density for mobile to save battery and performance
+    const density = isMobile ? 40000 : 8000;
+    const starCount = Math.floor((width * height) / density);
+
+    for (let i = 0; i < starCount; i++) {
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+      const opacity = Math.random() * 0.8 + 0.2;
+      const color = `rgba(255, 255, 255, ${opacity})`;
+
+      stars.push({
+        x,
+        y,
+        size: Math.random() * (isMobile ? 2 : 3.5),
+        color,
+        speed: Math.random() * 0.2 + 0.05,
+        vx: 0,
+        vy: 0,
+      });
+    }
+  }
+
+  // Optimized animation loop
   function animate() {
     if (!ctx) return;
 
-    // Performance: Clear rect is much faster than fillRect with alpha
+    // Check if tab is active to pause animation
+    if (document.hidden) {
+      animationFrame = requestAnimationFrame(animate);
+      return;
+    }
+
     ctx.clearRect(0, 0, width, height);
 
-    // Warp speed logic
     if (warpSpeed > 0) warpSpeed *= 0.95;
     if (warpSpeed < 0.1) warpSpeed = 0;
 
-    // Use a path for all stars of the same color?
-    // Actually, drawing thousands of individual sub-pixels is fast if we don't change state.
-    // We already moved color to the star object.
-    // Optimization: Just use a single fillStyle white/grey and vary radius? No, we want opacity.
-
-    // BEST OPTIMIZATION: Do not change ctx.fillStyle or globalAlpha inside the loop continuously if possible.
-    // However, since stars twinkle, they change opacity.
-    // Let's stick to simple drawing but use valid optimizations:
-    // 1. Math.PI * 2 is constant.
     const TWO_PI = Math.PI * 2;
-    // 2. Reduce object access overhead.
-
     const len = stars.length;
+
+    // Cache mouse position logic to avoid recalculation
+    const isMobile = width < 768;
+    const isInteracting = mouseX !== 0 && mouseY !== 0 && !isMobile;
+
     for (let i = 0; i < len; i++) {
       const star = stars[i];
 
-      // Physics
-      // Repulsion
-      const dx = mouseX - star.x;
-      const dy = mouseY - star.y;
-      // Optimization: Dist squared check to avoid Math.sqrt for far away particles
-      const distSq = dx * dx + dy * dy;
-      const maxDist = 200;
-      const maxDistSq = 40000; // 200 * 200
+      // Desktop Mouse Interaction
+      if (isInteracting) {
+        const dx = mouseX - star.x;
+        const dy = mouseY - star.y;
+        const distSq = dx * dx + dy * dy;
+        const maxDistSq = 40000;
 
-      if (distSq < maxDistSq) {
-        const dist = Math.sqrt(distSq);
-        const force = (maxDist - dist) / maxDist;
-        star.vx -= (dx / dist) * force * 0.5;
-        star.vy -= (dy / dist) * force * 0.5;
+        if (distSq < maxDistSq) {
+          const dist = Math.sqrt(distSq);
+          const force = (200 - dist) / 200;
+          star.vx -= (dx / dist) * force * 0.5;
+          star.vy -= (dy / dist) * force * 0.5;
+        }
+      }
+
+      // Mobile Gyroscope Interaction
+      if (isMobile) {
+        // Subtle drift based on tilt
+        star.vx += tiltX * 0.005 * star.size * 0.1;
+        star.vy += tiltY * 0.005 * star.size * 0.1;
       }
 
       star.x += star.vx;
       star.y += star.vy;
+      // Friction
       star.vx *= 0.95;
       star.vy *= 0.95;
 
@@ -89,6 +136,12 @@
         star.y = height;
         star.x = Math.random() * width;
       }
+      if (star.y > height) {
+        // Handle gyro pushing down
+        star.y = 0;
+        star.x = Math.random() * width;
+      }
+      // Wrap horizontal
       if (star.x < 0) star.x = width;
       if (star.x > width) star.x = 0;
 
@@ -100,33 +153,6 @@
     }
 
     animationFrame = requestAnimationFrame(animate);
-  }
-
-  function initStars() {
-    stars = [];
-    const isMobile = width < 768;
-    // Increased particle density as requested
-    const density = isMobile ? 15000 : 8000;
-    const starCount = Math.floor((width * height) / density);
-
-    for (let i = 0; i < starCount; i++) {
-      const x = Math.random() * width;
-      const y = Math.random() * height;
-      // Brighter, more visible stars
-      const opacity = Math.random() * 0.8 + 0.2;
-      const color = `rgba(239, 68, 68, ${opacity})`;
-
-      stars.push({
-        x,
-        y,
-        // Larger stars
-        size: Math.random() * (isMobile ? 2.5 : 3.5),
-        color,
-        speed: Math.random() * 0.2 + 0.05,
-        vx: 0,
-        vy: 0,
-      });
-    }
   }
 
   onMount(() => {
@@ -148,30 +174,54 @@
 
     window.addEventListener("resize", resize);
     window.addEventListener("mousemove", handleMouseMove);
+    // @ts-ignore
+    window.addEventListener("deviceorientation", handleOrientation);
     resize();
     animate();
 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
+      // @ts-ignore
+      window.removeEventListener("deviceorientation", handleOrientation);
       cancelAnimationFrame(animationFrame);
     };
   });
 </script>
 
 <div class="fixed inset-0 z-0 bg-black overflow-hidden pointer-events-none">
-  <!-- Reddish Cloud / Aurora: Optimized with will-change -->
+  <!-- Dynamic Gradient Background using CSS variables -->
+  <!-- We use Primary-900 with low opacity for the clouds -->
   <div
-    class="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_rgba(127,29,29,0.3)_0%,_rgba(0,0,0,0)_50%)] animate-slow-spin opacity-80 hardware-accel"
+    class="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,var(--color-primary-900)_0%,rgba(0,0,0,0)_50%)] animate-slow-spin opacity-20 hardware-accel"
+    style="filter: blur(100px);"
   ></div>
   <div
-    class="absolute bottom-[-50%] right-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_rgba(153,27,27,0.2)_0%,_rgba(0,0,0,0)_50%)] animate-slow-spin-reverse opacity-70 hardware-accel"
+    class="absolute bottom-[-50%] right-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,var(--color-primary-800)_0%,rgba(0,0,0,0)_50%)] animate-slow-spin-reverse opacity-15 hardware-accel"
+    style="filter: blur(100px);"
   ></div>
 
   <canvas
     bind:this={canvas}
     class="absolute inset-0 z-10 opacity-100 hardware-accel"
   ></canvas>
+
+  <!-- Volumetric Noise / Film Grain -->
+  <div
+    class="absolute inset-0 z-20 pointer-events-none opacity-[0.07] mix-blend-overlay"
+  >
+    <svg width="100%" height="100%">
+      <filter id="noise">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.8"
+          numOctaves="3"
+          stitchTiles="stitch"
+        />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noise)" />
+    </svg>
+  </div>
 </div>
 
 <style>

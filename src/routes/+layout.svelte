@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { page } from "$app/stores";
     import "../app.css";
     import Background from "$lib/components/Background.svelte";
@@ -16,10 +16,80 @@
         $isMenuOpen = false;
     }
     import { onMount } from "svelte";
+    import { initTheme, loadThemeFromStorage, themeStore } from "$lib/stores";
+    import ThemeManager from "$lib/components/ThemeManager.svelte";
+    import ThemeSwitcher from "$lib/components/ThemeSwitcher.svelte";
+    import ScrollProgress from "$lib/components/ScrollProgress.svelte";
+    import Magnetic from "$lib/components/Magnetic.svelte";
+    import CommandPalette from "$lib/components/CommandPalette.svelte";
+    import AudioPlayer from "$lib/components/AudioPlayer.svelte";
+    import { browser } from "$app/environment";
+    import Lenis from "lenis";
+
+    // Immediate synchronous theme loading from storage to prevent flash of wrong theme
+    if (browser) {
+        loadThemeFromStorage();
+    }
 
     let lastError = "";
 
+    let activeSection = "";
+
     onMount(() => {
+        initTheme(); // Fetch fresh theme
+
+        // Lenis Smooth Scroll
+        if (browser) {
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                orientation: "vertical",
+                gestureOrientation: "vertical",
+                smoothWheel: true,
+            });
+
+            function raf(time: number) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+
+            requestAnimationFrame(raf);
+
+            // Scrollspy
+            const sections = [
+                "home",
+                "programs",
+                "roadmap",
+                "resources",
+                "gallery",
+                "team",
+                "fanficx",
+            ];
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            activeSection = entry.target.id;
+                        }
+                    });
+                },
+                {
+                    threshold: 0.2,
+                    rootMargin: "-20% 0px -50% 0px",
+                },
+            );
+
+            // Delay to ensure elements are mounted
+            setTimeout(() => {
+                sections.forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (el) observer.observe(el);
+                });
+            }, 500);
+
+            return () => observer.disconnect();
+        }
+
         window.onerror = function (msg, url, lineNo, columnNo, error) {
             lastError = `Error: ${msg} at ${lineNo}:${columnNo}`;
             return false;
@@ -29,27 +99,21 @@
         };
     });
 
+    import { fly } from "svelte/transition";
+    import { cubicOut } from "svelte/easing";
+    import Footer from "$lib/components/Footer.svelte";
+
     function clearError() {
         lastError = "";
     }
 </script>
 
-{#if lastError}
-    <div
-        class="fixed top-0 left-0 w-full bg-red-900 text-white z-[99999] p-4 text-xs font-mono overflow-auto max-h-40 border-b-2 border-red-500 shadow-xl"
-    >
-        <div class="flex justify-between items-start">
-            <pre>{lastError}</pre>
-            <button
-                class="bg-black/50 px-2 py-1 rounded ml-4 hover:bg-black"
-                on:click={clearError}>X</button
-            >
-        </div>
-        <p class="mt-2 text-red-200">Please take a screenshot of this error.</p>
-    </div>
-{/if}
-
 <!-- Fixed Overlay Elements (Outside perspective context) -->
+<ThemeManager />
+<ThemeSwitcher />
+<ScrollProgress />
+<CommandPalette />
+<AudioPlayer />
 <Background />
 <SplashScreen />
 <CustomCursor />
@@ -57,49 +121,87 @@
 <ProgressBar />
 
 <nav
-    class="fixed top-0 w-full z-50 p-6 backdrop-blur-md bg-black/40 border-b border-red-900/10 transition-all duration-300"
+    class="fixed top-0 w-full z-50 p-6 backdrop-blur-md bg-black/40 transition-all duration-300"
 >
     <!-- Container for width constraint (7xl matches typical max-w for content) -->
     <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <a
-            href="/"
-            class="text-xl font-bold tracking-tighter text-red-500 relative z-50 hover:text-red-400 transition-colors cursor-pointer"
-            on:click={closeMenu}
-        >
-            DZypher
-        </a>
+        <Magnetic>
+            <a
+                href="/"
+                class="text-xl font-bold tracking-tighter text-red-500 relative z-50 hover:text-red-400 transition-colors cursor-pointer block"
+                on:click={closeMenu}
+            >
+                {$themeStore?.logo || "DZypher"}
+            </a>
+        </Magnetic>
 
         <!-- Desktop Menu -->
-        <div class="hidden md:flex gap-6 text-sm font-medium">
-            <a href="#" class="hover:text-red-400 transition-colors">Home</a>
-            <a href="#programs" class="hover:text-red-400 transition-colors"
-                >Programs</a
-            >
-            <a href="#roadmap" class="hover:text-red-400 transition-colors"
-                >Roadmap</a
-            >
-            <a href="#resources" class="hover:text-red-400 transition-colors"
-                >Library</a
-            >
-            <a href="#gallery" class="hover:text-red-400 transition-colors"
-                >Showcase</a
-            >
-            <a href="#team" class="hover:text-red-400 transition-colors">Team</a
-            >
-            <a
-                href="#fanficx"
-                class="hover:text-red-400 transition-colors text-red-500"
-                >Fanficx</a
-            >
+        <div class="hidden md:flex gap-6 text-sm font-medium items-center">
+            <Magnetic>
+                <a
+                    href="/"
+                    class="transition-colors py-2 px-1 block {activeSection ===
+                        'home' ||
+                    (!$page.url.hash && $page.url.pathname === '/')
+                        ? 'text-primary-500 font-bold'
+                        : 'text-stone-300 hover:text-primary-400'}">Home</a
+                >
+            </Magnetic>
+            <Magnetic>
+                <a
+                    href="#programs"
+                    class="transition-colors py-2 px-1 block {activeSection ===
+                    'programs'
+                        ? 'text-primary-500 font-bold'
+                        : 'text-stone-300 hover:text-primary-400'}">Programs</a
+                >
+            </Magnetic>
+            <Magnetic>
+                <a
+                    href="#roadmap"
+                    class="transition-colors py-2 px-1 block {activeSection ===
+                    'roadmap'
+                        ? 'text-primary-500 font-bold'
+                        : 'text-stone-300 hover:text-primary-400'}">Roadmap</a
+                >
+            </Magnetic>
+            <Magnetic>
+                <a
+                    href="#resources"
+                    class="transition-colors py-2 px-1 block {activeSection ===
+                    'resources'
+                        ? 'text-primary-500 font-bold'
+                        : 'text-stone-300 hover:text-primary-400'}">Library</a
+                >
+            </Magnetic>
+            <Magnetic>
+                <a
+                    href="#gallery"
+                    class="transition-colors py-2 px-1 block {activeSection ===
+                    'gallery'
+                        ? 'text-primary-500 font-bold'
+                        : 'text-stone-300 hover:text-primary-400'}">Showcase</a
+                >
+            </Magnetic>
+            <Magnetic>
+                <a
+                    href="#team"
+                    class="transition-colors py-2 px-1 block {activeSection ===
+                    'team'
+                        ? 'text-primary-500 font-bold'
+                        : 'text-stone-300 hover:text-primary-400'}">Team</a
+                >
+            </Magnetic>
+            <Magnetic>
+                <a
+                    href="#fanficx"
+                    class="transition-colors py-2 px-1 block {activeSection ===
+                    'fanficx'
+                        ? 'text-primary-500 font-bold'
+                        : 'text-stone-300 hover:text-primary-400'}">Fanficx</a
+                >
+            </Magnetic>
         </div>
-
-        <!-- Mobile Hamburger -->
-        <button
-            class="md:hidden z-50 text-white focus:outline-none"
-            on:click={toggleMenu}
-        >
-            <i class="fas {$isMenuOpen ? 'fa-times' : 'fa-bars'} text-2xl"></i>
-        </button>
     </div>
 </nav>
 
@@ -123,7 +225,7 @@
         </button>
 
         <a
-            href="#"
+            href="/"
             on:click={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Home</a
@@ -174,7 +276,14 @@
             : ''}"
         style="transform-style: preserve-3d;"
     >
-        <slot />
+        {#key $page.url.pathname}
+            <div
+                in:fly={{ y: 20, duration: 600, delay: 300, easing: cubicOut }}
+                out:fly={{ y: -20, duration: 300, easing: cubicOut }}
+            >
+                <slot />
+            </div>
+        {/key}
     </div>
 </div>
 

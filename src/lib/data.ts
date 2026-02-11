@@ -202,6 +202,7 @@ export interface Project {
     techStack: string[];
     link?: string;
     github?: string;
+    category?: 'Code' | 'Design' | 'Art' | 'Event' | 'Other';
 }
 
 export const PROJECTS: Project[] = [
@@ -211,7 +212,8 @@ export const PROJECTS: Project[] = [
         description: "Adaptive traffic signal timing using computer vision and reinforcement learning.",
         image: "https://images.unsplash.com/photo-1555421689-d68471e189f2?auto=format&fit=crop&q=80&w=600",
         techStack: ["Python", "YOLOv8", "PyTorch", "Raspberry Pi"],
-        github: "#"
+        github: "#",
+        category: "Code"
     },
     {
         title: "DZypher Website",
@@ -219,7 +221,8 @@ export const PROJECTS: Project[] = [
         description: "The official platform for our association, built with modern web tech.",
         image: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=600",
         techStack: ["SvelteKit", "TailwindCSS", "TypeScript"],
-        github: "#"
+        github: "#",
+        category: "Code"
     },
     {
         title: "Sentiment Analyzer",
@@ -227,6 +230,7 @@ export const PROJECTS: Project[] = [
         description: "Real-time Twitter sentiment analysis dashboard for brand monitoring.",
         image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=600",
         techStack: ["Python", "NLTK", "Flask", "React"],
-        github: "#"
+        github: "#",
+        category: "Code"
     }
 ];

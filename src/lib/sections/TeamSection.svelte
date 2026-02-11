@@ -1,13 +1,28 @@
 <script lang="ts">
     import { teamStore, fetchTeamData } from "$lib/stores";
     import TiltCard from "$lib/components/TiltCard.svelte";
+    import MemberModal from "$lib/components/MemberModal.svelte";
     import { reveal } from "$lib/actions";
     import { onMount } from "svelte";
+
+    let selectedMember: any = null;
+    let isModalOpen = false;
+
+    function openModal(member: any) {
+        selectedMember = member;
+        isModalOpen = true;
+    }
 
     onMount(() => {
         fetchTeamData();
     });
 </script>
+
+<MemberModal
+    bind:isOpen={isModalOpen}
+    member={selectedMember}
+    on:close={() => (isModalOpen = false)}
+/>
 
 <div
     id="team"
@@ -16,7 +31,7 @@
     <div class="container mx-auto px-6">
         <h1
             use:reveal
-            class="reveal-fade-up text-4xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-white"
+            class="reveal-fade-up text-4xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-white"
         >
             Our Team
         </h1>
@@ -26,7 +41,7 @@
             <section class="mb-20">
                 <h2
                     use:reveal
-                    class="reveal-fade-up delay-100 text-2xl font-semibold text-red-400 mb-8 border-b border-red-900/50 pb-2"
+                    class="reveal-fade-up delay-100 text-2xl font-semibold text-primary-400 mb-8 border-b border-primary-900/50 pb-2"
                 >
                     Faculty Coordinator
                 </h2>
@@ -36,15 +51,20 @@
                     {#each $teamStore.faculty as member, i}
                         <div
                             use:reveal
-                            class="reveal-scale"
+                            class="reveal-scale cursor-pointer"
                             style="transition-delay: {i * 100}ms"
+                            on:click={() => openModal(member)}
+                            role="button"
+                            tabindex="0"
+                            on:keydown={(e) =>
+                                e.key === "Enter" && openModal(member)}
                         >
                             <TiltCard>
                                 <div
-                                    class="h-full bg-gradient-to-br from-red-950/30 to-black border border-red-900/30 p-6 rounded-2xl hover:border-red-500/50 transition-all group"
+                                    class="h-full bg-gradient-to-br from-primary-950/30 to-black border border-primary-900/30 p-6 rounded-2xl hover:border-primary-500/50 transition-all group"
                                 >
                                     <div
-                                        class="w-24 h-24 bg-stone-800 rounded-full mb-4 mx-auto overflow-hidden border-2 border-red-900 group-hover:border-red-500 transition-colors"
+                                        class="w-24 h-24 bg-stone-800 rounded-full mb-4 mx-auto overflow-hidden border-2 border-primary-900 group-hover:border-primary-500 transition-colors"
                                     >
                                         {#if member.image}
                                             <img
@@ -66,7 +86,7 @@
                                         {member.name}
                                     </h3>
                                     <p
-                                        class="text-center text-red-300 text-sm mt-1"
+                                        class="text-center text-primary-300 text-sm mt-1"
                                     >
                                         {member.role}
                                     </p>
@@ -83,7 +103,7 @@
             <section>
                 <h2
                     use:reveal
-                    class="reveal-fade-up text-2xl font-semibold text-red-400 mb-8 border-b border-red-900/50 pb-2"
+                    class="reveal-fade-up text-2xl font-semibold text-primary-400 mb-8 border-b border-primary-900/50 pb-2"
                 >
                     Core Team
                 </h2>
@@ -93,17 +113,22 @@
                     {#each $teamStore.core as member, i}
                         <div
                             use:reveal
-                            class="reveal-scale"
+                            class="reveal-scale cursor-pointer"
                             style="transition-delay: {i * 50}ms"
+                            on:click={() => openModal(member)}
+                            role="button"
+                            tabindex="0"
+                            on:keydown={(e) =>
+                                e.key === "Enter" && openModal(member)}
                         >
                             <TiltCard>
                                 <div
-                                    class="h-full bg-black/40 border border-stone-800 p-6 rounded-xl hover:bg-red-950/10 hover:border-red-800 transition-all"
+                                    class="h-full bg-black/40 border border-stone-800 p-6 rounded-xl hover:bg-primary-950/10 hover:border-primary-800 transition-all"
                                 >
                                     <h3 class="text-lg font-bold text-white">
                                         {member.name}
                                     </h3>
-                                    <p class="text-red-400 text-sm">
+                                    <p class="text-primary-400 text-sm">
                                         {member.role}
                                     </p>
                                 </div>
