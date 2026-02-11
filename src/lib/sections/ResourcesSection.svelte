@@ -4,7 +4,7 @@
     import { fly, fade } from "svelte/transition";
     import { flip } from "svelte/animate";
 
-    let selectedCategory: string = "All";
+    let selectedCategory = $state<string>("All");
     const categories = ["All", ...new Set(RESOURCES.map((r) => r.category))];
 
     let filteredResources = $derived(

@@ -5,7 +5,7 @@
     import { fade } from "svelte/transition";
     import { flip } from "svelte/animate";
 
-    let activeCategory = "All";
+    let activeCategory = $state("All");
     const categories = ["All", "Code", "Design", "Art", "Event"];
 
     // Reactive statement to filter items based on activeCategory
