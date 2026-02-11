@@ -50,7 +50,7 @@
                     {activeCategory === cat
                         ? 'bg-primary-600 text-white border-primary-500 shadow-[0_0_15px_rgba(220,38,38,0.4)]'
                         : 'bg-black/30 text-stone-400 hover:text-white hover:bg-white/5'}"
-                    on:click={() => setCategory(cat)}
+                    onclick={() => setCategory(cat)}
                 >
                     {cat}
                 </button>

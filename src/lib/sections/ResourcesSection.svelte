@@ -37,7 +37,7 @@
                     {selectedCategory === category
                         ? 'bg-primary-600 text-white border-primary-500 shadow-[0_0_15px_var(--color-primary-500)]'
                         : 'bg-black/30 text-stone-400 hover:bg-white/10 hover:text-white'}"
-                    on:click={() => (selectedCategory = category)}
+                    onclick={() => (selectedCategory = category)}
                 >
                     {category}
                 </button>

@@ -52,7 +52,7 @@
                 >
                     <button
                         class="w-full flex justify-between items-center p-6 text-left focus:outline-none"
-                        on:click={() => toggle(i)}
+                        onclick={() => toggle(i)}
                     >
                         <span class="font-semibold text-lg text-stone-200"
                             >{faq.question}</span

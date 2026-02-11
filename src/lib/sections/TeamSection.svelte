@@ -53,7 +53,7 @@
                             use:reveal
                             class="reveal-scale cursor-pointer"
                             style="transition-delay: {i * 100}ms"
-                            on:click={() => openModal(member)}
+                            onclick={() => openModal(member)}
                             role="button"
                             tabindex="0"
                             on:keydown={(e) =>
@@ -116,7 +116,7 @@
                             use:reveal
                             class="reveal-scale cursor-pointer"
                             style="transition-delay: {i * 50}ms"
-                            on:click={() => openModal(member)}
+                            onclick={() => openModal(member)}
                             role="button"
                             tabindex="0"
                             on:keydown={(e) =>
