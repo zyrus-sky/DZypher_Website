@@ -10,7 +10,11 @@ export const selectedFanfic = writable<Fanfic | null>(null);
 export const teamStore = writable<{ faculty: TeamMember[], core: TeamMember[] }>({ faculty: [], core: [] });
 export const galleryStore = writable<GalleryItem[]>([]);
 export const countdownStore = writable<{ title: string, date: string } | null>(null);
-export const themeStore = writable<ThemeData | null>(null);
+// Default VORTIX Theme
+export const themeStore = writable<ThemeData | null>({
+    colors: ["#4E56C0", "#9B5DE0", "#D78FEE", "#FDCFFA"],
+    logo: "VORTIX"
+});
 
 // Helper to fix Google Drive Image Links
 
@@ -109,6 +113,15 @@ export function loadThemeFromStorage() {
         const stored = localStorage.getItem('themeData');
         if (stored) {
             const data: ThemeData = JSON.parse(stored);
+
+            // CRITICAL FIX: If stored theme is the old RED theme, IGNORE IT.
+            // Check if the first color is the old default red or if logo is NOT Vortix
+            if (data?.colors?.[0]?.toLowerCase() === '#ef4444' || data?.logo !== 'VORTIX') {
+                console.warn("Ignoring cached legacy theme (Red/DZypher). Enforcing Vortix.");
+                localStorage.removeItem('themeData'); // Clear bad cache
+                return; // Do not set store
+            }
+
             if (data && data.colors && data.logo) {
                 themeStore.set(data);
                 console.log("Theme loaded from storage:", data);
