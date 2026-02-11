@@ -1,16 +1,14 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
     import { fade, scale } from "svelte/transition";
 
-    export let events: any[] = [];
+    // Svelte 5: Props using $props()
+    let { events = [] }: { events?: any[] } = $props();
 
-    const dispatch = createEventDispatcher();
-
-    let currentMonth = 0; // Jan
-    let currentYear = 2026;
-    let daysInMonth: number[] = [];
-    let blankDays: number[] = [];
-    let selectedEvent: any = null;
+    let currentMonth = $state(0); // Jan
+    let currentYear = $state(2026);
+    let daysInMonth = $state<number[]>([]);
+    let blankDays = $state<number[]>([]);
+    let selectedEvent = $state<any>(null);
 
     const monthNames = [
         "January",
@@ -27,7 +25,8 @@
         "December",
     ];
 
-    $: {
+    // Svelte 5: Use $effect to update calendar when month/year changes
+    $effect(() => {
         daysInMonth = new Array(
             new Date(currentYear, currentMonth + 1, 0).getDate(),
         )
@@ -36,26 +35,26 @@
         blankDays = new Array(
             new Date(currentYear, currentMonth, 1).getDay(),
         ).fill(0);
-        // Dispatch month change so parent can filter events
-        dispatch("monthChange", { month: currentMonth, year: currentYear });
-    }
+    });
 
     // Derived: Events mapped by 'Day' number
-    $: parsedEvents = events.reduce(
-        (acc, event) => {
-            const dateObj = parseDate(event.date);
-            if (
-                dateObj &&
-                dateObj.getMonth() === currentMonth &&
-                dateObj.getFullYear() === currentYear
-            ) {
-                const day = dateObj.getDate();
-                if (!acc[day]) acc[day] = [];
-                acc[day].push(event);
-            }
-            return acc;
-        },
-        {} as Record<number, any[]>,
+    let parsedEvents = $derived(
+        events.reduce(
+            (acc, event) => {
+                const dateObj = parseDate(event.date);
+                if (
+                    dateObj &&
+                    dateObj.getMonth() === currentMonth &&
+                    dateObj.getFullYear() === currentYear
+                ) {
+                    const day = dateObj.getDate();
+                    if (!acc[day]) acc[day] = [];
+                    acc[day].push(event);
+                }
+                return acc;
+            },
+            {} as Record<number, any[]>,
+        ),
     );
 
     function parseDate(dateStr: string): Date | null {
@@ -128,11 +127,11 @@
         <div class="flex gap-1 md:gap-2">
             <button
                 class="p-2 text-stone-400 hover:text-white"
-                on:click={() => changeMonth(-1)}>&lt;</button
+                onclick={() => changeMonth(-1)}>&lt;</button
             >
             <button
                 class="p-2 text-stone-400 hover:text-white"
-                on:click={() => changeMonth(1)}>&gt;</button
+                onclick={() => changeMonth(1)}>&gt;</button
             >
         </div>
     </div>
@@ -176,8 +175,10 @@
                     <div class="hidden md:flex flex-col gap-1 overflow-hidden">
                         {#each parsedEvents[day] as event}
                             <button
-                                on:click|stopPropagation={() =>
-                                    openEvent(event)}
+                                onclick={(e) => {
+                                    e.stopPropagation();
+                                    openEvent(event);
+                                }}
                                 class="text-left text-[10px] bg-red-900/80 text-white px-2 py-1 rounded truncate hover:bg-red-600 transition-colors w-full"
                             >
                                 {event.title}
@@ -187,7 +188,7 @@
 
                     <button
                         class="absolute inset-0 md:hidden z-10"
-                        on:click={() => openEvent(parsedEvents[day][0])}
+                        onclick={() => openEvent(parsedEvents[day][0])}
                     ></button>
                 {/if}
             </div>
@@ -207,7 +208,7 @@
         >
             <button
                 class="absolute top-2 right-2 text-white hover:text-red-500 z-20 bg-black/60 rounded-full p-2 backdrop-blur-md"
-                on:click={closeEvent}
+                onclick={closeEvent}
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
