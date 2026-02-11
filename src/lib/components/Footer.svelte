@@ -127,7 +127,7 @@
                 <form
                     onsubmit={(e) => {
                         e.preventDefault();
-                        handleSubscribe(e);
+                        handleSubscribe();
                     }}
                     class="space-y-3"
                 >
