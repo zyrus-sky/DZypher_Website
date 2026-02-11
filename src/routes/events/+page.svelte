@@ -127,7 +127,7 @@
     <!-- Background Elements -->
     <div class="fixed inset-0 pointer-events-none -z-10">
         <div
-            class="absolute top-0 right-0 w-[500px] h-[500px] bg-red-900/20 blur-[120px] rounded-full"
+            class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-900/20 blur-[120px] rounded-full"
         ></div>
         <div
             class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-900/10 blur-[120px] rounded-full"
@@ -138,7 +138,7 @@
         <!-- Header -->
         <div class="text-center mb-12">
             <h1
-                class="text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-red-500"
+                class="text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-primary-200 to-primary-500"
             >
                 Events Calendar
             </h1>
@@ -156,13 +156,13 @@
                         on:click={() => filterEvents(category)}
                         class="px-6 py-2 rounded-full border transition-all duration-300 relative overflow-hidden group {selectedCategory ===
                         category
-                            ? 'border-red-500 bg-red-500/10 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)]'
+                            ? 'border-primary-500 bg-primary-500/10 text-white shadow-[0_0_20px_rgb(var(--color-primary-500-rgb)/0.3)]'
                             : 'border-white/10 text-stone-400 hover:border-white/30 hover:text-white'}"
                     >
                         <span class="relative z-10">{category}</span>
                         {#if selectedCategory === category}
                             <div
-                                class="absolute inset-0 bg-red-500/10 blur-sm"
+                                class="absolute inset-0 bg-primary-500/10 blur-sm"
                                 transition:fade
                             ></div>
                         {/if}
@@ -196,7 +196,7 @@
                     <div in:fly={{ y: 20, delay: i * 50, duration: 400 }}>
                         <TiltCard>
                             <div
-                                class="h-full group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md hover:border-red-500/50 transition-all duration-500 flex flex-col"
+                                class="h-full group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md hover:border-primary-500/50 transition-all duration-500 flex flex-col"
                             >
                                 <!-- Image -->
                                 <div
@@ -223,7 +223,7 @@
                                     ></div>
 
                                     <span
-                                        class="absolute top-4 right-4 px-3 py-1 text-xs font-bold tracking-wider text-white bg-red-600 rounded-full shadow-lg z-10"
+                                        class="absolute top-4 right-4 px-3 py-1 text-xs font-bold tracking-wider text-white bg-primary-600 rounded-full shadow-lg z-10"
                                     >
                                         {event.type}
                                     </span>
@@ -234,7 +234,7 @@
                                     class="p-6 flex-1 flex flex-col relative z-10"
                                 >
                                     <h3
-                                        class="text-xl font-bold text-white mb-2 line-clamp-2 leading-tight group-hover:text-red-400 transition-colors"
+                                        class="text-xl font-bold text-white mb-2 line-clamp-2 leading-tight group-hover:text-primary-400 transition-colors"
                                     >
                                         {event.title}
                                     </h3>
@@ -242,7 +242,8 @@
                                     <div
                                         class="flex items-center gap-2 text-sm text-stone-400 mb-4 font-mono"
                                     >
-                                        <i class="far fa-calendar text-red-500"
+                                        <i
+                                            class="far fa-calendar text-primary-500"
                                         ></i>
                                         <span>{event.date}</span>
                                     </div>

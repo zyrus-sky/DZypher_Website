@@ -39,7 +39,7 @@
                     <a
                         href={project.link}
                         target="_blank"
-                        class="p-2 bg-black/50 rounded-full hover:bg-red-600 text-white transition-colors backdrop-blur-md"
+                        class="p-2 bg-black/50 rounded-full hover:bg-primary-600 text-white transition-colors backdrop-blur-md"
                     >
                         <i class="fas fa-external-link-alt"></i>
                     </a>
@@ -51,7 +51,7 @@
         <div class="p-6 relative">
             <div class="absolute -top-10 left-6">
                 <span
-                    class="inline-block px-3 py-1 bg-red-600 text-white text-xs font-bold uppercase tracking-wider rounded shadow-lg"
+                    class="inline-block px-3 py-1 bg-primary-600 text-white text-xs font-bold uppercase tracking-wider rounded shadow-lg"
                 >
                     {project.student}
                 </span>

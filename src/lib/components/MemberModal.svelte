@@ -70,7 +70,7 @@
                             {member.name}
                         </h2>
                         <div
-                            class="text-red-500 font-medium tracking-wide uppercase text-sm"
+                            class="text-primary-500 font-medium tracking-wide uppercase text-sm"
                         >
                             {member.role}
                         </div>

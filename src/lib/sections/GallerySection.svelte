@@ -16,7 +16,7 @@
     <div class="container mx-auto px-6">
         <div class="text-center mb-12">
             <h1
-                class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-orange-500 mb-4"
+                class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-orange-500 mb-4"
             >
                 Moments
             </h1>

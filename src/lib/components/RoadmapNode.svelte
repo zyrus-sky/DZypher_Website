@@ -44,7 +44,7 @@
     <div class="pb-12 flex-1 pt-2">
         <button
             type="button"
-            class="text-left text-2xl font-bold text-white mb-2 cursor-pointer hover:text-red-400 transition-colors focus:outline-none"
+            class="text-left text-2xl font-bold text-white mb-2 cursor-pointer hover:text-primary-400 transition-colors focus:outline-none"
             onclick={toggle}
         >
             {item.title}
@@ -57,10 +57,10 @@
             <div
                 in:fly={{ y: -10, duration: 300 }}
                 out:fade={{ duration: 200 }}
-                class="bg-red-950/10 border border-red-900/30 rounded-lg p-4 backdrop-blur-sm"
+                class="bg-primary-950/10 border border-primary-900/30 rounded-lg p-4 backdrop-blur-sm"
             >
                 <h4
-                    class="text-red-300 text-xs uppercase font-bold tracking-wider mb-3"
+                    class="text-primary-300 text-xs uppercase font-bold tracking-wider mb-3"
                 >
                     Event Highlights
                 </h4>
@@ -73,7 +73,8 @@
                                 <div
                                     class="flex items-center gap-2 text-stone-300"
                                 >
-                                    <i class="fas fa-star text-xs text-red-500"
+                                    <i
+                                        class="fas fa-star text-xs text-primary-500"
                                     ></i>
                                     {resource.title}
                                 </div>
@@ -82,7 +83,7 @@
                                     <a
                                         href={resource.registration_link}
                                         target="_blank"
-                                        class="text-xs px-2 py-1 bg-red-900/50 hover:bg-red-700 text-red-100 rounded transition-colors uppercase font-bold tracking-wider"
+                                        class="text-xs px-2 py-1 bg-primary-900/50 hover:bg-primary-700 text-primary-100 rounded transition-colors uppercase font-bold tracking-wider"
                                     >
                                         Register
                                     </a>

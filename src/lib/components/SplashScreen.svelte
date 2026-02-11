@@ -726,7 +726,7 @@
                         x2="2879.96"
                         y2="3700.28"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -738,7 +738,7 @@
                         x2="3192.87"
                         y2="3700.28"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -750,7 +750,7 @@
                         x2="3524.3"
                         y2="3700.28"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -762,7 +762,7 @@
                         x2="3860.2"
                         y2="3700.28"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -774,7 +774,7 @@
                         x2="4204.25"
                         y2="3700.28"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -810,7 +810,7 @@
                         x2="4728.86"
                         y2="2784.55"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -894,7 +894,7 @@
                         x2="4461.94"
                         y2="2625.82"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -906,7 +906,7 @@
                         x2="4386.32"
                         y2="2998.18"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -918,7 +918,7 @@
                         x2="2594.27"
                         y2="3618.29"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -930,7 +930,7 @@
                         x2="4526.45"
                         y2="3689.49"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -942,7 +942,7 @@
                         x2="2580.19"
                         y2="3729.55"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#250306"
                         /></linearGradient
@@ -954,7 +954,7 @@
                         x2="1795.75"
                         y2="3395.75"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#0A0A0A"
                         /></linearGradient
@@ -966,7 +966,7 @@
                         x2="1302.7"
                         y2="2533.84"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#0A0A0A"
                         /></linearGradient
@@ -978,7 +978,7 @@
                         x2="1407.98"
                         y2="3376.47"
                         gradientUnits="userSpaceOnUse"
-                        ><stop stop-color="#8B0C15" /><stop
+                        ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
                             stop-color="#0A0A0A"
                         /></linearGradient

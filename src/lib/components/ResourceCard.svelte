@@ -22,8 +22,8 @@
             icon: "fas fa-brain",
         },
         "Deep Learning": {
-            color: "text-red-400",
-            border: "border-red-500/30",
+            color: "text-primary-400",
+            border: "border-primary-500/30",
             icon: "fas fa-network-wired",
         },
         Other: {
@@ -59,7 +59,7 @@
     </div>
 
     <h3
-        class="text-xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors line-clamp-1"
+        class="text-xl font-bold text-white mb-2 group-hover:text-primary-400 transition-colors line-clamp-1"
     >
         {resource.title}
     </h3>

@@ -119,7 +119,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-4 md:mb-6">
         <h2
-            class="text-xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-white"
+            class="text-xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-white"
         >
             {monthNames[currentMonth]}
             {currentYear}
@@ -140,7 +140,7 @@
     <div class="grid grid-cols-7 gap-1 md:gap-2 text-center mb-2">
         {#each ["S", "M", "T", "W", "T", "F", "S"] as day}
             <div
-                class="text-red-500 font-bold uppercase text-[10px] md:text-xs tracking-wider"
+                class="text-primary-500 font-bold uppercase text-[10px] md:text-xs tracking-wider"
             >
                 {day}
             </div>
@@ -154,7 +154,7 @@
 
         {#each daysInMonth as day}
             <div
-                class="relative h-12 md:h-24 rounded border border-white/5 bg-white/5 p-1 transition-all hover:border-red-500/50 hover:bg-white/10 group flex flex-col justify-between"
+                class="relative h-12 md:h-24 rounded border border-white/5 bg-white/5 p-1 transition-all hover:border-primary-500/50 hover:bg-white/10 group flex flex-col justify-between"
             >
                 <span
                     class="text-stone-500 text-[10px] md:text-sm font-mono group-hover:text-white"
@@ -166,7 +166,7 @@
                     <div class="flex gap-1 justify-center md:hidden">
                         {#each parsedEvents[day] as _}
                             <div
-                                class="w-1 h-1 rounded-full bg-red-500 animate-pulse"
+                                class="w-1 h-1 rounded-full bg-primary-500 animate-pulse"
                             ></div>
                         {/each}
                     </div>
@@ -179,7 +179,7 @@
                                     e.stopPropagation();
                                     openEvent(event);
                                 }}
-                                class="text-left text-[10px] bg-red-900/80 text-white px-2 py-1 rounded truncate hover:bg-red-600 transition-colors w-full"
+                                class="text-left text-[10px] bg-primary-900/80 text-white px-2 py-1 rounded truncate hover:bg-primary-600 transition-colors w-full"
                             >
                                 {event.title}
                             </button>
@@ -203,11 +203,11 @@
         transition:fade
     >
         <div
-            class="bg-stone-900 border border-red-500/30 rounded-2xl w-full max-w-4xl max-h-[85vh] overflow-y-auto shadow-2xl relative flex flex-col md:flex-row"
+            class="bg-stone-900 border border-primary-500/30 rounded-2xl w-full max-w-4xl max-h-[85vh] overflow-y-auto shadow-2xl relative flex flex-col md:flex-row"
             transition:scale
         >
             <button
-                class="absolute top-2 right-2 text-white hover:text-red-500 z-20 bg-black/60 rounded-full p-2 backdrop-blur-md"
+                class="absolute top-2 right-2 text-white hover:text-primary-500 z-20 bg-black/60 rounded-full p-2 backdrop-blur-md"
                 onclick={closeEvent}
             >
                 <svg
@@ -246,7 +246,7 @@
                 class="p-6 md:p-8 flex flex-col justify-center w-full md:w-1/2"
             >
                 <span
-                    class="text-red-500 text-xs font-bold tracking-widest uppercase mb-2"
+                    class="text-primary-500 text-xs font-bold tracking-widest uppercase mb-2"
                     >{selectedEvent.type}</span
                 >
                 <h3
@@ -265,7 +265,7 @@
                         <a
                             href={selectedEvent.registration_link}
                             target="_blank"
-                            class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-6 rounded-lg text-center transition-all shadow-lg shadow-red-900/30"
+                            class="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-3 px-6 rounded-lg text-center transition-all shadow-lg shadow-primary-900/30"
                         >
                             Register Now
                         </a>

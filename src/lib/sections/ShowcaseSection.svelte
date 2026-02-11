@@ -81,7 +81,7 @@
     <!-- Call to Action -->
     <div class="mt-20 text-center" use:reveal>
         <div
-            class="reveal-scale inline-block p-[2px] rounded-full bg-gradient-to-r from-red-500 to-blue-500"
+            class="reveal-scale inline-block p-[2px] rounded-full bg-gradient-to-r from-primary-500 to-blue-500"
         >
             <div class="bg-black rounded-full px-8 py-4">
                 <p class="text-stone-300">

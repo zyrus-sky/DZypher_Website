@@ -74,17 +74,17 @@
 <div class="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block">
     <!-- Trail Cursor -->
     <div
-        class="absolute -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-red-400/50 blur-[2px]"
+        class="absolute -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary-400/50 blur-[2px]"
         style="transform: translate({$trailCoords.x}px, {$trailCoords.y}px)"
     ></div>
 
     <!-- Main Cursor -->
     <div
-        class="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-red-500 bg-red-500/10 backdrop-blur-[1px]"
+        class="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary-500 bg-primary-500/10 backdrop-blur-[1px]"
         style="transform: translate({$coords.x}px, {$coords.y}px); width: {$size}px; height: {$size}px; transition: width 0.1s, height 0.1s"
     >
         <div
-            class="absolute inset-0 rounded-full bg-red-500 opacity-40 blur-md"
+            class="absolute inset-0 rounded-full bg-primary-500 opacity-40 blur-md"
         ></div>
     </div>
 
