@@ -88,27 +88,6 @@
 
         // Also set the surface/neutral tones if we want to be thorough, but maybe just start with primary for now.
     }
-
-    onMount(() => {
-        // Initial load
-        const defaultHex = $themeStore?.colors?.[0] || defaultSourceColor;
-        updateColors(defaultHex);
-
-        // Listen for dark mode changes if handled via class on html
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.attributeName === "class") {
-                    const defaultHex =
-                        $themeStore?.colors?.[0] || defaultSourceColor;
-                    updateColors(defaultHex);
-                }
-            });
-        });
-
-        observer.observe(document.documentElement, { attributes: true });
-
-        return () => observer.disconnect();
-    });
 </script>
 
 ```
