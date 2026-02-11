@@ -1,21 +1,23 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { fetchFanficsLive, type Fanfic } from "$lib/csvParser";
     import TiltCard from "$lib/components/TiltCard.svelte";
     import { reveal } from "$lib/actions";
     import { selectedFanfic } from "$lib/stores";
 
-    let fanfics: Fanfic[] = [];
-    let loading = true;
+    let fanfics = $state<Fanfic[]>([]);
+    let loading = $state(true);
 
-    onMount(async () => {
-        try {
-            fanfics = await fetchFanficsLive();
-        } catch (e) {
-            console.error("Fanfic load error:", e);
-        } finally {
-            loading = false;
-        }
+    // Svelte 5: Use $effect for async data loading
+    $effect(() => {
+        (async () => {
+            try {
+                fanfics = await fetchFanficsLive();
+            } catch (e) {
+                console.error("Fanfic load error:", e);
+            } finally {
+                loading = false;
+            }
+        })();
     });
 
     function openBook(fic: Fanfic) {
@@ -64,7 +66,7 @@
                 {#each fanfics as fic}
                     <button
                         class="text-left group perspective-1000 focus:outline-none"
-                        on:click={() => openBook(fic)}
+                        onclick={() => openBook(fic)}
                     >
                         <TiltCard>
                             <div
