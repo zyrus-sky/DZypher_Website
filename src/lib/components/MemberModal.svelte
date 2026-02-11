@@ -1,10 +1,10 @@
 <script lang="ts">
     import { fade, scale } from "svelte/transition";
 
-    // Svelte 5: Props using $props()
+    // Svelte 5: Props using $props() with $bindable for isOpen
     let {
         member,
-        isOpen = false,
+        isOpen = $bindable(false),
         onclose,
     }: {
         member: any;
