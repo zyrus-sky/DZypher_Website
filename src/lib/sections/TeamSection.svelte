@@ -1,20 +1,19 @@
 <script lang="ts">
-    import { teamStore, fetchTeamData } from "$lib/stores";
-    import TiltCard from "$lib/components/TiltCard.svelte";
-    import MemberModal from "$lib/components/MemberModal.svelte";
+    import { fly, fade } from "svelte/transition";
     import { reveal } from "$lib/actions";
-    import { onMount } from "svelte";
+    import { fetchTeamMembers, type TeamMember } from "$lib/csvParser";
+    import MemberModal from "$lib/components/MemberModal.svelte";
 
-    let selectedMember: any = null;
-    let isModalOpen = false;
+    let members = $state<TeamMember[]>([]);
+    let loading = $state(true);
+    let selectedMember = $state<TeamMember | null>(null);
 
-    function openModal(member: any) {
-        selectedMember = member;
-        isModalOpen = true;
-    }
-
-    onMount(() => {
-        fetchTeamData();
+    // Svelte 5: Use $effect for data loading
+    $effect(() => {
+        (async () => {
+            members = await fetchTeamMembers();
+            loading = false;
+        })();
     });
 </script>
 
