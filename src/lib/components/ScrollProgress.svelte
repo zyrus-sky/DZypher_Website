@@ -9,8 +9,11 @@
     // Spring for smooth progress
     let progress = spring(0, { stiffness: 0.1, damping: 0.3 });
 
-    // Svelte 5: Use $effect for reactive updates
+    // Svelte 5: Use $effect for reactive updates and to get scrollHeight
     $effect(() => {
+        // Update scrollHeight from document
+        scrollHeight = document.documentElement.scrollHeight;
+
         if (scrollHeight && innerHeight) {
             const maxScroll = scrollHeight - innerHeight;
             // Avoid division by zero
@@ -29,8 +32,6 @@
 </script>
 
 <svelte:window bind:scrollY bind:innerHeight />
-
-<svelte:document bind:scrollHeight />
 
 <div
     class="fixed bottom-8 right-8 z-50 pointer-events-none mix-blend-difference"
