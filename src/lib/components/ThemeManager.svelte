@@ -7,7 +7,6 @@
         themeFromSourceColor,
         TonalPalette,
     } from "@material/material-color-utilities";
-    import { onMount } from "svelte";
 
     // Default Red Palette Source Color
     const defaultSourceColor = "#ef4444";

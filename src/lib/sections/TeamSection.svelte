@@ -3,7 +3,6 @@
     import TiltCard from "$lib/components/TiltCard.svelte";
     import MemberModal from "$lib/components/MemberModal.svelte";
     import { reveal } from "$lib/actions";
-    import { onMount } from "svelte";
 
     let selectedMember: any = null;
     let isModalOpen = false;
@@ -13,7 +12,8 @@
         isModalOpen = true;
     }
 
-    onMount(() => {
+    // Svelte 5: Use $effect instead of onMount
+    $effect(() => {
         fetchTeamData();
     });
 </script>
