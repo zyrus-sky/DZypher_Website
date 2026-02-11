@@ -204,7 +204,7 @@
         class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-8 cursor-pointer focus:outline-none"
         role="button"
         tabindex="0"
-        on:keydown={(e) => {
+        onkeydown={(e) => {
             if (e.key === "Enter" || e.key === " ") skip();
         }}
         out:fade={{ duration: 800 }}
