@@ -1,9 +1,10 @@
 <script lang="ts">
     import TiltCard from "$lib/components/TiltCard.svelte";
     import { galleryStore, fetchGalleryData } from "$lib/stores";
-    import { onMount } from "svelte";
+    import { reveal } from "$lib/actions";
 
-    onMount(() => {
+    // Svelte 5: Use $effect instead of onMount
+    $effect(() => {
         fetchGalleryData();
     });
 </script>
