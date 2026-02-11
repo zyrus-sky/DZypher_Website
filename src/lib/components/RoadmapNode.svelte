@@ -2,11 +2,14 @@
     import { fly, fade } from "svelte/transition";
     import type { RoadmapItem } from "$lib/data";
 
-    export let item: RoadmapItem;
-    export let index: number;
-    export let isLast: boolean = false;
+    // Svelte 5: Props using $props()
+    let {
+        item,
+        index,
+        isLast = false,
+    }: { item: RoadmapItem; index: number; isLast?: boolean } = $props();
 
-    let isOpen = false;
+    let isOpen = $state(false);
 
     function toggle() {
         isOpen = !isOpen;
@@ -23,7 +26,7 @@
             type="button"
             class="w-12 h-12 rounded-full border-2 border-red-600 bg-black flex items-center justify-center z-10
             group-hover:bg-red-900/50 group-hover:scale-110 transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(220,38,38,0.3)] focus:outline-none focus:ring-2 focus:ring-red-500"
-            on:click={toggle}
+            onclick={toggle}
             aria-label="Toggle details for {item.title}"
         >
             <i
@@ -42,7 +45,7 @@
         <button
             type="button"
             class="text-left text-2xl font-bold text-white mb-2 cursor-pointer hover:text-red-400 transition-colors focus:outline-none"
-            on:click={toggle}
+            onclick={toggle}
         >
             {item.title}
         </button>

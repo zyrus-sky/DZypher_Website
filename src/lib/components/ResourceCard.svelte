@@ -1,7 +1,8 @@
 <script lang="ts">
     import type { Resource } from "$lib/data";
 
-    export let resource: Resource;
+    // Svelte 5: Props using $props()
+    let { resource }: { resource: Resource } = $props();
 
     // Map categories to colors/icons
     const categoryConfig = {
@@ -32,7 +33,10 @@
         },
     };
 
-    $: config = categoryConfig[resource.category] || categoryConfig["Other"];
+    // Svelte 5: Use $derived for computed values
+    let config = $derived(
+        categoryConfig[resource.category] || categoryConfig["Other"],
+    );
 </script>
 
 <div

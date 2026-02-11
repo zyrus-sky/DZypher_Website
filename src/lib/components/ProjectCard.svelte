@@ -2,7 +2,8 @@
     import type { Project } from "$lib/data";
     import TiltCard from "./TiltCard.svelte";
 
-    export let project: Project;
+    // Svelte 5: Props using $props()
+    let { project }: { project: Project } = $props();
 </script>
 
 <TiltCard>

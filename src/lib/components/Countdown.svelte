@@ -1,15 +1,16 @@
 <script lang="ts">
-    import { onMount, onDestroy } from "svelte";
+    // Svelte 5: Props using $props()
+    let {
+        targetDate,
+        title = "Event Starts In",
+    }: { targetDate: string; title?: string } = $props();
 
-    export let targetDate: string; // ISO string or parsable date
-    export let title: string = "Event Starts In";
-
-    let timeLeft = {
+    let timeLeft = $state({
         days: 0,
         hours: 0,
         minutes: 0,
         seconds: 0,
-    };
+    });
 
     let interval: any;
 
@@ -29,13 +30,14 @@
         }
     }
 
-    onMount(() => {
+    // Svelte 5: Use $effect for side effects
+    $effect(() => {
         calculateTimeLeft();
         interval = setInterval(calculateTimeLeft, 1000);
-    });
 
-    onDestroy(() => {
-        clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+        };
     });
 </script>
 

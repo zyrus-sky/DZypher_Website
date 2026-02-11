@@ -1,5 +1,4 @@
-<script>
-    import { onMount, onDestroy } from "svelte";
+<script lang="ts">
     import { spring } from "svelte/motion";
 
     let coords = spring(
@@ -19,13 +18,10 @@
     );
 
     let size = spring(10, { stiffness: 0.3, damping: 0.6 });
-    let isHovering = false;
+    let isHovering = $state(false);
 
-    // @ts-ignore
-    function handleMouseMove(e) {
-        // @ts-ignore
+    function handleMouseMove(e: MouseEvent) {
         coords.set({ x: e.clientX, y: e.clientY });
-        // @ts-ignore
         trailCoords.set({ x: e.clientX, y: e.clientY });
     }
 
@@ -33,7 +29,6 @@
         size.set(20);
     }
 
-    // ... rest of the functions
     function handleMouseUp() {
         size.set(isHovering ? 50 : 10);
     }
@@ -55,7 +50,8 @@
         });
     }
 
-    onMount(() => {
+    // Svelte 5: Use $effect for side effects
+    $effect(() => {
         window.addEventListener("mousemove", handleMouseMove);
         window.addEventListener("mousedown", handleMouseDown);
         window.addEventListener("mouseup", handleMouseUp);
