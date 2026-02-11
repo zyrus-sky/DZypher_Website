@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
   import { afterNavigate } from "$app/navigation";
 
-  let canvas: HTMLCanvasElement;
-  let ctx: CanvasRenderingContext2D | null;
+  let canvas = $state<HTMLCanvasElement>();
+  let ctx = $state<CanvasRenderingContext2D | null>();
 
   interface Star {
     x: number;
@@ -15,16 +14,16 @@
     vy: number;
   }
 
-  let stars: Star[] = [];
-  let width: number;
-  let height: number;
-  let animationFrame: number;
-  let mouseX = 0;
-  let mouseY = 0;
-  let warpSpeed = 0;
+  let stars = $state<Star[]>([]);
+  let width = $state<number>(0);
+  let height = $state<number>(0);
+  let animationFrame = $state<number>(0);
+  let mouseX = $state(0);
+  let mouseY = $state(0);
+  let warpSpeed = $state(0);
 
-  let tiltX = 0;
-  let tiltY = 0;
+  let tiltX = $state(0);
+  let tiltY = $state(0);
 
   function handleOrientation(e: DeviceOrientationEvent) {
     if (width > 768) return; // Only relevant for mobile
@@ -156,15 +155,27 @@
   }
 
   onMount(() => {
-    // Enable alpha for transparency
-    ctx = canvas.getContext("2d", { alpha: true });
+  // Svelte 5: Use $effect for lifecycle management
+  $effect(() => {
+    if (!canvas) return;
 
-    if (typeof window !== "undefined") {
-      mouseX = window.innerWidth / 2;
-      mouseY = window.innerHeight / 2;
-    }
+    ctx = canvas.getContext("2d", { alpha: true }); // Re-added alpha: true
+    if (!ctx) return;
 
-    const resize = () => {
+    // Initial setup
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    // Initialize stars
+    initStars(); // Use existing initStars function
+
+    // Start animation
+    animate();
+
+    // Event listeners
+    const handleResize = () => { // Define handleResize locally for cleanup
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width;
@@ -172,19 +183,20 @@
       initStars();
     };
 
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", handleMouseMove);
-    // @ts-ignore
-    window.addEventListener("deviceorientation", handleOrientation);
-    resize();
-    animate();
+    if (typeof DeviceOrientationEvent !== "undefined") {
+      window.addEventListener("deviceorientation", handleOrientation);
+    }
 
+    // Cleanup
     return () => {
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      // @ts-ignore
-      window.removeEventListener("deviceorientation", handleOrientation);
       cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (typeof DeviceOrientationEvent !== "undefined") {
+        window.removeEventListener("deviceorientation", handleOrientation);
+      }
     };
   });
 </script>
