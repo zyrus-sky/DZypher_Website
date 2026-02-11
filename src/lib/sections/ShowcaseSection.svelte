@@ -85,7 +85,7 @@
             <div class="bg-black rounded-full px-8 py-4">
                 <p class="text-stone-300">
                     Have a project to feature? <a
-                        href="#"
+                        href="javascript:void(0)"
                         class="text-white font-bold hover:underline"
                         >Submit it here</a
                     >

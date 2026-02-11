@@ -77,6 +77,22 @@ export async function fetchFanficsLive(): Promise<Fanfic[]> {
     }
 }
 
+export function fixDriveLink(url: string): string {
+    if (!url) return '';
+    let id = '';
+    const match1 = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (match1) id = match1[1];
+    else {
+        const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (match2) id = match2[1];
+    }
+
+    if (id) {
+        return `https://lh3.googleusercontent.com/d/${id}`;
+    }
+    return url;
+}
+
 function parseEventCSV(csvText: string): Event[] {
     const rows = parseCSVLines(csvText);
     const events: Event[] = [];
@@ -87,34 +103,21 @@ function parseEventCSV(csvText: string): Event[] {
         if (row.length < 1) continue;
 
         const title = row[0]?.trim();
-        // Skip header row if it slipped through or empty titles
         if (!title || title.toLowerCase() === 'event_name') continue;
 
-        // Index 1: event_type - Default to 'program' if missing
         const typeRaw = row[1]?.trim().toLowerCase() || '';
         const type = typeRaw.includes('workshop') ? 'workshop' : 'program';
 
-        // Index 2: event_description
         const description = row[2]?.trim() || 'No description available.';
 
-        // Index 3: event_photo_link
         let image = row[3]?.trim() || '';
-        // Fix drive links for event images too
-        if (image.includes('drive.google.com/file/d/')) {
-            const idMatch = image.match(/\/d\/([a-zA-Z0-9_-]+)/);
-            if (idMatch && idMatch[1]) {
-                image = `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
-            }
-        }
+        image = fixDriveLink(image);
 
-        // Index 4: registration_link
         const regLink = row[4]?.trim() || '#';
 
-        // Index 5: registration_status
         const statusRaw = row[5]?.trim().toUpperCase();
         const isOpen = statusRaw === 'TRUE' || statusRaw === 'OPEN';
 
-        // Index 7: event_date_m
         const finalDate = row[7]?.trim() || 'TBA';
 
         events.push({
@@ -140,32 +143,14 @@ function parseFanficCSV(csvText: string): Fanfic[] {
     for (const row of rows.slice(1)) {
         if (row.length < 2) continue;
 
-        // Verified Headers from previous step:
-        // NAME, title_of the book, prologue, MC, Google doc link, image_link, st_name, college, year, rank
-
-        // Index 0: NAME (Author)
         const author = row[0]?.trim() || 'Anonymous';
-
-        // Index 1: title_of the book
         const title = row[1]?.trim();
         if (!title) continue;
 
-        // Index 2: prologue (Description)
         const description = row[2]?.trim() || '';
-
-        // Index 4: Google doc link
         const link = row[4]?.trim() || '#';
-
-        // Index 5: image_link (Cover)
         let cover = row[5]?.trim() || '';
-
-        // Fix drive links for covers
-        if (cover.includes('drive.google.com/file/d/')) {
-            const idMatch = cover.match(/\/d\/([a-zA-Z0-9_-]+)/);
-            if (idMatch && idMatch[1]) {
-                cover = `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
-            }
-        }
+        cover = fixDriveLink(cover);
 
         fanfics.push({ title, author, description, cover, link });
     }

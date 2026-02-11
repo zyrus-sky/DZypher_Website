@@ -20,10 +20,11 @@
         if (!dateStr || dateStr === "TBA") return null;
         let strToParse = dateStr.trim();
 
-        // Handle "25-01-2026" or "25/01/2026" manually to ensure DD/MM format
+        const currentYear = 2026; // Hardcoded context for this event
+
+        // Handle "25-01-2026" or "25/01/2026"
         if (strToParse.match(/^\d{1,2}[\/-]\d{1,2}[\/-]\d{4}$/)) {
             const parts = strToParse.split(/[\/-]/);
-            // Assume DD-MM-YYYY
             return new Date(
                 parseInt(parts[2]),
                 parseInt(parts[1]) - 1,
@@ -31,23 +32,24 @@
             );
         }
 
-        // Handle text based like "Jan 23"
+        // Handle "21 Feb" or "21 February"
+        const dayMonthMatch = strToParse.match(/^(\d{1,2})\s+([a-zA-Z]+)$/);
+        if (dayMonthMatch) {
+            strToParse = `${dayMonthMatch[1]} ${dayMonthMatch[2]} ${currentYear}`;
+        }
+
+        // Try parsing assuming full date string now
+        let d = new Date(strToParse);
+        if (!isNaN(d.getTime())) return d;
+
+        // Fallback for "Jan 23" style if not caught above
         if (
             strToParse.toLowerCase().includes("jan") &&
             !strToParse.includes("2026")
         ) {
             strToParse = `${strToParse} 2026`;
-        }
-
-        let d = new Date(strToParse);
-        if (!isNaN(d.getTime())) return d;
-
-        // Fallback: try to extract any number and assume it's Jan 2026 for now (since event is seemingly Jan)
-        const parts = strToParse.match(/(\d+)/g);
-        if (parts && parts.length > 0) {
-            // If looks like date
-            const day = parseInt(parts[0]);
-            if (day > 0 && day <= 31) return new Date(2026, 0, day);
+            d = new Date(strToParse);
+            if (!isNaN(d.getTime())) return d;
         }
 
         return null;
@@ -56,12 +58,11 @@
     // Helper to get Google Cal Link
     function getGoogleCalLink(event: Event): string {
         const date = parseDate(event.date);
-        if (!date) return "#"; // Or some error handling
+        if (!date) return "#";
 
-        // Default start time: 9 AM if not specified (parsing logic above doesn't really handle time well, so assuming date only -> 00:00)
-        // Let's set a default time like 9 AM for the event
+        // Default start time: 9:30 AM
         const startDate = new Date(date);
-        startDate.setHours(9, 0, 0, 0);
+        startDate.setHours(9, 30, 0, 0);
 
         return generateGoogleCalendarUrl({
             title: event.title,

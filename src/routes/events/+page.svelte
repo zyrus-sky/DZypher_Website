@@ -80,6 +80,8 @@
     function parseDate(dateStr: string): Date | null {
         if (!dateStr || dateStr === "TBA") return null;
         let strToParse = dateStr.trim();
+        const currentYear = 2026;
+
         if (strToParse.match(/^\d{1,2}[\/-]\d{1,2}[\/-]\d{4}$/)) {
             const parts = strToParse.split(/[\/-]/);
             return new Date(
@@ -88,19 +90,22 @@
                 parseInt(parts[0]),
             );
         }
-        if (
-            strToParse.toLowerCase().includes("jan") &&
-            !strToParse.includes("2026")
-        ) {
-            strToParse = `${strToParse} 2026`;
+
+        // Handle "21 Feb"
+        const dayMonthMatch = strToParse.match(/^(\d{1,2})\s+([a-zA-Z]+)$/);
+        if (dayMonthMatch) {
+            strToParse = `${dayMonthMatch[1]} ${dayMonthMatch[2]} ${currentYear}`;
         }
+
         let d = new Date(strToParse);
         if (!isNaN(d.getTime())) return d;
-        const parts = strToParse.match(/(\d+)/g);
-        if (parts && parts.length > 0) {
-            const day = parseInt(parts[0]);
-            if (day > 0 && day <= 31) return new Date(2026, 0, day);
+
+        if (strToParse.toLowerCase().includes("jan")) {
+            strToParse = `${strToParse} ${currentYear}`;
+            d = new Date(strToParse);
+            if (!isNaN(d.getTime())) return d;
         }
+
         return null;
     }
 
@@ -108,12 +113,12 @@
         const date = parseDate(event.date);
         if (!date) return "#";
         const startDate = new Date(date);
-        startDate.setHours(9, 0, 0, 0);
+        startDate.setHours(9, 30, 0, 0); // Default 9:30 AM
         return generateGoogleCalendarUrl({
             title: event.title,
             description: event.description,
             start: startDate,
-            location: "https://maps.app.goo.gl/uhLvwKTpvyLjnh3UA",
+            location: "Vortix '26 Venue",
         });
     }
 </script>
@@ -195,13 +200,14 @@
                             >
                                 <!-- Image -->
                                 <div
-                                    class="h-48 w-full overflow-hidden relative"
+                                    class="w-full aspect-square overflow-hidden relative"
                                 >
                                     {#if event.image}
                                         <img
                                             src={event.image}
                                             alt={event.title}
                                             class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                            referrerpolicy="no-referrer"
                                         />
                                     {:else}
                                         <div
@@ -213,18 +219,20 @@
                                         </div>
                                     {/if}
                                     <div
-                                        class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"
+                                        class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"
                                     ></div>
 
                                     <span
-                                        class="absolute top-4 right-4 px-3 py-1 text-xs font-bold tracking-wider text-white bg-red-600 rounded-full shadow-lg"
+                                        class="absolute top-4 right-4 px-3 py-1 text-xs font-bold tracking-wider text-white bg-red-600 rounded-full shadow-lg z-10"
                                     >
                                         {event.type}
                                     </span>
                                 </div>
 
                                 <!-- Content -->
-                                <div class="p-6 flex-1 flex flex-col">
+                                <div
+                                    class="p-6 flex-1 flex flex-col relative z-10"
+                                >
                                     <h3
                                         class="text-xl font-bold text-white mb-2 line-clamp-2 leading-tight group-hover:text-red-400 transition-colors"
                                     >
@@ -266,6 +274,7 @@
                                         <a
                                             href={getGoogleCalLink(event)}
                                             target="_blank"
+                                            rel="noopener noreferrer"
                                             class="w-full flex items-center justify-center gap-2 py-2.5 border border-white/10 text-stone-300 font-medium text-center rounded-lg hover:border-white/30 hover:text-white transition-colors text-sm"
                                         >
                                             <i class="far fa-calendar-plus"></i>

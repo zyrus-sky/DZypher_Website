@@ -71,6 +71,7 @@
                                                 src={member.image}
                                                 alt={member.name}
                                                 class="w-full h-full object-cover"
+                                                referrerpolicy="no-referrer"
                                             />
                                         {:else}
                                             <div
@@ -123,12 +124,34 @@
                         >
                             <TiltCard>
                                 <div
-                                    class="h-full bg-black/40 border border-stone-800 p-6 rounded-xl hover:bg-primary-950/10 hover:border-primary-800 transition-all"
+                                    class="h-full bg-black/40 border border-stone-800 p-6 rounded-xl hover:bg-primary-950/10 hover:border-primary-800 transition-all group"
                                 >
-                                    <h3 class="text-lg font-bold text-white">
+                                    <div
+                                        class="w-20 h-20 bg-stone-800 rounded-full mb-4 mx-auto overflow-hidden border-2 border-stone-700 group-hover:border-primary-500 transition-colors"
+                                    >
+                                        {#if member.image}
+                                            <img
+                                                src={member.image}
+                                                alt={member.name}
+                                                class="w-full h-full object-cover"
+                                                referrerpolicy="no-referrer"
+                                            />
+                                        {:else}
+                                            <div
+                                                class="w-full h-full flex items-center justify-center text-stone-500 text-xs"
+                                            >
+                                                IMG
+                                            </div>
+                                        {/if}
+                                    </div>
+                                    <h3
+                                        class="text-lg font-bold text-white text-center"
+                                    >
                                         {member.name}
                                     </h3>
-                                    <p class="text-primary-400 text-sm">
+                                    <p
+                                        class="text-primary-400 text-sm text-center mt-1"
+                                    >
                                         {member.role}
                                     </p>
                                 </div>

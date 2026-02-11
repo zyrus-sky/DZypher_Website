@@ -1,10 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-    plugins: [sveltekit()],
-    server: {
-        host: true, // Listen on all addresses
-        allowedHosts: ['seven-pumas-shout.loca.lt', '.loca.lt']
-    }
+    plugins: [tailwindcss(), sveltekit()]
 });

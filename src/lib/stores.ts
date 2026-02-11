@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Fanfic, ThemeData } from './csvParser';
-import { parseCSVLines, TEAM_CSV_URL, GALLERY_CSV_URL, COUNTDOWN_CSV_URL, parseFlexibleDate, fetchThemeLive } from './csvParser';
+import { parseCSVLines, TEAM_CSV_URL, GALLERY_CSV_URL, COUNTDOWN_CSV_URL, parseFlexibleDate, fetchThemeLive, fixDriveLink } from './csvParser';
 import type { TeamMember, GalleryItem, CountdownItem } from './data';
 
 export const isMenuOpen = writable(false);
@@ -13,16 +13,7 @@ export const countdownStore = writable<{ title: string, date: string } | null>(n
 export const themeStore = writable<ThemeData | null>(null);
 
 // Helper to fix Google Drive Image Links
-function fixDriveLink(url: string) {
-    if (!url) return '';
-    if (url.includes('drive.google.com/file/d/')) {
-        const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-        if (idMatch && idMatch[1]) {
-            return `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
-        }
-    }
-    return url;
-}
+
 
 // Fetchers
 export async function fetchTeamData() {
@@ -49,8 +40,12 @@ export async function fetchTeamData() {
                 }
             };
 
-            if (member.category === 'Faculty') faculty.push(member);
-            else core.push(member);
+            // Loose check for Faculty to catch "Faculty Coordinators"
+            if (member.category && member.category.toLowerCase().includes('faculty')) {
+                faculty.push(member);
+            } else {
+                core.push(member);
+            }
         }
         teamStore.set({ faculty, core });
     } catch (e) {

@@ -2,6 +2,7 @@
     import HomeSection from "$lib/sections/HomeSection.svelte";
     import ProgramsSection from "$lib/sections/ProgramsSection.svelte";
     import RoadmapSection from "$lib/sections/RoadmapSection.svelte";
+    import ResourcesSection from "$lib/sections/ResourcesSection.svelte";
     import ShowcaseSection from "$lib/sections/ShowcaseSection.svelte";
     import TeamSection from "$lib/sections/TeamSection.svelte";
     import FanficSection from "$lib/sections/FanficSection.svelte";
@@ -14,6 +15,7 @@
     <HomeSection />
     <ProgramsSection />
     <RoadmapSection />
+    <ResourcesSection />
     <ShowcaseSection />
     <OriginSection />
     <TeamSection />

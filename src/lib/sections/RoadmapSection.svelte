@@ -11,10 +11,10 @@
     onMount(async () => {
         const events = await fetchEventsLive();
 
-        // Find Yukthi'26 node and inject events
-        const yukthiNode = roadmap.find((item: any) => item.id === "yukthi-26");
-        if (yukthiNode && events.length > 0) {
-            yukthiNode.resources = events.map((e: any) => ({
+        // Find VORTIX'26 node and inject events
+        const vortixNode = roadmap.find((item: any) => item.id === "vortix-26");
+        if (vortixNode && events.length > 0) {
+            vortixNode.resources = events.map((e: any) => ({
                 title: e.title,
                 link: e.registration_link || "#",
                 registration_status: e.registration_status,

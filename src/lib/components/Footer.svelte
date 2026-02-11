@@ -88,28 +88,28 @@
                 <ul class="space-y-3">
                     <li>
                         <a
-                            href="#"
+                            href="javascript:void(0)"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Blog</a
                         >
                     </li>
                     <li>
                         <a
-                            href="#"
+                            href="javascript:void(0)"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Documentation</a
                         >
                     </li>
                     <li>
                         <a
-                            href="#"
+                            href="javascript:void(0)"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Privacy Policy</a
                         >
                     </li>
                     <li>
                         <a
-                            href="#"
+                            href="javascript:void(0)"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Terms of Service</a
                         >

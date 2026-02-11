@@ -74,8 +74,8 @@
                     });
                 },
                 {
-                    threshold: 0.2,
-                    rootMargin: "-20% 0px -50% 0px",
+                    threshold: 0.1,
+                    rootMargin: "-40% 0px -40% 0px",
                 },
             );
 
@@ -149,16 +149,16 @@
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#programs"
+                    href="/#programs"
                     class="transition-colors py-2 px-1 block {activeSection ===
-                    'programs'
+                        'programs' || $page.url.pathname === '/events'
                         ? 'text-primary-500 font-bold'
                         : 'text-stone-300 hover:text-primary-400'}">Programs</a
                 >
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#roadmap"
+                    href="/#roadmap"
                     class="transition-colors py-2 px-1 block {activeSection ===
                     'roadmap'
                         ? 'text-primary-500 font-bold'
@@ -167,7 +167,7 @@
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#resources"
+                    href="/#resources"
                     class="transition-colors py-2 px-1 block {activeSection ===
                     'resources'
                         ? 'text-primary-500 font-bold'
@@ -176,7 +176,7 @@
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#gallery"
+                    href="/#gallery"
                     class="transition-colors py-2 px-1 block {activeSection ===
                     'gallery'
                         ? 'text-primary-500 font-bold'
@@ -185,7 +185,7 @@
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#team"
+                    href="/#team"
                     class="transition-colors py-2 px-1 block {activeSection ===
                     'team'
                         ? 'text-primary-500 font-bold'
@@ -194,7 +194,7 @@
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#fanficx"
+                    href="/#fanficx"
                     class="transition-colors py-2 px-1 block {activeSection ===
                     'fanficx'
                         ? 'text-primary-500 font-bold'
@@ -231,37 +231,37 @@
             >Home</a
         >
         <a
-            href="#programs"
+            href="/#programs"
             on:click={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Programs</a
         >
         <a
-            href="#roadmap"
+            href="/#roadmap"
             on:click={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Roadmap</a
         >
         <a
-            href="#gallery"
+            href="/#gallery"
             on:click={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Showcase</a
         >
         <a
-            href="#resources"
+            href="/#resources"
             on:click={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Library</a
         >
         <a
-            href="#team"
+            href="/#team"
             on:click={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
             >Team</a
         >
         <a
-            href="#fanficx"
+            href="/#fanficx"
             on:click={closeMenu}
             class="text-3xl font-bold hover:text-red-500 transition-colors text-red-500"
             >Fanficx</a

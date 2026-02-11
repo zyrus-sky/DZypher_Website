@@ -119,6 +119,9 @@
     <div
         class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-start justify-center pt-[20vh] px-4"
         on:click|self={close}
+        on:keydown={(e) => e.key === "Escape" && close()}
+        role="dialog"
+        aria-modal="true"
         transition:fade={{ duration: 150 }}
     >
         <div

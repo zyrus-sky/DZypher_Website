@@ -1,75 +1,58 @@
+import { skeleton } from '@skeletonlabs/skeleton/plugin';
+import * as themes from '@skeletonlabs/skeleton/themes';
+import forms from '@tailwindcss/forms';
+
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: ['./src/**/*.{html,js,svelte,ts}'],
+    content: [
+        './src/**/*.{html,js,svelte,ts}',
+        './node_modules/@skeletonlabs/skeleton/**/*.{html,js,svelte,ts}'
+    ],
+
     theme: {
         extend: {
-            colors: {
-                red: {
-                    50: 'var(--color-primary-50)',
-                    100: 'var(--color-primary-100)',
-                    200: 'var(--color-primary-200)',
-                    300: 'var(--color-primary-300)',
-                    400: 'var(--color-primary-400)',
-                    500: 'var(--color-primary-500)',
-                    600: 'var(--color-primary-600)',
-                    700: 'var(--color-primary-700)',
-                    800: 'var(--color-primary-800)',
-                    900: 'var(--color-primary-900)',
-                    950: 'var(--color-primary-950)',
-                },
-                primary: {
-                    50: 'var(--color-primary-50)',
-                    100: 'var(--color-primary-100)',
-                    200: 'var(--color-primary-200)',
-                    300: 'var(--color-primary-300)',
-                    400: 'var(--color-primary-400)',
-                    500: 'var(--color-primary-500)',
-                    600: 'var(--color-primary-600)',
-                    700: 'var(--color-primary-700)',
-                    800: 'var(--color-primary-800)',
-                    900: 'var(--color-primary-900)',
-                    950: 'var(--color-primary-950)',
-                },
-                m3: {
-                    primary: 'var(--md-sys-color-primary)',
-                    'on-primary': 'var(--md-sys-color-on-primary)',
-                    'primary-container': 'var(--md-sys-color-primary-container)',
-                    'on-primary-container': 'var(--md-sys-color-on-primary-container)',
-                    secondary: 'var(--md-sys-color-secondary)',
-                    'on-secondary': 'var(--md-sys-color-on-secondary)',
-                    'secondary-container': 'var(--md-sys-color-secondary-container)',
-                    'on-secondary-container': 'var(--md-sys-color-on-secondary-container)',
-                    tertiary: 'var(--md-sys-color-tertiary)',
-                    'on-tertiary': 'var(--md-sys-color-on-tertiary)',
-                    'tertiary-container': 'var(--md-sys-color-tertiary-container)',
-                    'on-tertiary-container': 'var(--md-sys-color-on-tertiary-container)',
-                    error: 'var(--md-sys-color-error)',
-                    'on-error': 'var(--md-sys-color-on-error)',
-                    'error-container': 'var(--md-sys-color-error-container)',
-                    'on-error-container': 'var(--md-sys-color-on-error-container)',
-                    background: 'var(--md-sys-color-background)',
-                    'on-background': 'var(--md-sys-color-on-background)',
-                    surface: 'var(--md-sys-color-surface)',
-                    'on-surface': 'var(--md-sys-color-on-surface)',
-                    'surface-variant': 'var(--md-sys-color-surface-variant)',
-                    'on-surface-variant': 'var(--md-sys-color-on-surface-variant)',
-                    outline: 'var(--md-sys-color-outline)',
-                    'outline-variant': 'var(--md-sys-color-outline-variant)',
-                    'inverse-surface': 'var(--md-sys-color-inverse-surface)',
-                    'inverse-on-surface': 'var(--md-sys-color-inverse-on-surface)',
-                    'inverse-primary': 'var(--md-sys-color-inverse-primary)',
-                },
-                surface: {
-                    DEFAULT: 'var(--md-sys-color-surface)',
-                    on: 'var(--md-sys-color-on-surface)',
-                    variant: 'var(--md-sys-color-surface-variant)',
-                    'on-variant': 'var(--md-sys-color-on-surface-variant)',
-                },
-            },
             fontFamily: {
                 sans: ['"Neuropol X Free"', 'Inter', 'sans-serif'],
             },
         },
     },
-    plugins: [],
-}
+
+    plugins: [
+        skeleton({
+            themes: [
+                themes.cerberus,
+                {
+                    name: 'dzypher-dark',
+                    properties: {
+                        // Primary (Red theme)
+                        '--color-primary-50': '254 242 242',
+                        '--color-primary-100': '254 226 226',
+                        '--color-primary-200': '254 202 202',
+                        '--color-primary-300': '252 165 165',
+                        '--color-primary-400': '248 113 113',
+                        '--color-primary-500': '239 68 68',
+                        '--color-primary-600': '220 38 38',
+                        '--color-primary-700': '185 28 28',
+                        '--color-primary-800': '153 27 27',
+                        '--color-primary-900': '127 29 29',
+                        '--color-primary-950': '69 10 10',
+
+                        // Surface colors (dark theme)
+                        '--color-surface-50': '250 250 250',
+                        '--color-surface-100': '245 245 245',
+                        '--color-surface-200': '229 229 229',
+                        '--color-surface-300': '212 212 212',
+                        '--color-surface-400': '163 163 163',
+                        '--color-surface-500': '115 115 115',
+                        '--color-surface-600': '82 82 82',
+                        '--color-surface-700': '64 64 64',
+                        '--color-surface-800': '38 38 38',
+                        '--color-surface-900': '23 23 23',
+                        '--color-surface-950': '10 10 10',
+                    }
+                }
+            ]
+        }),
+        forms,
+    ],
+};

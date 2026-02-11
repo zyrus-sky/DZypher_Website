@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { spring } from "svelte/motion";
 
     export let strength = 0.5; // How strong the magnetic pull is (0-1)
@@ -11,8 +11,11 @@
         },
     );
 
-    function handleMouseMove(e) {
-        const rect = e.currentTarget.getBoundingClientRect();
+    function handleMouseMove(e: MouseEvent) {
+        const target = e.currentTarget as HTMLElement;
+        if (!target) return;
+
+        const rect = target.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
 

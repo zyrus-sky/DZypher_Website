@@ -46,7 +46,6 @@
     <Logo className="w-full max-w-2xl mb-8 animate-fade-in-up relative z-10" />
 
     <div
-        id="home"
         class="relative z-10 perspective-container"
         use:reveal
         role="group"
