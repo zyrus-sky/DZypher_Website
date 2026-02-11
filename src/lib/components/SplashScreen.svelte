@@ -192,8 +192,8 @@
     }
 
     // Reactively update paths when theme changes (fixes race condition)
-    $: isVortix = $themeStore?.logo?.includes("VORTIX") ?? false;
-    $: animatedPaths = generatePaths(isVortix);
+    let isVortix = $derived($themeStore?.logo?.includes("VORTIX") ?? false);
+    let animatedPaths = $derived(generatePaths(isVortix));
 
     function skip() {
         visible = false;
