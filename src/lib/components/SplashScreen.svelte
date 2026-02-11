@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { onMount, tick } from "svelte";
+    import { tick } from "svelte";
     import { fly, fade, scale } from "svelte/transition";
     import { quintOut } from "svelte/easing";
     import { themeStore } from "$lib/stores";
 
-    let visible = true;
-    let animatedPaths: any[] = [];
+    let visible = $state(true);
+    let animatedPaths = $state<any[]>([]);
 
     // Path data from Logo.svelte
     const PATHS = [
