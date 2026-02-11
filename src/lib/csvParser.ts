@@ -275,23 +275,48 @@ export async function fetchThemeLive(): Promise<ThemeData | null> {
         // Header: THEME,logo
         // Row 1: "hex1\nhex2...", VORTIX
 
-        // Robust Parsing
-        // Find logo: Look for "VORTIX" anywhere
+        // Robust Parsing:
+        // The CSV format for the theme sheet is:
+        // Row 1: Logo Name (e.g. VORTIX)
+        // Row 2: Hex Codes (comma separated or in separate cells)
+
+        const rows = parseCSVLines(text);
+        let colors: string[] = [];
         let logo = "DZypher";
-        if (text.includes("VORTIX") || text.includes("vortix")) {
-            logo = "VORTIX";
+
+        // 1. Extract Logo
+        // Look for VORTIX in the first few rows
+        for (const row of rows) {
+            const rowStr = row.join(' ').toUpperCase();
+            if (rowStr.includes('VORTIX')) {
+                logo = 'VORTIX';
+                break;
+            }
         }
 
-        // Find colors: Look for #XXXXXX patterns
-        // We expect 4 colors.
-        const colorRegex = /#[0-9a-fA-F]{6}/g;
-        const matches = text.match(colorRegex);
+        // 2. Extract Colors
+        // Look for the specific Purple sequence to identify the correct row, OR just find the first valid palette.
+        // We know the intended palette is: #4E56C0, #9B5DE0, #D78FEE, #FDCFFA
+        // We should look for a row that contains MULTIPLE hex codes.
 
-        let colors: string[] = [];
-        if (matches && matches.length >= 4) {
-            // Take the first 4 unique or just first 4?
-            // The sheet has 4 colors.
-            colors = matches.slice(0, 4);
+        for (const row of rows) {
+            const rowColors = row.filter(cell => /^#[0-9a-fA-F]{6}$/.test(cell.trim()));
+            if (rowColors.length >= 3) {
+                colors = rowColors.slice(0, 4);
+                break;
+            }
+        }
+
+        // Fallback: if strict row parsing failed, try the old regex but skip known bad values
+        if (colors.length === 0) {
+            const allMatches = text.match(/#[0-9a-fA-F]{6}/g) || [];
+            // Filter out known Red flags if logo is Vortix
+            if (logo === 'VORTIX') {
+                colors = allMatches.filter(c => !['#EF4444', '#DC2626', '#B91C1C', '#8B0C15'].includes(c.toUpperCase()));
+            } else {
+                colors = allMatches;
+            }
+            if (colors.length > 4) colors = colors.slice(0, 4);
         }
 
         console.log("Parsed Theme:", { colors, logo });
