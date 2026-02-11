@@ -296,6 +296,17 @@ export async function fetchThemeLive(): Promise<ThemeData | null> {
 
         console.log("Parsed Theme:", { colors, logo });
 
+        // Sanitize VORTIX Theme (Live Override)
+        // If the sheet returns VORTIX but with Red colors (Legacy), force Purple.
+        if (logo === "VORTIX" && colors.length > 0) {
+            const firstColor = colors[0].toLowerCase();
+            // Check for common Red variants (Tailwind Red-500, Red-600, or the deep red used in backgrounds)
+            if (['#ef4444', '#dc2626', '#b91c1c', '#991b1b', '#7f1d1d', '#8b0c15'].includes(firstColor)) {
+                console.warn("Live theme has VORTIX logo but Red colors. Forcing Purple.");
+                colors = ["#4E56C0", "#9B5DE0", "#D78FEE", "#FDCFFA"];
+            }
+        }
+
         if (colors.length > 0) {
             return { colors, logo };
         }

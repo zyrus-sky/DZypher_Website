@@ -116,10 +116,23 @@ export function loadThemeFromStorage() {
 
             // CRITICAL FIX: If stored theme is the old RED theme, IGNORE IT.
             // Check if the first color is the old default red or if logo is NOT Vortix
-            if (data?.colors?.[0]?.toLowerCase() === '#ef4444' || data?.logo !== 'VORTIX') {
-                console.warn("Ignoring cached legacy theme (Red/DZypher). Enforcing Vortix.");
-                localStorage.removeItem('themeData'); // Clear bad cache
-                return; // Do not set store
+            // CRITICAL FIX: Aggressive Sanitation
+            // If the logo is 'VORTIX', we MUST ensure the color is the correct Purple.
+            // Old configurations might have 'VORTIX' with Red colors.
+            const isVortix = data?.logo === 'VORTIX';
+            const isPurple = data?.colors?.[0]?.toLowerCase() === '#4e56c0';
+
+            if (isVortix && !isPurple) {
+                console.warn("Detected VORTIX theme with WRONG colors (likely Red). Enforcing Purple.");
+                localStorage.removeItem('themeData');
+                return;
+            }
+
+            // General Legacy Check
+            if (data?.colors?.[0]?.toLowerCase() === '#ef4444' || (data?.logo !== 'VORTIX' && data?.logo !== 'DZypher')) {
+                console.warn("Ignoring cached legacy theme. Enforcing default.");
+                localStorage.removeItem('themeData');
+                return;
             }
 
             if (data && data.colors && data.logo) {

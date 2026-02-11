@@ -11,6 +11,26 @@
     text-shadow: 0 0 10px rgba(var(--color-primary-500-rgb), 0.5);
   }
 
+  /* Fallback Theme Variables (Purple) - Ensures even without JS, it is NOT Red */
+  :root {
+    --color-primary-50: #efecff;
+    --color-primary-100: #e0daff;
+    --color-primary-200: #c2b5ff;
+    --color-primary-300: #a391ff;
+    --color-primary-400: #856cff;
+    --color-primary-500: #6648ff;
+    /* Fallback Purple */
+    --color-primary-600: #523aac;
+    --color-primary-700: #3d2c80;
+    --color-primary-800: #291d53;
+    --color-primary-900: #140e2b;
+    --color-primary-950: #0a0715;
+
+    --color-primary-500-rgb: 102, 72, 255;
+    --color-primary-600-rgb: 82, 58, 172;
+    --color-primary-700-rgb: 61, 44, 128;
+  }
+
   @keyframes glitch-1 {
     0% {
       transform: translate(0);
