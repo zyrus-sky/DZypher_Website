@@ -2,7 +2,6 @@
     import Logo from "$lib/components/Logo.svelte";
     import Countdown from "$lib/components/Countdown.svelte";
     import { SOCIALS } from "$lib/data";
-    import { onMount } from "svelte";
     import { reveal, typewriter } from "$lib/actions";
     import {
         countdownStore,
@@ -11,7 +10,8 @@
     } from "$lib/stores";
     import { generateGoogleCalendarUrl } from "$lib/calendarUtils";
 
-    onMount(() => {
+    // Svelte 5: Use $effect instead of onMount
+    $effect(() => {
         fetchCountdownData();
     });
 
@@ -50,14 +50,14 @@
         use:reveal
         role="group"
         aria-label="Interactive Logo Container"
-        on:mousemove={(e) => {
+        onmousemove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
             e.currentTarget.style.setProperty("--tx", `${x / 50}deg`);
             e.currentTarget.style.setProperty("--ty", `${-y / 50}deg`);
         }}
-        on:mouseleave={(e) => {
+        onmouseleave={(e) => {
             e.currentTarget.style.setProperty("--tx", "0deg");
             e.currentTarget.style.setProperty("--ty", "0deg");
         }}
@@ -168,7 +168,7 @@
         </a>
 
         <button
-            on:click={() =>
+            onclick={() =>
                 document
                     .getElementById("programs")
                     ?.scrollIntoView({ behavior: "smooth" })}
