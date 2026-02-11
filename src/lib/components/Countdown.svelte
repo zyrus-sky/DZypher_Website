@@ -48,8 +48,8 @@
     ></div>
 
     <h3
-        class="text-xl md:text-3xl text-primary-500 font-bold mb-8 tracking-[0.2em] uppercase animate-pulse-slow"
-        style="text-shadow: 0 0 10px rgba(var(--color-primary-500-rgb), 0.5);"
+        class="text-xl md:text-3xl font-bold mb-8 tracking-[0.2em] uppercase animate-pulse-slow"
+        style="color: #4E56C0; text-shadow: 0 0 10px rgba(78, 86, 192, 0.5);"
     >
         {title}
     </h3>
@@ -62,24 +62,27 @@
                 <div class="relative group/box">
                     <!-- Glowing Border -->
                     <div
-                        class="absolute -inset-1 bg-gradient-to-br from-primary-600 to-black rounded-xl opacity-50 blur-sm group-hover/box:opacity-100 transition-opacity duration-500"
+                        class="absolute -inset-1 rounded-xl opacity-50 blur-sm group-hover/box:opacity-100 transition-opacity duration-500"
+                        style="background: linear-gradient(to bottom right, #4E56C0, black);"
                     ></div>
 
                     <div
-                        class="w-20 h-20 md:w-32 md:h-32 bg-black border border-primary-500/30 rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl backdrop-blur-xl"
+                        class="w-20 h-20 md:w-32 md:h-32 bg-black border rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl backdrop-blur-xl"
+                        style="border-color: rgba(78, 86, 192, 0.3);"
                     >
                         <!-- Scanline -->
                         <div
                             class="absolute inset-0 pointer-events-none"
-                            style="background-image: linear-gradient(transparent 50%, rgba(var(--color-primary-500-rgb), 0.1) 50%); background-size: 100% 4px;"
+                            style="background-image: linear-gradient(transparent 50%, rgba(78, 86, 192, 0.1) 50%); background-size: 100% 4px;"
                         ></div>
                         <div
-                            class="absolute inset-0 bg-gradient-to-b from-primary-500/10 to-transparent opacity-0 group-hover/box:opacity-20 transition-opacity"
+                            class="absolute inset-0 opacity-0 group-hover/box:opacity-20 transition-opacity"
+                            style="background: linear-gradient(to bottom, rgba(78, 86, 192, 0.1), transparent);"
                         ></div>
 
                         <span
                             class="text-4xl md:text-6xl font-bold text-white font-mono z-10"
-                            style="text-shadow: 0 0 20px rgba(var(--color-primary-600-rgb), 0.5);"
+                            style="text-shadow: 0 0 20px rgba(82, 58, 172, 0.5);"
                         >
                             {value.toString().padStart(2, "0")}
                         </span>

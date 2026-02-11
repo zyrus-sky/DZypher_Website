@@ -171,7 +171,16 @@
                 document
                     .getElementById("programs")
                     ?.scrollIntoView({ behavior: "smooth" })}
-            class="relative px-8 py-3 border border-primary-500/50 hover:border-primary-500 hover:bg-primary-950/30 text-primary-100 rounded-full transition-all font-semibold backdrop-blur-sm"
+            class="relative px-8 py-3 border rounded-full transition-all font-semibold backdrop-blur-sm"
+            style="color: #efecff; border-color: rgba(78, 86, 192, 0.5);"
+            onmouseenter={(e) => {
+                e.currentTarget.style.borderColor = "#4E56C0";
+                e.currentTarget.style.backgroundColor = "rgba(10, 7, 21, 0.3)";
+            }}
+            onmouseleave={(e) => {
+                e.currentTarget.style.borderColor = "rgba(78, 86, 192, 0.5)";
+                e.currentTarget.style.backgroundColor = "transparent";
+            }}
         >
             View Events
         </button>
