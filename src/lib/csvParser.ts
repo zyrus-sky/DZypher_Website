@@ -300,10 +300,22 @@ export async function fetchThemeLive(): Promise<ThemeData | null> {
             return { colors, logo };
         }
 
+        // Fallback to Vortix Protocol if parsing fails but VORTIX is mentioned
+        if (logo === "VORTIX") {
+            return {
+                colors: ["#4E56C0", "#9B5DE0", "#D78FEE", "#FDCFFA"],
+                logo: "VORTIX"
+            };
+        }
+
         return null;
 
     } catch (e) {
-        console.error("Error fetching theme:", e);
-        return null;
+        console.error("Error fetching theme, falling back to VORTIX default:", e);
+        // Fallback to Vortix Protocol on network error
+        return {
+            colors: ["#4E56C0", "#9B5DE0", "#D78FEE", "#FDCFFA"],
+            logo: "VORTIX"
+        };
     }
 }
