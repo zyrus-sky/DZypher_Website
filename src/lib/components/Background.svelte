@@ -154,7 +154,6 @@
     animationFrame = requestAnimationFrame(animate);
   }
 
-  onMount(() => {
   // Svelte 5: Use $effect for lifecycle management
   $effect(() => {
     if (!canvas) return;
@@ -175,7 +174,8 @@
     animate();
 
     // Event listeners
-    const handleResize = () => { // Define handleResize locally for cleanup
+    const handleResize = () => {
+      // Define handleResize locally for cleanup
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width;
