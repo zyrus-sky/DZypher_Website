@@ -83,7 +83,7 @@
 >
     <div class="container mx-auto px-4 md:px-6 h-full flex flex-col">
         <h1
-            class="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-white shrink-0"
+            class="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12 text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-white shrink-0"
         >
             Programs & Events
         </h1>
@@ -110,13 +110,13 @@
                 {#each filteredEvents.slice(0, 3) as event (event.title)}
                     <TiltCard>
                         <div
-                            class="h-full relative overflow-hidden rounded-2xl border border-red-900/30 bg-gradient-to-r from-red-950/10 to-black p-6 md:p-8 hover:border-red-500/40 transition-all group"
+                            class="h-full relative overflow-hidden rounded-2xl border border-primary-900/30 bg-gradient-to-r from-primary-950/10 to-black p-6 md:p-8 hover:border-primary-500/40 transition-all group"
                         >
                             <div
                                 class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none"
                             >
                                 <div
-                                    class="text-6xl md:text-8xl text-red-500 rotate-12 font-bold select-none"
+                                    class="text-6xl md:text-8xl text-primary-500 rotate-12 font-bold select-none"
                                 >
                                     {event.type === "workshop" ? "W" : "E"}
                                 </div>
@@ -171,7 +171,7 @@
                                         <a
                                             href={event.registration_link}
                                             target="_blank"
-                                            class="block w-full md:w-auto px-6 py-3 bg-red-700 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors text-center shadow-lg shadow-red-900/20"
+                                            class="block w-full md:w-auto px-6 py-3 bg-primary-700 hover:bg-primary-600 text-white rounded-lg font-semibold transition-colors text-center shadow-lg shadow-primary-900/20"
                                         >
                                             Register
                                         </a>
@@ -187,7 +187,7 @@
                                     <a
                                         href={getGoogleCalLink(event)}
                                         target="_blank"
-                                        class="block w-full md:w-auto px-4 py-2 mt-2 text-sm text-stone-400 hover:text-white border border-white/10 hover:border-red-500 rounded-lg transition-colors text-center"
+                                        class="block w-full md:w-auto px-4 py-2 mt-2 text-sm text-stone-400 hover:text-white border border-white/10 hover:border-primary-500 rounded-lg transition-colors text-center"
                                     >
                                         <i class="far fa-calendar-plus mr-2"
                                         ></i> Add to Google Cal
@@ -202,7 +202,7 @@
                 <div class="flex justify-center pt-8">
                     <a
                         href="/events"
-                        class="px-8 py-3 bg-white/5 border border-white/10 rounded-full text-white font-bold hover:bg-white/10 hover:border-red-500/50 hover:text-red-400 transition-all duration-300 group"
+                        class="px-8 py-3 bg-white/5 border border-white/10 rounded-full text-white font-bold hover:bg-white/10 hover:border-primary-500/50 hover:text-primary-400 transition-all duration-300 group"
                     >
                         View All Events <i
                             class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"

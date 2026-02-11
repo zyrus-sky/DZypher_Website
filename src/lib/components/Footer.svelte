@@ -140,7 +140,7 @@
                     />
                     <button
                         type="submit"
-                        class="w-full px-4 py-3 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-lg transition-all shadow-[0_0_15px_rgba(220,38,38,0.3)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)]"
+                        class="w-full px-4 py-3 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-lg transition-all shadow-[0_0_15px_rgb(var(--color-primary-600-rgb)/0.3)] hover:shadow-[0_0_25px_rgb(var(--color-primary-600-rgb)/0.5)]"
                     >
                         {isSubscribed ? "Subscribed!" : "Subscribe"}
                     </button>

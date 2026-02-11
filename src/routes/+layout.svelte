@@ -128,7 +128,7 @@
         <Magnetic>
             <a
                 href="/"
-                class="text-xl font-bold tracking-tighter text-red-500 relative z-50 hover:text-red-400 transition-colors cursor-pointer block"
+                class="text-xl font-bold tracking-tighter text-primary-500 relative z-50 hover:text-primary-400 transition-colors cursor-pointer block"
                 onclick={closeMenu}
             >
                 {$themeStore?.logo || "DZypher"}
@@ -227,43 +227,43 @@
         <a
             href="/"
             onclick={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Home</a
         >
         <a
             href="/#programs"
             onclick={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Programs</a
         >
         <a
             href="/#roadmap"
             onclick={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Roadmap</a
         >
         <a
             href="/#gallery"
             onclick={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Showcase</a
         >
         <a
             href="/#resources"
             onclick={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Library</a
         >
         <a
             href="/#team"
             onclick={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Team</a
         >
         <a
             href="/#fanficx"
             onclick={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-red-500"
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-primary-500"
             >Fanficx</a
         >
     </div>

@@ -33,14 +33,13 @@
     class="min-h-screen w-full py-12 md:py-24 snap-start flex flex-col justify-center relative overflow-hidden"
 >
     <!-- Simple Background Decor -->
-    <div
-        class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-red-900/10 blur-[100px] rounded-full pointer-events-none"
+        class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary-900/10 blur-[100px] rounded-full pointer-events-none"
     ></div>
 
     <div class="container mx-auto px-6 relative z-10">
         <h2
             use:reveal
-            class="reveal-fade-up text-4xl md:text-5xl font-bold mb-16 text-center text-red-500 font-neuropol"
+            class="reveal-fade-up text-4xl md:text-5xl font-bold mb-16 text-center text-primary-500 font-neuropol"
         >
             Roadmap
         </h2>
@@ -50,7 +49,7 @@
                 {#each roadmap as node, i}
                     <div
                         use:reveal
-                        class="reveal-fade-up group relative pl-8 border-l-2 border-red-900/30 hover:border-red-500 transition-colors"
+                        class="reveal-fade-up group relative pl-8 border-l-2 border-primary-900/30 hover:border-primary-500 transition-colors"
                         style="transition-delay: {i * 100}ms"
                     >
                         <RoadmapNode

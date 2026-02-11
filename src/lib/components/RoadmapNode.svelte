@@ -24,18 +24,18 @@
     <div class="flex flex-col items-center self-stretch">
         <button
             type="button"
-            class="w-12 h-12 rounded-full border-2 border-red-600 bg-black flex items-center justify-center z-10
-            group-hover:bg-red-900/50 group-hover:scale-110 transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(220,38,38,0.3)] focus:outline-none focus:ring-2 focus:ring-red-500"
+            class="w-12 h-12 rounded-full border-2 border-primary-600 bg-black flex items-center justify-center z-10
+            group-hover:bg-primary-900/50 group-hover:scale-110 transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgb(var(--color-primary-600-rgb)/0.3)] focus:outline-none focus:ring-2 focus:ring-primary-500"
             onclick={toggle}
             aria-label="Toggle details for {item.title}"
         >
             <i
-                class="{item.icon} text-red-500 text-xl group-hover:text-white transition-colors"
+                class="{item.icon} text-primary-500 text-xl group-hover:text-white transition-colors"
             ></i>
         </button>
         {#if !isLast}
             <div
-                class="w-0.5 flex-grow bg-gradient-to-b from-red-800 to-red-900/10 my-2"
+                class="w-0.5 flex-grow bg-gradient-to-b from-primary-800 to-primary-900/10 my-2"
             ></div>
         {/if}
     </div>
