@@ -7,10 +7,11 @@
     let selectedCategory: string = "All";
     const categories = ["All", ...new Set(RESOURCES.map((r) => r.category))];
 
-    $: filteredResources =
+    let filteredResources = $derived(
         selectedCategory === "All"
             ? RESOURCES
-            : RESOURCES.filter((r) => r.category === selectedCategory);
+            : RESOURCES.filter((r) => r.category === selectedCategory),
+    );
 </script>
 
 <div
