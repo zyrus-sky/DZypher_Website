@@ -1,27 +1,30 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { DS_ROADMAP } from "$lib/data";
     import { fetchEventsLive } from "$lib/csvParser";
     import RoadmapNode from "$lib/components/RoadmapNode.svelte";
     import { reveal } from "$lib/actions";
 
-    let roadmap = JSON.parse(JSON.stringify(DS_ROADMAP)); // Local copy
-    let loading = true;
+    let roadmap = $state(JSON.parse(JSON.stringify(DS_ROADMAP))); // Local copy
+    let loading = $state(true);
 
-    onMount(async () => {
-        const events = await fetchEventsLive();
+    // Svelte 5: Use $effect for async data loading
+    $effect(() => {
+        (async () => {
+            const events = await fetchEventsLive();
 
-        // Find VORTIX'26 node and inject events
-        const vortixNode = roadmap.find((item: any) => item.id === "vortix-26");
-        if (vortixNode && events.length > 0) {
-            vortixNode.resources = events.map((e: any) => ({
-                title: e.title,
-                link: e.registration_link || "#",
-                registration_status: e.registration_status,
-                // Add extra fields if TimelineNode supports them
-            }));
-        }
-        loading = false;
+            // Find VORTIX'26 node and inject events
+            const vortixNode = roadmap.find(
+                (item: any) => item.id === "vortix-26",
+            );
+            if (vortixNode && events.length > 0) {
+                vortixNode.resources = events.map((e: any) => ({
+                    title: e.title,
+                    link: e.registration_link || "#",
+                    registration_status: e.registration_status,
+                }));
+            }
+            loading = false;
+        })();
     });
 </script>
 
