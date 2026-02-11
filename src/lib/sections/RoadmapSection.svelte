@@ -33,6 +33,7 @@
     class="min-h-screen w-full py-12 md:py-24 snap-start flex flex-col justify-center relative overflow-hidden"
 >
     <!-- Simple Background Decor -->
+    <div
         class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary-900/10 blur-[100px] rounded-full pointer-events-none"
     ></div>
 
