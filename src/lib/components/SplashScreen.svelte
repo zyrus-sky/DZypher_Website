@@ -728,7 +728,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
@@ -740,7 +740,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
@@ -752,7 +752,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
@@ -764,7 +764,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
@@ -776,7 +776,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
@@ -812,7 +812,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
@@ -896,7 +896,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
@@ -908,7 +908,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
@@ -920,7 +920,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
@@ -932,7 +932,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
@@ -944,7 +944,7 @@
                         gradientUnits="userSpaceOnUse"
                         ><stop stop-color="var(--color-primary-700)" /><stop
                             offset="1"
-                            stop-color="#250306"
+                            stop-color="var(--color-primary-950)"
                         /></linearGradient
                     >
                     <linearGradient
