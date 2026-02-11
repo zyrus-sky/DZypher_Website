@@ -158,9 +158,10 @@
         },
     ];
 
-    let showLogo = false;
+    let showLogo = $state(false);
 
-    onMount(() => {
+    // Svelte 5: Use $effect instead of onMount
+    $effect(() => {
         // Small delay to ensure browser paints background before starting animation
         setTimeout(() => {
             showLogo = true;
@@ -207,7 +208,7 @@
             if (e.key === "Enter" || e.key === " ") skip();
         }}
         out:fade={{ duration: 800 }}
-        on:click={skip}
+        onclick={skip}
     >
         <div
             class="w-full max-w-4xl relative pointer-events-none flex flex-col items-center justify-center"
