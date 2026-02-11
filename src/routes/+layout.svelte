@@ -30,9 +30,9 @@
         loadThemeFromStorage();
     }
 
-    let lastError = "";
+    let lastError = $state("");
 
-    let activeSection = "";
+    let activeSection = $state("");
 
     // Svelte 5: Use $effect instead of onMount
     $effect(() => {
