@@ -158,6 +158,7 @@
             target="_blank"
             rel="noreferrer"
             class="group relative px-8 py-3 bg-primary-700/80 hover:bg-primary-600 text-white rounded-full transition-all shadow-[0_0_20px_var(--color-primary-900)] hover:shadow-[0_0_30px_var(--color-primary-600)] font-semibold flex items-center gap-2 overflow-hidden"
+            style="background-color: rgba(var(--color-primary-700-rgb), 0.8);"
         >
             <span class="relative z-10">Join Discord</span>
             <div

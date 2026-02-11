@@ -142,7 +142,7 @@
 
                                     <div class="flex-1">
                                         <span
-                                            class="inline-block px-3 py-1 text-xs font-bold tracking-wider text-red-200 bg-red-900/50 rounded-full mb-3 uppercase"
+                                            class="inline-block px-3 py-1 text-xs font-bold tracking-wider text-primary-200 bg-primary-900/50 rounded-full mb-3 uppercase"
                                             >{event.type}</span
                                         >
                                         <h3
@@ -156,7 +156,7 @@
                                             {event.description}
                                         </p>
                                         <div
-                                            class="flex items-center text-sm text-red-400 gap-2 font-mono"
+                                            class="flex items-center text-sm text-primary-400 gap-2 font-mono"
                                         >
                                             <i class="far fa-calendar"></i>
                                             <span>{event.date}</span>
@@ -172,6 +172,7 @@
                                             href={event.registration_link}
                                             target="_blank"
                                             class="block w-full md:w-auto px-6 py-3 bg-primary-700 hover:bg-primary-600 text-white rounded-lg font-semibold transition-colors text-center shadow-lg shadow-primary-900/20"
+                                            style="background-color: rgb(var(--color-primary-700-rgb));"
                                         >
                                             Register
                                         </a>
