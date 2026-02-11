@@ -12,15 +12,18 @@
     // Default Red Palette Source Color
     const defaultSourceColor = "#ef4444";
 
-    $: if ($themeStore?.colors && $themeStore.colors.length > 0) {
-        // Use the first color as the primary source for M3 generation
-        // M3 algorithms work best with a single source color to generate a harmonious palette.
-        // If we have multiple, we could potentially use them for other semantic roles, but for now
-        // let's stick to the primary source for the main theme.
-        updateColors($themeStore.colors[0]);
-    } else {
-        updateColors(defaultSourceColor);
-    }
+    // Svelte 5: Apply theme colors when they change
+    $effect(() => {
+        if ($themeStore?.colors && $themeStore.colors.length > 0) {
+            // Use the first color as the primary source for M3 generation
+            // M3 algorithms work best with a single source color to generate a harmonious palette.
+            // If we have multiple, we could potentially use them for other semantic roles, but for now
+            // let's stick to the primary source for the main theme.
+            updateColors($themeStore.colors[0]);
+        } else {
+            updateColors(defaultSourceColor);
+        }
+    });
 
     function updateColors(sourceHex: string) {
         if (typeof document === "undefined") return;

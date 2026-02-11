@@ -9,10 +9,11 @@
     const categories = ["All", "Code", "Design", "Art", "Event"];
 
     // Reactive statement to filter items based on activeCategory
-    $: filteredItems =
+    let filteredItems = $derived(
         activeCategory === "All"
             ? PROJECTS
-            : PROJECTS.filter((item) => item.category === activeCategory);
+            : PROJECTS.filter((item) => item.category === activeCategory),
+    );
 
     function setCategory(cat: string) {
         activeCategory = cat;
