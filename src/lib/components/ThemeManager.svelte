@@ -8,8 +8,8 @@
         TonalPalette,
     } from "@material/material-color-utilities";
 
-    // Default Red Palette Source Color
-    const defaultSourceColor = "#ef4444";
+    // Default Vortix Palette Source Color (Purple)
+    const defaultSourceColor = "#4E56C0";
 
     // Svelte 5: Apply theme colors when they change
     $effect(() => {
