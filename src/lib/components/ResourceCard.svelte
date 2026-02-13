@@ -21,8 +21,8 @@
             icon: "fas fa-brain",
         },
         "Deep Learning": {
-            color: "text-red-400",
-            border: "border-red-500/30",
+            color: "text-primary-400",
+            border: "border-primary-500/30",
             icon: "fas fa-network-wired",
         },
         Other: {
@@ -66,11 +66,21 @@
 
     <a
         href={resource.link}
+        target="_blank"
+        rel="noopener noreferrer"
         class="inline-flex items-center gap-2 text-sm font-semibold {config.color} hover:text-white transition-colors mt-auto"
     >
-        <span>Download PDF</span>
+        <span
+            >{resource.size?.startsWith("PDF")
+                ? "Download PDF"
+                : resource.size?.startsWith("PNG")
+                  ? "View Image"
+                  : "Open Guide"}</span
+        >
         <i
-            class="fas fa-download text-xs transform group-hover:translate-y-0.5 transition-transform"
+            class="fas {resource.size?.startsWith('PDF')
+                ? 'fa-download'
+                : 'fa-external-link-alt'} text-xs transform group-hover:translate-y-0.5 transition-transform"
         ></i>
     </a>
 </div>

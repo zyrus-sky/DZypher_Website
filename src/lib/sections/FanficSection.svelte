@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { fetchFanficsLive, type Fanfic } from "$lib/csvParser";
-    import TiltCard from "$lib/components/TiltCard.svelte";
     import { reveal } from "$lib/actions";
     import { selectedFanfic } from "$lib/stores";
 
@@ -61,41 +60,100 @@
             <div
                 class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto"
             >
-                {#each fanfics as fic}
+                {#each fanfics as fic, i}
                     <button
-                        class="text-left group perspective-1000 focus:outline-none"
+                        use:reveal
+                        class="reveal-fade-up text-left group focus:outline-none"
+                        style="transition-delay: {i * 80}ms"
                         on:click={() => openBook(fic)}
                     >
-                        <TiltCard>
-                            <div
-                                class="relative aspect-[2/3] bg-gradient-to-br from-stone-900 to-black rounded-r-lg border-l-4 border-l-stone-800 shadow-2xl transform transition-transform group-hover:-translate-y-2 group-hover:rotate-y-[-10deg] overflow-hidden"
-                            >
-                                <!-- Book Spine -->
+                        <div
+                            class="relative aspect-[2/3] rounded-lg shadow-xl overflow-hidden transition-all duration-500 ease-out group-hover:-translate-y-3 group-hover:shadow-[0_20px_40px_rgba(var(--color-primary-500-rgb),0.15)]"
+                        >
+                            <!-- Cover Image or Gradient Fallback -->
+                            {#if fic.cover}
+                                <img
+                                    src={fic.cover}
+                                    alt="{fic.title} cover"
+                                    class="absolute inset-0 w-full h-full object-cover"
+                                    loading="lazy"
+                                />
                                 <div
-                                    class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white/10 to-transparent z-10"
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
                                 ></div>
-
+                            {:else}
                                 <div
-                                    class="absolute inset-0 p-4 flex flex-col justify-between"
-                                >
-                                    <div
-                                        class="border border-primary-900/30 inset-2 absolute rounded"
-                                    ></div>
+                                    class="absolute inset-0 bg-gradient-to-br from-primary-950 via-stone-900 to-black"
+                                ></div>
+                                <!-- Decorative pattern for no-cover books -->
+                                <div
+                                    class="absolute inset-0 opacity-5"
+                                    style="background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 21px);"
+                                ></div>
+                            {/if}
 
+                            <!-- Book Spine -->
+                            <div
+                                class="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-primary-700/40 to-transparent z-20"
+                            ></div>
+                            <div
+                                class="absolute left-[3px] top-0 bottom-0 w-px bg-white/10 z-20"
+                            ></div>
+
+                            <!-- Decorative border frame -->
+                            <div
+                                class="absolute inset-3 border border-white/10 rounded-sm z-10 pointer-events-none transition-colors duration-300 group-hover:border-primary-500/30"
+                            ></div>
+
+                            <!-- Title & Author (always visible) -->
+                            <div
+                                class="absolute inset-0 p-5 pl-6 flex flex-col justify-end z-10"
+                            >
+                                <h3
+                                    class="font-serif text-lg md:text-xl text-white font-bold leading-snug drop-shadow-lg line-clamp-3"
+                                >
+                                    {fic.title}
+                                </h3>
+                                <p
+                                    class="text-primary-300/80 text-xs mt-1.5 font-mono tracking-wide"
+                                >
+                                    by {fic.author}
+                                </p>
+                            </div>
+
+                            <!-- Hover Reveal: Description Overlay -->
+                            <div
+                                class="absolute inset-0 z-30 flex flex-col justify-end translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                            >
+                                <div
+                                    class="bg-gradient-to-t from-black via-black/95 to-black/70 backdrop-blur-sm p-5 pl-6 pt-10"
+                                >
                                     <h3
-                                        class="font-alan-sans text-xl md:text-2xl text-primary-100 mt-4 leading-tight drop-shadow-lg p-2 font-bold"
+                                        class="font-serif text-base md:text-lg text-white font-bold leading-snug mb-2"
                                     >
                                         {fic.title}
                                     </h3>
-
-                                    <div
-                                        class="text-stone-500 text-xs md:text-sm font-mono p-2"
+                                    <p
+                                        class="text-stone-400 text-xs leading-relaxed line-clamp-4 mb-3"
                                     >
-                                        by {fic.author}
-                                    </div>
+                                        {fic.description ||
+                                            "A story from the DZypher universe..."}
+                                    </p>
+                                    <span
+                                        class="inline-flex items-center text-primary-400 text-xs font-semibold tracking-wide group-hover:gap-2 transition-all"
+                                    >
+                                        Read <i
+                                            class="fas fa-arrow-right text-[10px] ml-1 group-hover:translate-x-1 transition-transform"
+                                        ></i>
+                                    </span>
                                 </div>
                             </div>
-                        </TiltCard>
+
+                            <!-- Top shine on hover -->
+                            <div
+                                class="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"
+                            ></div>
+                        </div>
                     </button>
                 {/each}
             </div>
@@ -104,14 +162,5 @@
 </div>
 
 <style>
-    @font-face {
-        font-family: "Alan Sans";
-        src: local("Times New Roman"); /* Fallback to Serif for book feel */
-    }
-    .font-alan-sans {
-        font-family: "Times New Roman", serif;
-    }
-    .perspective-1000 {
-        perspective: 1000px;
-    }
+    /* No custom styles needed for new book design */
 </style>
