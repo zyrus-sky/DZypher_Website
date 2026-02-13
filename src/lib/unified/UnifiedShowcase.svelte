@@ -1,5 +1,6 @@
 <script lang="ts">
     import { PROJECTS } from "$lib/data";
+    import { showcaseStore } from "$lib/stores";
     import { reveal } from "$lib/actions";
     import { fade } from "svelte/transition";
     import { flip } from "svelte/animate";
@@ -8,10 +9,13 @@
     let activeCategory = $state("All");
     const categories = ["All", "Code", "Design", "Art", "Event"];
 
+    // Combine static and dynamic projects
+    let allProjects = $derived([...($showcaseStore || []), ...PROJECTS]);
+
     let filteredItems = $derived(
         activeCategory === "All"
-            ? PROJECTS
-            : PROJECTS.filter((item) => item.category === activeCategory),
+            ? allProjects
+            : allProjects.filter((item) => item.category === activeCategory),
     );
 
     function setCategory(cat: string) {

@@ -15,7 +15,12 @@
     function closeMenu() {
         $isMenuOpen = false;
     }
-    import { initTheme, loadThemeFromStorage, themeStore } from "$lib/stores";
+    import {
+        initTheme,
+        loadThemeFromStorage,
+        themeStore,
+        fetchShowcaseData,
+    } from "$lib/stores";
     import ThemeManager from "$lib/components/ThemeManager.svelte";
     import ThemeSwitcher from "$lib/components/ThemeSwitcher.svelte";
     import ScrollProgress from "$lib/components/ScrollProgress.svelte";
@@ -37,6 +42,7 @@
     // Svelte 5: Use $effect instead of onMount
     $effect(() => {
         initTheme(); // Fetch fresh theme
+        fetchShowcaseData(); // Fetch showcase projects
 
         // Lenis Smooth Scroll
         if (browser) {
