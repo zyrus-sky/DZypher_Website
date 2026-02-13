@@ -26,6 +26,49 @@
     --color-primary-900: #140e2b;
     --color-primary-950: #0a0715;
 
+    /* Secondary (Teal/Cyan fallback) */
+    --color-secondary-50: #effcfc;
+    --color-secondary-100: #d6f6f6;
+    --color-secondary-200: #bcecec;
+    --color-secondary-300: #9ee0e0;
+    --color-secondary-400: #7fd4d4;
+    --color-secondary-500: #5fc8c8;
+    --color-secondary-600: #4aa0a0;
+    --color-secondary-700: #357878;
+    --color-secondary-800: #205050;
+    --color-secondary-900: #0b2828;
+    --color-secondary-950: #051414;
+
+    /* Tertiary (Pink/Rose fallback) */
+    --color-tertiary-50: #fff0f5;
+    --color-tertiary-100: #ffe1eb;
+    --color-tertiary-200: #ffc2d6;
+    --color-tertiary-300: #ffa3c2;
+    --color-tertiary-400: #ff85ad;
+    --color-tertiary-500: #ff6699;
+    --color-tertiary-600: #cc527a;
+    --color-tertiary-700: #993d5c;
+    --color-tertiary-800: #66293d;
+    --color-tertiary-900: #33141f;
+    --color-tertiary-950: #1a0a0f;
+
+    /* Surface (Neutral) */
+    --color-surface-50: #fbfbfc;
+    --color-surface-100: #f7f7f8;
+    --color-surface-200: #efeff1;
+    --color-surface-300: #e7e7e9;
+    --color-surface-400: #dfdfe2;
+    --color-surface-500: #d7d7da;
+    --color-surface-600: #acacae;
+    --color-surface-700: #818183;
+    --color-surface-800: #565657;
+    --color-surface-900: #2b2b2c;
+    --color-surface-950: #151516;
+
+    /* Error */
+    --color-error-500: #ef4444;
+    --color-error-500-rgb: 239, 68, 68;
+
     /* RGB components for all shades — needed for Tailwind opacity modifiers */
     --color-primary-50-rgb: 239, 236, 255;
     --color-primary-100-rgb: 224, 218, 255;
@@ -38,6 +81,15 @@
     --color-primary-800-rgb: 41, 29, 83;
     --color-primary-900-rgb: 20, 14, 43;
     --color-primary-950-rgb: 10, 7, 21;
+
+    --color-secondary-50-rgb: 239, 252, 252;
+    --color-secondary-500-rgb: 95, 200, 200;
+
+    --color-tertiary-50-rgb: 255, 240, 245;
+    --color-tertiary-500-rgb: 255, 102, 153;
+
+    --color-surface-500-rgb: 215, 215, 218;
+    --color-surface-950-rgb: 21, 21, 22;
   }
 
   /* ============================================= */
