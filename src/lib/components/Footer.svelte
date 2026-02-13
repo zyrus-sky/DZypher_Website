@@ -36,7 +36,7 @@
         class="absolute -top-20 -left-20 w-64 h-64 bg-primary-900/20 rounded-full blur-[100px]"
     ></div>
     <div
-        class="absolute -bottom-20 -right-20 w-64 h-64 bg-blue-900/20 rounded-full blur-[100px]"
+        class="absolute -bottom-20 -right-20 w-64 h-64 bg-primary-900/10 rounded-full blur-[100px]"
     ></div>
 
     <div class="container mx-auto max-w-6xl relative z-10">

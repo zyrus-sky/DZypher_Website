@@ -1,6 +1,6 @@
 <script lang="ts">
     import { reveal } from "$lib/actions";
-    import TiltCard from "$lib/components/TiltCard.svelte";
+    import TiltCard from "$lib/components/TiltCard.svelte"; // Kept external due to physics state
     import { fetchEventsLive, type Event } from "$lib/csvParser";
     import { generateGoogleCalendarUrl } from "$lib/calendarUtils";
 
@@ -20,8 +20,7 @@
     function parseDate(dateStr: string): Date | null {
         if (!dateStr || dateStr === "TBA") return null;
         let strToParse = dateStr.trim();
-
-        const currentYear = 2026; // Hardcoded context for this event
+        const currentYear = 2026;
 
         // Handle "25-01-2026" or "25/01/2026"
         if (strToParse.match(/^\d{1,2}[\/-]\d{1,2}[\/-]\d{4}$/)) {
@@ -39,11 +38,10 @@
             strToParse = `${dayMonthMatch[1]} ${dayMonthMatch[2]} ${currentYear}`;
         }
 
-        // Try parsing assuming full date string now
         let d = new Date(strToParse);
         if (!isNaN(d.getTime())) return d;
 
-        // Fallback for "Jan 23" style if not caught above
+        // Fallback
         if (
             strToParse.toLowerCase().includes("jan") &&
             !strToParse.includes("2026")
@@ -52,7 +50,6 @@
             d = new Date(strToParse);
             if (!isNaN(d.getTime())) return d;
         }
-
         return null;
     }
 
@@ -60,8 +57,6 @@
     function getGoogleCalLink(event: Event): string {
         const date = parseDate(event.date);
         if (!date) return "#";
-
-        // Default start time: 9:30 AM
         const startDate = new Date(date);
         startDate.setHours(9, 30, 0, 0);
 
@@ -73,7 +68,6 @@
         });
     }
 
-    // Show all events (no more month filtering from calendar sidebar)
     let filteredEvents = $derived(allEvents);
 </script>
 
@@ -89,7 +83,6 @@
         </h1>
 
         <div class="flex flex-col items-center h-full">
-            <!-- Event List - Full Width/Centered -->
             <div class="w-full max-w-4xl space-y-6" bind:this={eventsContainer}>
                 {#if loading}
                     <div class="space-y-6">

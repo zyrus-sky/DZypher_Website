@@ -146,48 +146,116 @@ export interface Resource {
 }
 
 export const RESOURCES: Resource[] = [
+    // === Python ===
     {
         title: "Python 3 Cheat Sheet",
         category: "Python",
-        description: "Comprehensive guide to Python syntax, data types, and common functions.",
-        link: "#",
-        size: "2.5 MB"
+        description: "Comprehensive Python 3 quick reference — syntax, data types, string ops, list comprehensions, file I/O, and more.",
+        link: "https://perso.limsi.fr/pointal/_media/python:cours:mementopython3-english.pdf",
+        size: "PDF · 2 pages"
     },
     {
-        title: "NumPy & Pandas Basics",
+        title: "NumPy Cheat Sheet",
         category: "Python",
-        description: "Quick reference for data manipulation and analysis libraries.",
-        link: "#",
-        size: "1.8 MB"
+        description: "DataCamp's visual guide to NumPy: array creation, indexing, slicing, math ops, linear algebra, and broadcasting.",
+        link: "https://images.datacamp.com/image/upload/v1676302459/Marketing/Blog/Numpy_Cheat_Sheet.pdf",
+        size: "PDF · 1 page"
     },
     {
-        title: "Linear Algebra Rules",
+        title: "Pandas Cheat Sheet",
+        category: "Python",
+        description: "DataCamp's Pandas quick reference — DataFrames, selection, filtering, groupby, merging, reshaping, and time series.",
+        link: "https://images.datacamp.com/image/upload/v1676302204/Marketing/Blog/Pandas_Cheat_Sheet.pdf",
+        size: "PDF · 1 page"
+    },
+    {
+        title: "Matplotlib Cheat Sheet",
+        category: "Python",
+        description: "DataCamp's guide to Matplotlib: figure anatomy, plot types, customization, subplots, and saving figures.",
+        link: "https://images.datacamp.com/image/upload/v1676302533/Marketing/Blog/Matplotlib_Cheat_Sheet.pdf",
+        size: "PDF · 1 page"
+    },
+    // === Mathematics ===
+    {
+        title: "Linear Algebra Review (Stanford CS229)",
         category: "Mathematics",
-        description: "Essential matrix operations and vector calculus rules for ML.",
-        link: "#",
-        size: "1.2 MB"
+        description: "Stanford's concise linear algebra refresher for ML: vectors, matrices, eigenvalues, SVD, and matrix calculus.",
+        link: "https://cs229.stanford.edu/section/cs229-linalg.pdf",
+        size: "PDF · 30 pages"
     },
     {
-        title: "Probability & Stats",
+        title: "Probability & Statistics Cheat Sheet",
         category: "Mathematics",
-        description: "Key statistical concepts and probability distributions.",
-        link: "#",
-        size: "3.0 MB"
+        description: "MIT-style probability reference: distributions, Bayes' theorem, expectation, variance, common PDFs and PMFs.",
+        link: "https://static1.squarespace.com/static/54bf3241e4b0f0d81bf7ff36/t/55e9494fe4b011aed10e48e5/1441352015658/probability_cheatsheet.pdf",
+        size: "PDF · 10 pages"
     },
     {
-        title: "Scikit-Learn Map",
+        title: "Calculus Rules for ML",
+        category: "Mathematics",
+        description: "Key derivative rules, gradient computation, chain rule, and multivariate calculus essentials for optimization.",
+        link: "https://cs229.stanford.edu/section/cs229-calculus.pdf",
+        size: "PDF · 5 pages"
+    },
+    // === Machine Learning ===
+    {
+        title: "Scikit-Learn Algorithm Cheat Sheet",
         category: "Machine Learning",
-        description: "Flowchart for choosing the right estimator for your problem.",
-        link: "#",
-        size: "0.5 MB"
+        description: "Official Scikit-Learn flowchart for choosing the right estimator: classification, regression, clustering, dimensionality reduction.",
+        link: "https://scikit-learn.org/stable/_static/ml_map.png",
+        size: "PNG · Flowchart"
     },
     {
-        title: "Neural Network Architectures",
+        title: "Machine Learning Cheat Sheet (Stanford CS229)",
+        category: "Machine Learning",
+        description: "Covers supervised & unsupervised learning, SVMs, kernels, decision trees, ensemble methods, and evaluation metrics.",
+        link: "https://stanford.edu/~shervine/teaching/cs-229/cheatsheet-supervised-learning",
+        size: "Web · Multi-page"
+    },
+    {
+        title: "Feature Engineering Techniques",
+        category: "Machine Learning",
+        description: "Practical guide to feature scaling, encoding, imputation, binning, polynomial features, and feature selection methods.",
+        link: "https://images.datacamp.com/image/upload/v1688741085/Marketing/Blog/scikit-learn_cheat_sheet.pdf",
+        size: "PDF · 1 page"
+    },
+    // === Deep Learning ===
+    {
+        title: "Neural Network Architectures Zoo",
         category: "Deep Learning",
-        description: "Visual guide to CNNs, RNNs, Transformers, and GANs.",
-        link: "#",
-        size: "4.2 MB"
-    }
+        description: "Visual chart of every major neural network architecture: CNNs, RNNs, LSTMs, Transformers, GANs, Autoencoders, and more.",
+        link: "https://www.asimovinstitute.org/wp-content/uploads/2019/04/NeuralNetworkZoo20042019.png",
+        size: "PNG · Poster"
+    },
+    {
+        title: "Deep Learning Cheat Sheet (Stanford CS230)",
+        category: "Deep Learning",
+        description: "Convolutional networks, recurrent networks, training tips, regularization, hyperparameter tuning, and optimization.",
+        link: "https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks",
+        size: "Web · Multi-page"
+    },
+    {
+        title: "PyTorch Cheat Sheet",
+        category: "Deep Learning",
+        description: "Official PyTorch quick start: tensors, autograd, nn.Module, DataLoader, training loops, GPU acceleration, and saving models.",
+        link: "https://pytorch.org/tutorials/beginner/ptcheat.html",
+        size: "Web · Tutorial"
+    },
+    // === Other ===
+    {
+        title: "Git & GitHub Cheat Sheet",
+        category: "Other",
+        description: "GitHub's official reference: init, clone, branch, merge, rebase, stash, log, diff, remote, and pull request workflows.",
+        link: "https://education.github.com/git-cheat-sheet-education.pdf",
+        size: "PDF · 2 pages"
+    },
+    {
+        title: "SQL Cheat Sheet",
+        category: "Other",
+        description: "Essential SQL commands: SELECT, JOIN, GROUP BY, subqueries, window functions, indexing, and common patterns for data work.",
+        link: "https://images.datacamp.com/image/upload/v1675360372/Marketing/Blog/SQL_Basics_For_Data_Science.pdf",
+        size: "PDF · 1 page"
+    },
 ];
 
 export interface Project {

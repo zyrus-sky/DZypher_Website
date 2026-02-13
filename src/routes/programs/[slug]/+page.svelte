@@ -151,7 +151,7 @@
                             <a
                                 href={program.registration_link || "#"}
                                 target="_blank"
-                                class="block w-full py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold text-center rounded-xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] transform hover:-translate-y-1"
+                                class="block w-full py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold text-center rounded-xl transition-all shadow-[0_0_20px_rgb(var(--color-primary-600-rgb)/0.3)] hover:shadow-[0_0_30px_rgb(var(--color-primary-600-rgb)/0.5)] transform hover:-translate-y-1"
                             >
                                 Register Now
                             </a>

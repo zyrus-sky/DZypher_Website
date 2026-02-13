@@ -4,14 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Forced rebuild trigger */
-
 @layer utilities {
   .text-glow {
     text-shadow: 0 0 10px rgba(var(--color-primary-500-rgb), 0.5);
   }
 
-  /* Fallback Theme Variables (Purple) - Ensures even without JS, it is NOT Red */
+  /* ============================================= */
+  /* Fallback Theme Variables (Purple)             */
+  /* Prevents broken colors before JS loads        */
+  /* ============================================= */
   :root {
     --color-primary-50: #efecff;
     --color-primary-100: #e0daff;
@@ -19,18 +20,29 @@
     --color-primary-300: #a391ff;
     --color-primary-400: #856cff;
     --color-primary-500: #6648ff;
-    /* Fallback Purple */
     --color-primary-600: #523aac;
     --color-primary-700: #3d2c80;
     --color-primary-800: #291d53;
     --color-primary-900: #140e2b;
     --color-primary-950: #0a0715;
 
+    /* RGB components for all shades — needed for Tailwind opacity modifiers */
+    --color-primary-50-rgb: 239, 236, 255;
+    --color-primary-100-rgb: 224, 218, 255;
+    --color-primary-200-rgb: 194, 181, 255;
+    --color-primary-300-rgb: 163, 145, 255;
+    --color-primary-400-rgb: 133, 108, 255;
     --color-primary-500-rgb: 102, 72, 255;
     --color-primary-600-rgb: 82, 58, 172;
     --color-primary-700-rgb: 61, 44, 128;
+    --color-primary-800-rgb: 41, 29, 83;
+    --color-primary-900-rgb: 20, 14, 43;
+    --color-primary-950-rgb: 10, 7, 21;
   }
 
+  /* ============================================= */
+  /* Glitch Animations                             */
+  /* ============================================= */
   @keyframes glitch-1 {
     0% {
       transform: translate(0);
@@ -91,6 +103,9 @@
     animation: glitch-2 3s infinite linear alternate-reverse;
   }
 
+  /* ============================================= */
+  /* Entrance Animations                           */
+  /* ============================================= */
   @keyframes fadeInUp {
     from {
       opacity: 0;
@@ -104,15 +119,19 @@
   }
 
   .animate-fade-in-up {
-    animation: fadeInUp 1s ease-out forwards;
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  /* Reveal Animations (triggered by .is-visible class) */
+  /* ============================================= */
+  /* Scroll-Reveal Transitions                     */
+  /* Activated by adding .is-visible class          */
+  /* Uses spring-like cubic-bezier for overshoot   */
+  /* ============================================= */
   .reveal-fade-up {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-      transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal-fade-up.is-visible {
@@ -121,10 +140,10 @@
   }
 
   .reveal-scale {
-    transform: scale(0.95);
+    transform: scale(0.92);
     opacity: 0;
-    transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-      opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal-scale.is-visible {
@@ -132,37 +151,59 @@
     opacity: 1;
   }
 
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #0a0a0a;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-primary-600);
-  }
-
   .reveal-blur {
     opacity: 0;
-    filter: blur(10px);
-    transition: opacity 1.2s ease, filter 1.2s ease;
+    filter: blur(12px);
+    transform: translateY(10px);
+    transition: opacity 1s ease, filter 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal-blur.is-visible {
     opacity: 1;
     filter: blur(0);
+    transform: translateY(0);
   }
 
-  /* Stagger delays */
+  .reveal-fade-right {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-fade-right.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .reveal-fade-left {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-fade-left.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Wave-like stagger reveal — rotate in */
+  .reveal-stagger-wave {
+    opacity: 0;
+    transform: translateY(50px) rotate(2deg) scale(0.95);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-stagger-wave.is-visible {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+
+  /* ============================================= */
+  /* Stagger Delays                                */
+  /* ============================================= */
   .delay-100 {
     transition-delay: 100ms;
   }
@@ -179,63 +220,198 @@
     transition-delay: 500ms;
   }
 
-  .reveal-fade-right {
-    opacity: 0;
-    transform: translateX(-30px);
-    transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-      transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* ============================================= */
+  /* New Unique Animation Keyframes                */
+  /* ============================================= */
+
+  /* Shimmer — horizontal light sweep over element */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+
+    100% {
+      background-position: 200% center;
+    }
   }
 
-  .reveal-fade-right.is-visible {
-    opacity: 1;
-    transform: translateX(0);
+  .animate-shimmer {
+    background-size: 200% 100%;
+    background-image: linear-gradient(110deg,
+        transparent 25%,
+        rgba(var(--color-primary-400-rgb), 0.15) 37%,
+        transparent 63%);
+    animation: shimmer 3s ease-in-out infinite;
   }
 
-  .reveal-fade-left {
-    opacity: 0;
-    transform: translateX(30px);
-    transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-      transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* Float — gentle vertical hover */
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-8px);
+    }
   }
 
-  .reveal-fade-left.is-visible {
-    opacity: 1;
-    transform: translateX(0);
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Pulse Glow — themed glow expansion */
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      box-shadow: 0 0 5px rgba(var(--color-primary-500-rgb), 0.2),
+        0 0 20px rgba(var(--color-primary-500-rgb), 0.05);
+    }
+
+    50% {
+      box-shadow: 0 0 15px rgba(var(--color-primary-500-rgb), 0.4),
+        0 0 40px rgba(var(--color-primary-500-rgb), 0.15);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  /* Text Gradient Shift — animated gradient on text */
+  @keyframes text-gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-text-gradient {
+    background-size: 200% 200%;
+    background-image: linear-gradient(90deg,
+        var(--color-primary-400),
+        var(--color-primary-600),
+        var(--color-primary-300),
+        var(--color-primary-500));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-gradient-shift 4s ease-in-out infinite;
+  }
+
+  /* Slow Pulse — subtle opacity pulse */
+  @keyframes pulse-slow {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+
+  /* Magnetic Pull — micro-attraction toward center */
+  @keyframes magnetic-pull {
+
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.02);
+    }
+  }
+
+  .animate-magnetic {
+    animation: magnetic-pull 2s ease-in-out infinite;
+  }
+
+  /* Border Glow Trace — animated border highlight */
+  @keyframes border-trace {
+    0% {
+      background-position: 0% 0%;
+    }
+
+    25% {
+      background-position: 100% 0%;
+    }
+
+    50% {
+      background-position: 100% 100%;
+    }
+
+    75% {
+      background-position: 0% 100%;
+    }
+
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+
+  .animate-border-trace {
+    background-size: 300% 300%;
+    background-image: conic-gradient(from 0deg,
+        transparent 0%,
+        rgba(var(--color-primary-500-rgb), 0.6) 10%,
+        transparent 20%);
+    animation: border-trace 4s linear infinite;
+  }
+
+  /* ============================================= */
+  /* Scrollbar (Webkit)                            */
+  /* ============================================= */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #57534e;
+    border-radius: 10px;
+    border: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-600);
   }
 }
 
-/* Global Dark Scrollbar - Firefox */
+/* ============================================= */
+/* Scrollbar (Firefox)                           */
+/* ============================================= */
 * {
   scrollbar-width: thin;
   scrollbar-color: #57534e transparent;
-  /* stone-600 */
 }
 
-/* Global Dark Scrollbar - Webkit (Chrome/Edge/Safari) */
-::-webkit-scrollbar {
-  width: 6px;
-  /* slightly thinner */
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-  /* Transparent track */
-}
-
-::-webkit-scrollbar-thumb {
-  background: #57534e;
-  /* stone-600 */
-  border-radius: 10px;
-  border: transparent;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #78716c;
-  /* stone-500 */
-}
-
-/* Glass panel effect */
+/* ============================================= */
+/* Utility Classes                               */
+/* ============================================= */
 .glass-panel {
   backdrop-filter: blur(10px);
   background: rgba(0, 0, 0, 0.5);

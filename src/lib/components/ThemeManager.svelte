@@ -31,29 +31,9 @@
         const sourceArgb = argbFromHex(sourceHex);
         const theme = themeFromSourceColor(sourceArgb);
         const root = document.documentElement;
-        const isDark = root.classList.contains("dark");
 
-        // 2. Set Semantic CSS Variables (e.g., --md-sys-color-primary)
-        // We iterate over the 'schemes' (light/dark)
-        const scheme = isDark ? theme.schemes.dark : theme.schemes.light;
-
-        for (const [key, value] of Object.entries(scheme.toJSON())) {
-            // key is like 'primary', 'onPrimary', 'surface', etc.
-            // value is ARGB number
-            const kebabCase = key
-                .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
-                .toLowerCase();
-            const hexValue = hexFromArgb(value);
-            root.style.setProperty(`--md-sys-color-${kebabCase}`, hexValue);
-        }
-
-        // 3. Set Tonal Palette Variables (Backward Compatibility: --color-primary-50 to 950)
+        // 2. Set Tonal Palette Variables (--color-primary-50 to 950)
         // We map M3 Tones to Tailwind's 50-950 scale.
-        // M3 Tones: 0 (black), 10, 20, ..., 90, 95, 99, 100 (white)
-        // Tailwind: 50 (lightest), ..., 950 (darkest)
-        // Note: M3 0 is black, 100 is white. Tailwind 950 is dark, 50 is light.
-        // So M3 Tone 10 ~= Tailwind 900. M3 Tone 90 ~= Tailwind 100.
-
         const primaryPalette = theme.palettes.primary;
 
         const tonalMap = {
@@ -66,7 +46,7 @@
             600: 30, // M3 Tone 30 -> Tailwind 600
             700: 20, // M3 Tone 20 -> Tailwind 700
             800: 10, // M3 Tone 10 -> Tailwind 800
-            900: 5, // M3 Tone 5  -> Tailwind 900 (custom addition if needed, or stick to 10)
+            900: 5, // M3 Tone 5  -> Tailwind 900
             950: 0, // M3 Tone 0  -> Tailwind 950
         };
 
@@ -76,7 +56,6 @@
             root.style.setProperty(`--color-primary-${twShade}`, hex);
 
             // Set RGB components for rgba() usage
-            // hex is #RRGGBB
             const r = parseInt(hex.slice(1, 3), 16);
             const g = parseInt(hex.slice(3, 5), 16);
             const b = parseInt(hex.slice(5, 7), 16);
@@ -86,10 +65,9 @@
             );
         }
 
-        // Also set the surface/neutral tones if we want to be thorough, but maybe just start with primary for now.
         console.log("ThemeManager applied colors:", {
             sourceHex,
-            primary500: theme.palettes.primary.tone(40),
+            primary500: hexFromArgb(primaryPalette.tone(40)),
         });
     }
 </script>

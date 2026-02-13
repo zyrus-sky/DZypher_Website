@@ -130,7 +130,7 @@
             class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-900/20 blur-[120px] rounded-full"
         ></div>
         <div
-            class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-900/10 blur-[120px] rounded-full"
+            class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary-900/10 blur-[120px] rounded-full"
         ></div>
     </div>
 

@@ -122,15 +122,13 @@ export function loadThemeFromStorage() {
             const isVortix = data?.logo === 'VORTIX';
             const isPurple = data?.colors?.[0]?.toLowerCase() === '#4e56c0';
 
-            if (isVortix && !isPurple) {
-                console.warn("Detected VORTIX theme with WRONG colors (likely Red). Enforcing Purple.");
-                localStorage.removeItem('themeData');
-                return;
-            }
+            // Allow VORTIX to have other colors if the user explicitly chose them.
+            // Only sanitize if structure is missing.
+            // We trust the storage now.
 
-            // General Legacy Check
-            if (data?.colors?.[0]?.toLowerCase() === '#ef4444' || (data?.logo !== 'VORTIX' && data?.logo !== 'DZypher')) {
-                console.warn("Ignoring cached legacy theme. Enforcing default.");
+            // General Legacy Check - ALLOW Red Theme now.
+            if ((data?.logo !== 'VORTIX' && data?.logo !== 'DZypher') && !data?.colors) {
+                console.warn("Ignoring invalid theme.");
                 localStorage.removeItem('themeData');
                 return;
             }
@@ -148,6 +146,15 @@ export function loadThemeFromStorage() {
 export async function initTheme() {
     // Try to load from storage first if not already loaded (optional, but good for redundancy)
     // loadThemeFromStorage(); 
+
+    // Check if user has a saved preference allowed
+    const stored = localStorage.getItem('themeData');
+    if (stored) {
+        console.log("User preference found, skipping live theme sync to preserve selection.");
+        // We already loaded from storage in +layout.svelte, so we just return.
+        // This ensures User Choice > Live Default.
+        return;
+    }
 
     const theme = await fetchThemeLive();
     if (theme) {
