@@ -25,7 +25,7 @@
         },
     ];
 
-    let openIndex = 0;
+    let openIndex = $state(0);
 
     function toggle(index: number) {
         openIndex = openIndex === index ? -1 : index;
@@ -33,7 +33,7 @@
 </script>
 
 <div
-    class="min-h-[60vh] py-24 px-6 flex flex-col items-center justify-center relative"
+    class="min-h-[60vh] py-24 px-6 flex flex-col items-center justify-center relative snap-start"
 >
     <div class="container mx-auto max-w-3xl relative z-10">
         <h2
@@ -52,7 +52,7 @@
                 >
                     <button
                         class="w-full flex justify-between items-center p-6 text-left focus:outline-none"
-                        on:click={() => toggle(i)}
+                        onclick={() => toggle(i)}
                     >
                         <span class="font-semibold text-lg text-stone-200"
                             >{faq.question}</span

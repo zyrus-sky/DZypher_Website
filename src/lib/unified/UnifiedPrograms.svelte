@@ -1,29 +1,30 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { reveal } from "$lib/actions";
-    import TiltCard from "$lib/components/TiltCard.svelte";
-    // import Calendar from "$lib/components/Calendar.svelte"; // Removed
+    import TiltCard from "$lib/components/TiltCard.svelte"; // Kept external due to physics state
     import { fetchEventsLive, type Event } from "$lib/csvParser";
     import { generateGoogleCalendarUrl } from "$lib/calendarUtils";
 
-    let allEvents: Event[] = [];
-    let loading = true;
-    let eventsContainer: HTMLElement;
+    let allEvents = $state<Event[]>([]);
+    let loading = $state(true);
+    let eventsContainer = $state<HTMLElement>();
 
-    onMount(async () => {
-        allEvents = await fetchEventsLive();
-        loading = false;
+    // Svelte 5: Use $effect for async data loading
+    $effect(() => {
+        (async () => {
+            allEvents = await fetchEventsLive();
+            loading = false;
+        })();
     });
 
     // Helper to parse date
     function parseDate(dateStr: string): Date | null {
         if (!dateStr || dateStr === "TBA") return null;
         let strToParse = dateStr.trim();
+        const currentYear = 2026;
 
-        // Handle "25-01-2026" or "25/01/2026" manually to ensure DD/MM format
+        // Handle "25-01-2026" or "25/01/2026"
         if (strToParse.match(/^\d{1,2}[\/-]\d{1,2}[\/-]\d{4}$/)) {
             const parts = strToParse.split(/[\/-]/);
-            // Assume DD-MM-YYYY
             return new Date(
                 parseInt(parts[2]),
                 parseInt(parts[1]) - 1,
@@ -31,37 +32,33 @@
             );
         }
 
-        // Handle text based like "Jan 23"
-        if (
-            strToParse.toLowerCase().includes("jan") &&
-            !strToParse.includes("2026")
-        ) {
-            strToParse = `${strToParse} 2026`;
+        // Handle "21 Feb" or "21 February"
+        const dayMonthMatch = strToParse.match(/^(\d{1,2})\s+([a-zA-Z]+)$/);
+        if (dayMonthMatch) {
+            strToParse = `${dayMonthMatch[1]} ${dayMonthMatch[2]} ${currentYear}`;
         }
 
         let d = new Date(strToParse);
         if (!isNaN(d.getTime())) return d;
 
-        // Fallback: try to extract any number and assume it's Jan 2026 for now (since event is seemingly Jan)
-        const parts = strToParse.match(/(\d+)/g);
-        if (parts && parts.length > 0) {
-            // If looks like date
-            const day = parseInt(parts[0]);
-            if (day > 0 && day <= 31) return new Date(2026, 0, day);
+        // Fallback
+        if (
+            strToParse.toLowerCase().includes("jan") &&
+            !strToParse.includes("2026")
+        ) {
+            strToParse = `${strToParse} 2026`;
+            d = new Date(strToParse);
+            if (!isNaN(d.getTime())) return d;
         }
-
         return null;
     }
 
     // Helper to get Google Cal Link
     function getGoogleCalLink(event: Event): string {
         const date = parseDate(event.date);
-        if (!date) return "#"; // Or some error handling
-
-        // Default start time: 9 AM if not specified (parsing logic above doesn't really handle time well, so assuming date only -> 00:00)
-        // Let's set a default time like 9 AM for the event
+        if (!date) return "#";
         const startDate = new Date(date);
-        startDate.setHours(9, 0, 0, 0);
+        startDate.setHours(9, 30, 0, 0);
 
         return generateGoogleCalendarUrl({
             title: event.title,
@@ -71,8 +68,7 @@
         });
     }
 
-    // Show all events (no more month filtering from calendar sidebar)
-    $: filteredEvents = allEvents;
+    let filteredEvents = $derived(allEvents);
 </script>
 
 <div
@@ -81,13 +77,12 @@
 >
     <div class="container mx-auto px-4 md:px-6 h-full flex flex-col">
         <h1
-            class="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-white shrink-0"
+            class="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12 text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-white shrink-0"
         >
             Programs & Events
         </h1>
 
         <div class="flex flex-col items-center h-full">
-            <!-- Event List - Full Width/Centered -->
             <div class="w-full max-w-4xl space-y-6" bind:this={eventsContainer}>
                 {#if loading}
                     <div class="space-y-6">
@@ -108,13 +103,13 @@
                 {#each filteredEvents.slice(0, 3) as event (event.title)}
                     <TiltCard>
                         <div
-                            class="h-full relative overflow-hidden rounded-2xl border border-red-900/30 bg-gradient-to-r from-red-950/10 to-black p-6 md:p-8 hover:border-red-500/40 transition-all group"
+                            class="h-full relative overflow-hidden rounded-2xl border border-primary-900/30 bg-gradient-to-r from-primary-950/10 to-black p-6 md:p-8 hover:border-primary-500/40 transition-all group"
                         >
                             <div
                                 class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none"
                             >
                                 <div
-                                    class="text-6xl md:text-8xl text-red-500 rotate-12 font-bold select-none"
+                                    class="text-6xl md:text-8xl text-primary-500 rotate-12 font-bold select-none"
                                 >
                                     {event.type === "workshop" ? "W" : "E"}
                                 </div>
@@ -140,7 +135,7 @@
 
                                     <div class="flex-1">
                                         <span
-                                            class="inline-block px-3 py-1 text-xs font-bold tracking-wider text-red-200 bg-red-900/50 rounded-full mb-3 uppercase"
+                                            class="inline-block px-3 py-1 text-xs font-bold tracking-wider text-primary-200 bg-primary-900/50 rounded-full mb-3 uppercase"
                                             >{event.type}</span
                                         >
                                         <h3
@@ -154,7 +149,7 @@
                                             {event.description}
                                         </p>
                                         <div
-                                            class="flex items-center text-sm text-red-400 gap-2 font-mono"
+                                            class="flex items-center text-sm text-primary-400 gap-2 font-mono"
                                         >
                                             <i class="far fa-calendar"></i>
                                             <span>{event.date}</span>
@@ -169,7 +164,8 @@
                                         <a
                                             href={event.registration_link}
                                             target="_blank"
-                                            class="block w-full md:w-auto px-6 py-3 bg-red-700 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors text-center shadow-lg shadow-red-900/20"
+                                            class="block w-full md:w-auto px-6 py-3 bg-primary-700 hover:bg-primary-600 text-white rounded-lg font-semibold transition-colors text-center shadow-lg shadow-primary-900/20"
+                                            style="background-color: rgb(var(--color-primary-700-rgb));"
                                         >
                                             Register
                                         </a>
@@ -185,7 +181,7 @@
                                     <a
                                         href={getGoogleCalLink(event)}
                                         target="_blank"
-                                        class="block w-full md:w-auto px-4 py-2 mt-2 text-sm text-stone-400 hover:text-white border border-white/10 hover:border-red-500 rounded-lg transition-colors text-center"
+                                        class="block w-full md:w-auto px-4 py-2 mt-2 text-sm text-stone-400 hover:text-white border border-white/10 hover:border-primary-500 rounded-lg transition-colors text-center"
                                     >
                                         <i class="far fa-calendar-plus mr-2"
                                         ></i> Add to Google Cal
@@ -200,7 +196,7 @@
                 <div class="flex justify-center pt-8">
                     <a
                         href="/events"
-                        class="px-8 py-3 bg-white/5 border border-white/10 rounded-full text-white font-bold hover:bg-white/10 hover:border-red-500/50 hover:text-red-400 transition-all duration-300 group"
+                        class="px-8 py-3 bg-white/5 border border-white/10 rounded-full text-white font-bold hover:bg-white/10 hover:border-primary-500/50 hover:text-primary-400 transition-all duration-300 group"
                     >
                         View All Events <i
                             class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"

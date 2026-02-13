@@ -1,30 +1,31 @@
 <script lang="ts">
     import { selectedFanfic } from "$lib/stores";
     import { fade, scale } from "svelte/transition";
-    import { onMount } from "svelte";
     import { typewriter } from "$lib/actions";
 
-    let visible = false;
-    let loading = false;
-    let content = "";
-    let pages: string[] = [];
-    let currentPage = 0;
-    let theme: "light" | "dark" = "light";
+    let visible = $state(false);
+    let loading = $state(false);
+    let content = $state("");
+    let pages = $state<string[]>([]);
+    let currentPage = $state(0);
+    let theme = $state<"light" | "dark">("light");
 
     function toggleTheme() {
         theme = theme === "light" ? "dark" : "light";
     }
 
-    // Subscribe to store
-    $: if ($selectedFanfic) {
-        visible = true;
-        loadContent($selectedFanfic);
-    } else {
-        visible = false;
-        content = "";
-        pages = [];
-        currentPage = 0;
-    }
+    // Svelte 5: Use $effect to subscribe to store
+    $effect(() => {
+        if ($selectedFanfic) {
+            visible = true;
+            loadContent($selectedFanfic);
+        } else {
+            visible = false;
+            content = "";
+            pages = [];
+            currentPage = 0;
+        }
+    });
 
     function close() {
         $selectedFanfic = null;
@@ -130,7 +131,7 @@
         <div class="absolute top-4 right-4 md:top-8 md:right-8 flex gap-4 z-50">
             <button
                 class="text-stone-400 hover:text-white transition-colors"
-                on:click={toggleTheme}
+                onclick={toggleTheme}
                 title="Toggle Theme"
             >
                 <i
@@ -141,7 +142,7 @@
             </button>
             <button
                 class="text-stone-400 hover:text-white transition-colors"
-                on:click={close}
+                onclick={close}
             >
                 <i class="fas fa-times text-3xl"></i>
             </button>
@@ -294,7 +295,7 @@
                                 ? 'text-primary-900 hover:text-primary-700'
                                 : 'text-primary-400 hover:text-primary-300'}"
                             disabled={currentPage === 0}
-                            on:click={prevPage}
+                            onclick={prevPage}
                         >
                             <i class="fas fa-arrow-left mr-2"></i> Prev
                         </button>
@@ -313,7 +314,7 @@
                                 ? 'text-primary-900 hover:text-primary-700'
                                 : 'text-primary-400 hover:text-primary-300'}"
                             disabled={currentPage >= pages.length - 1}
-                            on:click={nextPage}
+                            onclick={nextPage}
                         >
                             Next <i class="fas fa-arrow-right ml-2"></i>
                         </button>

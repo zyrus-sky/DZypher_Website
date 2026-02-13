@@ -80,6 +80,8 @@
     function parseDate(dateStr: string): Date | null {
         if (!dateStr || dateStr === "TBA") return null;
         let strToParse = dateStr.trim();
+        const currentYear = 2026;
+
         if (strToParse.match(/^\d{1,2}[\/-]\d{1,2}[\/-]\d{4}$/)) {
             const parts = strToParse.split(/[\/-]/);
             return new Date(
@@ -88,19 +90,22 @@
                 parseInt(parts[0]),
             );
         }
-        if (
-            strToParse.toLowerCase().includes("jan") &&
-            !strToParse.includes("2026")
-        ) {
-            strToParse = `${strToParse} 2026`;
+
+        // Handle "21 Feb"
+        const dayMonthMatch = strToParse.match(/^(\d{1,2})\s+([a-zA-Z]+)$/);
+        if (dayMonthMatch) {
+            strToParse = `${dayMonthMatch[1]} ${dayMonthMatch[2]} ${currentYear}`;
         }
+
         let d = new Date(strToParse);
         if (!isNaN(d.getTime())) return d;
-        const parts = strToParse.match(/(\d+)/g);
-        if (parts && parts.length > 0) {
-            const day = parseInt(parts[0]);
-            if (day > 0 && day <= 31) return new Date(2026, 0, day);
+
+        if (strToParse.toLowerCase().includes("jan")) {
+            strToParse = `${strToParse} ${currentYear}`;
+            d = new Date(strToParse);
+            if (!isNaN(d.getTime())) return d;
         }
+
         return null;
     }
 
@@ -108,12 +113,12 @@
         const date = parseDate(event.date);
         if (!date) return "#";
         const startDate = new Date(date);
-        startDate.setHours(9, 0, 0, 0);
+        startDate.setHours(9, 30, 0, 0); // Default 9:30 AM
         return generateGoogleCalendarUrl({
             title: event.title,
             description: event.description,
             start: startDate,
-            location: "https://maps.app.goo.gl/uhLvwKTpvyLjnh3UA",
+            location: "Vortix '26 Venue",
         });
     }
 </script>
@@ -122,10 +127,10 @@
     <!-- Background Elements -->
     <div class="fixed inset-0 pointer-events-none -z-10">
         <div
-            class="absolute top-0 right-0 w-[500px] h-[500px] bg-red-900/20 blur-[120px] rounded-full"
+            class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-900/20 blur-[120px] rounded-full"
         ></div>
         <div
-            class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-900/10 blur-[120px] rounded-full"
+            class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary-900/10 blur-[120px] rounded-full"
         ></div>
     </div>
 
@@ -133,7 +138,7 @@
         <!-- Header -->
         <div class="text-center mb-12">
             <h1
-                class="text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-red-500"
+                class="text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-primary-200 to-primary-500"
             >
                 Events Calendar
             </h1>
@@ -151,13 +156,13 @@
                         on:click={() => filterEvents(category)}
                         class="px-6 py-2 rounded-full border transition-all duration-300 relative overflow-hidden group {selectedCategory ===
                         category
-                            ? 'border-red-500 bg-red-500/10 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)]'
+                            ? 'border-primary-500 bg-primary-500/10 text-white shadow-[0_0_20px_rgb(var(--color-primary-500-rgb)/0.3)]'
                             : 'border-white/10 text-stone-400 hover:border-white/30 hover:text-white'}"
                     >
                         <span class="relative z-10">{category}</span>
                         {#if selectedCategory === category}
                             <div
-                                class="absolute inset-0 bg-red-500/10 blur-sm"
+                                class="absolute inset-0 bg-primary-500/10 blur-sm"
                                 transition:fade
                             ></div>
                         {/if}
@@ -191,17 +196,18 @@
                     <div in:fly={{ y: 20, delay: i * 50, duration: 400 }}>
                         <TiltCard>
                             <div
-                                class="h-full group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md hover:border-red-500/50 transition-all duration-500 flex flex-col"
+                                class="h-full group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md hover:border-primary-500/50 transition-all duration-500 flex flex-col"
                             >
                                 <!-- Image -->
                                 <div
-                                    class="h-48 w-full overflow-hidden relative"
+                                    class="w-full aspect-square overflow-hidden relative"
                                 >
                                     {#if event.image}
                                         <img
                                             src={event.image}
                                             alt={event.title}
                                             class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                            referrerpolicy="no-referrer"
                                         />
                                     {:else}
                                         <div
@@ -213,20 +219,22 @@
                                         </div>
                                     {/if}
                                     <div
-                                        class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"
+                                        class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"
                                     ></div>
 
                                     <span
-                                        class="absolute top-4 right-4 px-3 py-1 text-xs font-bold tracking-wider text-white bg-red-600 rounded-full shadow-lg"
+                                        class="absolute top-4 right-4 px-3 py-1 text-xs font-bold tracking-wider text-white bg-primary-600 rounded-full shadow-lg z-10"
                                     >
                                         {event.type}
                                     </span>
                                 </div>
 
                                 <!-- Content -->
-                                <div class="p-6 flex-1 flex flex-col">
+                                <div
+                                    class="p-6 flex-1 flex flex-col relative z-10"
+                                >
                                     <h3
-                                        class="text-xl font-bold text-white mb-2 line-clamp-2 leading-tight group-hover:text-red-400 transition-colors"
+                                        class="text-xl font-bold text-white mb-2 line-clamp-2 leading-tight group-hover:text-primary-400 transition-colors"
                                     >
                                         {event.title}
                                     </h3>
@@ -234,7 +242,8 @@
                                     <div
                                         class="flex items-center gap-2 text-sm text-stone-400 mb-4 font-mono"
                                     >
-                                        <i class="far fa-calendar text-red-500"
+                                        <i
+                                            class="far fa-calendar text-primary-500"
                                         ></i>
                                         <span>{event.date}</span>
                                     </div>
@@ -266,6 +275,7 @@
                                         <a
                                             href={getGoogleCalLink(event)}
                                             target="_blank"
+                                            rel="noopener noreferrer"
                                             class="w-full flex items-center justify-center gap-2 py-2.5 border border-white/10 text-stone-300 font-medium text-center rounded-lg hover:border-white/30 hover:text-white transition-colors text-sm"
                                         >
                                             <i class="far fa-calendar-plus"></i>

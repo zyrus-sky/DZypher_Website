@@ -6,7 +6,7 @@
     let scale = spring(1, { stiffness: 0.1, damping: 0.4 });
 
     // For spotlight/holographic effects
-    let m = { x: 0, y: 0 };
+    let m = $state({ x: 0, y: 0 });
 
     let rafId: number;
 
@@ -52,9 +52,9 @@
 <div
     bind:this={el}
     class="perspective-1000 transform-style-3d interactive cursor-pointer md:cursor-none will-change-transform relative"
-    on:mousemove={handleMouseMove}
-    on:mouseenter={handleMouseEnter}
-    on:mouseleave={handleMouseLeave}
+    onmousemove={handleMouseMove}
+    onmouseenter={handleMouseEnter}
+    onmouseleave={handleMouseLeave}
     role="img"
     aria-label="Interactive 3D Card"
     style="

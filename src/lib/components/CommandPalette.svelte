@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { onMount, onDestroy } from "svelte";
     import { goto } from "$app/navigation";
     import { fade, scale } from "svelte/transition";
 
-    let isOpen = false;
-    let query = "";
-    let selectedIndex = 0;
+    // Svelte 5: Use $state for reactive variables
+    let isOpen = $state(false);
+    let query = $state("");
+    let selectedIndex = $state(0);
     let searchInput: HTMLInputElement;
 
     const items = [
@@ -45,7 +45,6 @@
             type: "Section",
             action: () => scrollTo("fanficx"),
         },
-        // Placeholder items - in a real app these would be dynamic
         {
             id: "mach",
             title: "Mach Learning",
@@ -60,8 +59,11 @@
         },
     ];
 
-    $: filteredItems = items.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase()),
+    // Svelte 5: Use $derived for computed values
+    let filteredItems = $derived(
+        items.filter((item) =>
+            item.title.toLowerCase().includes(query.toLowerCase()),
+        ),
     );
 
     function scrollTo(id: string) {
@@ -109,7 +111,8 @@
         }
     }
 
-    onMount(() => {
+    // Svelte 5: Use $effect for side effects
+    $effect(() => {
         window.addEventListener("keydown", handleKeydown);
         return () => window.removeEventListener("keydown", handleKeydown);
     });
@@ -118,7 +121,10 @@
 {#if isOpen}
     <div
         class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-start justify-center pt-[20vh] px-4"
-        on:click|self={close}
+        onclick={(e) => e.target === e.currentTarget && close()}
+        onkeydown={(e) => e.key === "Escape" && close()}
+        role="dialog"
+        aria-modal="true"
         transition:fade={{ duration: 150 }}
     >
         <div
@@ -156,8 +162,8 @@
                             selectedIndex
                                 ? 'bg-white/10'
                                 : ''}"
-                            on:click={item.action}
-                            on:mousemove={() => (selectedIndex = i)}
+                            onclick={item.action}
+                            onmousemove={() => (selectedIndex = i)}
                         >
                             <span class="text-gray-200">{item.title}</span>
                             <span class="text-xs text-gray-500"

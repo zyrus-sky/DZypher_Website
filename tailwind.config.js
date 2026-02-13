@@ -1,75 +1,35 @@
+import forms from '@tailwindcss/forms';
+
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: ['./src/**/*.{html,js,svelte,ts}'],
+    content: [
+        './src/**/*.{html,js,svelte,ts}',
+    ],
+
+    darkMode: 'class',
+
     theme: {
         extend: {
-            colors: {
-                red: {
-                    50: 'var(--color-primary-50)',
-                    100: 'var(--color-primary-100)',
-                    200: 'var(--color-primary-200)',
-                    300: 'var(--color-primary-300)',
-                    400: 'var(--color-primary-400)',
-                    500: 'var(--color-primary-500)',
-                    600: 'var(--color-primary-600)',
-                    700: 'var(--color-primary-700)',
-                    800: 'var(--color-primary-800)',
-                    900: 'var(--color-primary-900)',
-                    950: 'var(--color-primary-950)',
-                },
-                primary: {
-                    50: 'var(--color-primary-50)',
-                    100: 'var(--color-primary-100)',
-                    200: 'var(--color-primary-200)',
-                    300: 'var(--color-primary-300)',
-                    400: 'var(--color-primary-400)',
-                    500: 'var(--color-primary-500)',
-                    600: 'var(--color-primary-600)',
-                    700: 'var(--color-primary-700)',
-                    800: 'var(--color-primary-800)',
-                    900: 'var(--color-primary-900)',
-                    950: 'var(--color-primary-950)',
-                },
-                m3: {
-                    primary: 'var(--md-sys-color-primary)',
-                    'on-primary': 'var(--md-sys-color-on-primary)',
-                    'primary-container': 'var(--md-sys-color-primary-container)',
-                    'on-primary-container': 'var(--md-sys-color-on-primary-container)',
-                    secondary: 'var(--md-sys-color-secondary)',
-                    'on-secondary': 'var(--md-sys-color-on-secondary)',
-                    'secondary-container': 'var(--md-sys-color-secondary-container)',
-                    'on-secondary-container': 'var(--md-sys-color-on-secondary-container)',
-                    tertiary: 'var(--md-sys-color-tertiary)',
-                    'on-tertiary': 'var(--md-sys-color-on-tertiary)',
-                    'tertiary-container': 'var(--md-sys-color-tertiary-container)',
-                    'on-tertiary-container': 'var(--md-sys-color-on-tertiary-container)',
-                    error: 'var(--md-sys-color-error)',
-                    'on-error': 'var(--md-sys-color-on-error)',
-                    'error-container': 'var(--md-sys-color-error-container)',
-                    'on-error-container': 'var(--md-sys-color-on-error-container)',
-                    background: 'var(--md-sys-color-background)',
-                    'on-background': 'var(--md-sys-color-on-background)',
-                    surface: 'var(--md-sys-color-surface)',
-                    'on-surface': 'var(--md-sys-color-on-surface)',
-                    'surface-variant': 'var(--md-sys-color-surface-variant)',
-                    'on-surface-variant': 'var(--md-sys-color-on-surface-variant)',
-                    outline: 'var(--md-sys-color-outline)',
-                    'outline-variant': 'var(--md-sys-color-outline-variant)',
-                    'inverse-surface': 'var(--md-sys-color-inverse-surface)',
-                    'inverse-on-surface': 'var(--md-sys-color-inverse-on-surface)',
-                    'inverse-primary': 'var(--md-sys-color-inverse-primary)',
-                },
-                surface: {
-                    DEFAULT: 'var(--md-sys-color-surface)',
-                    on: 'var(--md-sys-color-on-surface)',
-                    variant: 'var(--md-sys-color-surface-variant)',
-                    'on-variant': 'var(--md-sys-color-on-surface-variant)',
-                },
-            },
             fontFamily: {
                 sans: ['"Neuropol X Free"', 'Inter', 'sans-serif'],
             },
+            colors: {
+                primary: {
+                    50: 'rgb(var(--color-primary-50-rgb) / <alpha-value>)',
+                    100: 'rgb(var(--color-primary-100-rgb) / <alpha-value>)',
+                    200: 'rgb(var(--color-primary-200-rgb) / <alpha-value>)',
+                    300: 'rgb(var(--color-primary-300-rgb) / <alpha-value>)',
+                    400: 'rgb(var(--color-primary-400-rgb) / <alpha-value>)',
+                    500: 'rgb(var(--color-primary-500-rgb) / <alpha-value>)',
+                    600: 'rgb(var(--color-primary-600-rgb) / <alpha-value>)',
+                    700: 'rgb(var(--color-primary-700-rgb) / <alpha-value>)',
+                    800: 'rgb(var(--color-primary-800-rgb) / <alpha-value>)',
+                    900: 'rgb(var(--color-primary-900-rgb) / <alpha-value>)',
+                    950: 'rgb(var(--color-primary-950-rgb) / <alpha-value>)',
+                },
+            },
         },
     },
-    plugins: [],
-}
+
+    plugins: [forms],
+};
