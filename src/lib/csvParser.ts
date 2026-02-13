@@ -77,6 +77,22 @@ export async function fetchFanficsLive(): Promise<Fanfic[]> {
     }
 }
 
+export function fixDriveLink(url: string): string {
+    if (!url) return '';
+    let id = '';
+    const match1 = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (match1) id = match1[1];
+    else {
+        const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (match2) id = match2[1];
+    }
+
+    if (id) {
+        return `https://lh3.googleusercontent.com/d/${id}`;
+    }
+    return url;
+}
+
 function parseEventCSV(csvText: string): Event[] {
     const rows = parseCSVLines(csvText);
     const events: Event[] = [];
@@ -87,34 +103,21 @@ function parseEventCSV(csvText: string): Event[] {
         if (row.length < 1) continue;
 
         const title = row[0]?.trim();
-        // Skip header row if it slipped through or empty titles
         if (!title || title.toLowerCase() === 'event_name') continue;
 
-        // Index 1: event_type - Default to 'program' if missing
         const typeRaw = row[1]?.trim().toLowerCase() || '';
         const type = typeRaw.includes('workshop') ? 'workshop' : 'program';
 
-        // Index 2: event_description
         const description = row[2]?.trim() || 'No description available.';
 
-        // Index 3: event_photo_link
         let image = row[3]?.trim() || '';
-        // Fix drive links for event images too
-        if (image.includes('drive.google.com/file/d/')) {
-            const idMatch = image.match(/\/d\/([a-zA-Z0-9_-]+)/);
-            if (idMatch && idMatch[1]) {
-                image = `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
-            }
-        }
+        image = fixDriveLink(image);
 
-        // Index 4: registration_link
         const regLink = row[4]?.trim() || '#';
 
-        // Index 5: registration_status
         const statusRaw = row[5]?.trim().toUpperCase();
         const isOpen = statusRaw === 'TRUE' || statusRaw === 'OPEN';
 
-        // Index 7: event_date_m
         const finalDate = row[7]?.trim() || 'TBA';
 
         events.push({
@@ -140,32 +143,14 @@ function parseFanficCSV(csvText: string): Fanfic[] {
     for (const row of rows.slice(1)) {
         if (row.length < 2) continue;
 
-        // Verified Headers from previous step:
-        // NAME, title_of the book, prologue, MC, Google doc link, image_link, st_name, college, year, rank
-
-        // Index 0: NAME (Author)
         const author = row[0]?.trim() || 'Anonymous';
-
-        // Index 1: title_of the book
         const title = row[1]?.trim();
         if (!title) continue;
 
-        // Index 2: prologue (Description)
         const description = row[2]?.trim() || '';
-
-        // Index 4: Google doc link
         const link = row[4]?.trim() || '#';
-
-        // Index 5: image_link (Cover)
         let cover = row[5]?.trim() || '';
-
-        // Fix drive links for covers
-        if (cover.includes('drive.google.com/file/d/')) {
-            const idMatch = cover.match(/\/d\/([a-zA-Z0-9_-]+)/);
-            if (idMatch && idMatch[1]) {
-                cover = `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
-            }
-        }
+        cover = fixDriveLink(cover);
 
         fanfics.push({ title, author, description, cover, link });
     }
@@ -290,35 +275,83 @@ export async function fetchThemeLive(): Promise<ThemeData | null> {
         // Header: THEME,logo
         // Row 1: "hex1\nhex2...", VORTIX
 
-        // Robust Parsing
-        // Find logo: Look for "VORTIX" anywhere
+        // Robust Parsing:
+        // The CSV format for the theme sheet is:
+        // Row 1: Logo Name (e.g. VORTIX)
+        // Row 2: Hex Codes (comma separated or in separate cells)
+
+        const rows = parseCSVLines(text);
+        let colors: string[] = [];
         let logo = "DZypher";
-        if (text.includes("VORTIX") || text.includes("vortix")) {
-            logo = "VORTIX";
+
+        // 1. Extract Logo
+        // Look for VORTIX in the first few rows
+        for (const row of rows) {
+            const rowStr = row.join(' ').toUpperCase();
+            if (rowStr.includes('VORTIX')) {
+                logo = 'VORTIX';
+                break;
+            }
         }
 
-        // Find colors: Look for #XXXXXX patterns
-        // We expect 4 colors.
-        const colorRegex = /#[0-9a-fA-F]{6}/g;
-        const matches = text.match(colorRegex);
+        // 2. Extract Colors
+        // Look for the specific Purple sequence to identify the correct row, OR just find the first valid palette.
+        // We know the intended palette is: #4E56C0, #9B5DE0, #D78FEE, #FDCFFA
+        // We should look for a row that contains MULTIPLE hex codes.
 
-        let colors: string[] = [];
-        if (matches && matches.length >= 4) {
-            // Take the first 4 unique or just first 4?
-            // The sheet has 4 colors.
-            colors = matches.slice(0, 4);
+        for (const row of rows) {
+            const rowColors = row.filter(cell => /^#[0-9a-fA-F]{6}$/.test(cell.trim()));
+            if (rowColors.length >= 3) {
+                colors = rowColors.slice(0, 4);
+                break;
+            }
+        }
+
+        // Fallback: if strict row parsing failed, try the old regex but skip known bad values
+        if (colors.length === 0) {
+            const allMatches = text.match(/#[0-9a-fA-F]{6}/g) || [];
+            // Filter out known Red flags if logo is Vortix
+            if (logo === 'VORTIX') {
+                colors = allMatches.filter(c => !['#EF4444', '#DC2626', '#B91C1C', '#8B0C15'].includes(c.toUpperCase()));
+            } else {
+                colors = allMatches;
+            }
+            if (colors.length > 4) colors = colors.slice(0, 4);
         }
 
         console.log("Parsed Theme:", { colors, logo });
+
+        // Sanitize VORTIX Theme (Live Override)
+        // If the sheet returns VORTIX but with Red colors (Legacy), force Purple.
+        if (logo === "VORTIX" && colors.length > 0) {
+            const firstColor = colors[0].toLowerCase();
+            // Check for common Red variants (Tailwind Red-500, Red-600, or the deep red used in backgrounds)
+            if (['#ef4444', '#dc2626', '#b91c1c', '#991b1b', '#7f1d1d', '#8b0c15'].includes(firstColor)) {
+                console.warn("Live theme has VORTIX logo but Red colors. Forcing Purple.");
+                colors = ["#4E56C0", "#9B5DE0", "#D78FEE", "#FDCFFA"];
+            }
+        }
 
         if (colors.length > 0) {
             return { colors, logo };
         }
 
+        // Fallback to Vortix Protocol if parsing fails but VORTIX is mentioned
+        if (logo === "VORTIX") {
+            return {
+                colors: ["#4E56C0", "#9B5DE0", "#D78FEE", "#FDCFFA"],
+                logo: "VORTIX"
+            };
+        }
+
         return null;
 
     } catch (e) {
-        console.error("Error fetching theme:", e);
-        return null;
+        console.error("Error fetching theme, falling back to VORTIX default:", e);
+        // Fallback to Vortix Protocol on network error
+        return {
+            colors: ["#4E56C0", "#9B5DE0", "#D78FEE", "#FDCFFA"],
+            logo: "VORTIX"
+        };
     }
 }

@@ -1,29 +1,34 @@
-<script>
-    import { onMount } from "svelte";
+<script lang="ts">
     import { spring } from "svelte/motion";
     import { fade } from "svelte/transition";
 
-    let scrollY = 0;
-    let innerHeight = 0;
-    let scrollHeight = 0;
+    let scrollY = $state(0);
+    let innerHeight = $state(0);
+    let scrollHeight = $state(0);
 
     // Spring for smooth progress
     let progress = spring(0, { stiffness: 0.1, damping: 0.3 });
 
-    $: {
+    // Svelte 5: Use $effect for reactive updates and to get scrollHeight
+    $effect(() => {
+        // Update scrollHeight from document
+        scrollHeight = document.documentElement.scrollHeight;
+
         if (scrollHeight && innerHeight) {
             const maxScroll = scrollHeight - innerHeight;
             // Avoid division by zero
             const p = maxScroll > 0 ? (scrollY / maxScroll) * 100 : 0;
             progress.set(p);
         }
-    }
+    });
 
     const radius = 20;
     const circumference = 2 * Math.PI * radius;
 
     // Derived value for stroke-dashoffset
-    $: dashOffset = circumference - ($progress / 100) * circumference;
+    let dashOffset = $derived(
+        circumference - ($progress / 100) * circumference,
+    );
 </script>
 
 <svelte:window bind:scrollY bind:innerHeight />

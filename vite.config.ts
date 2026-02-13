@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
     plugins: [sveltekit()],
     server: {
-        host: true, // Listen on all addresses
-        allowedHosts: ['seven-pumas-shout.loca.lt', '.loca.lt']
+        host: true,
+        port: 5173
     }
 });

@@ -15,7 +15,6 @@
     function closeMenu() {
         $isMenuOpen = false;
     }
-    import { onMount } from "svelte";
     import { initTheme, loadThemeFromStorage, themeStore } from "$lib/stores";
     import ThemeManager from "$lib/components/ThemeManager.svelte";
     import ThemeSwitcher from "$lib/components/ThemeSwitcher.svelte";
@@ -31,11 +30,12 @@
         loadThemeFromStorage();
     }
 
-    let lastError = "";
+    let lastError = $state("");
 
-    let activeSection = "";
+    let activeSection = $state("");
 
-    onMount(() => {
+    // Svelte 5: Use $effect instead of onMount
+    $effect(() => {
         initTheme(); // Fetch fresh theme
 
         // Lenis Smooth Scroll
@@ -74,8 +74,8 @@
                     });
                 },
                 {
-                    threshold: 0.2,
-                    rootMargin: "-20% 0px -50% 0px",
+                    threshold: 0.1,
+                    rootMargin: "-40% 0px -40% 0px",
                 },
             );
 
@@ -117,6 +117,7 @@
 <Background />
 <SplashScreen />
 <CustomCursor />
+
 <BookReader />
 <ProgressBar />
 
@@ -128,8 +129,8 @@
         <Magnetic>
             <a
                 href="/"
-                class="text-xl font-bold tracking-tighter text-red-500 relative z-50 hover:text-red-400 transition-colors cursor-pointer block"
-                on:click={closeMenu}
+                class="text-xl font-bold tracking-tighter text-primary-500 relative z-50 hover:text-primary-400 transition-colors cursor-pointer block"
+                onclick={closeMenu}
             >
                 {$themeStore?.logo || "DZypher"}
             </a>
@@ -149,16 +150,16 @@
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#programs"
+                    href="/#programs"
                     class="transition-colors py-2 px-1 block {activeSection ===
-                    'programs'
+                        'programs' || $page.url.pathname === '/events'
                         ? 'text-primary-500 font-bold'
                         : 'text-stone-300 hover:text-primary-400'}">Programs</a
                 >
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#roadmap"
+                    href="/#roadmap"
                     class="transition-colors py-2 px-1 block {activeSection ===
                     'roadmap'
                         ? 'text-primary-500 font-bold'
@@ -167,7 +168,7 @@
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#resources"
+                    href="/#resources"
                     class="transition-colors py-2 px-1 block {activeSection ===
                     'resources'
                         ? 'text-primary-500 font-bold'
@@ -176,7 +177,7 @@
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#gallery"
+                    href="/#gallery"
                     class="transition-colors py-2 px-1 block {activeSection ===
                     'gallery'
                         ? 'text-primary-500 font-bold'
@@ -185,7 +186,7 @@
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#team"
+                    href="/#team"
                     class="transition-colors py-2 px-1 block {activeSection ===
                     'team'
                         ? 'text-primary-500 font-bold'
@@ -194,7 +195,7 @@
             </Magnetic>
             <Magnetic>
                 <a
-                    href="#fanficx"
+                    href="/#fanficx"
                     class="transition-colors py-2 px-1 block {activeSection ===
                     'fanficx'
                         ? 'text-primary-500 font-bold'
@@ -206,7 +207,7 @@
 </nav>
 
 <div
-    class="min-h-screen relative z-10 overflow-x-hidden text-white selection:bg-red-900 selection:text-white perspective-container"
+    class="min-h-screen relative z-10 overflow-x-hidden text-white selection:bg-primary-900 selection:text-white perspective-container"
 >
     <!-- Background was here, causing the issue -->
 
@@ -218,7 +219,7 @@
     >
         <button
             class="absolute top-8 right-8 text-stone-400 hover:text-white transition-colors"
-            on:click={closeMenu}
+            onclick={closeMenu}
             aria-label="Close Menu"
         >
             <i class="fas fa-times text-3xl"></i>
@@ -226,44 +227,44 @@
 
         <a
             href="/"
-            on:click={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            onclick={closeMenu}
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Home</a
         >
         <a
-            href="#programs"
-            on:click={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            href="/#programs"
+            onclick={closeMenu}
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Programs</a
         >
         <a
-            href="#roadmap"
-            on:click={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            href="/#roadmap"
+            onclick={closeMenu}
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Roadmap</a
         >
         <a
-            href="#gallery"
-            on:click={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            href="/#gallery"
+            onclick={closeMenu}
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Showcase</a
         >
         <a
-            href="#resources"
-            on:click={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            href="/#resources"
+            onclick={closeMenu}
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Library</a
         >
         <a
-            href="#team"
-            on:click={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-white"
+            href="/#team"
+            onclick={closeMenu}
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-white"
             >Team</a
         >
         <a
-            href="#fanficx"
-            on:click={closeMenu}
-            class="text-3xl font-bold hover:text-red-500 transition-colors text-red-500"
+            href="/#fanficx"
+            onclick={closeMenu}
+            class="text-3xl font-bold hover:text-primary-500 transition-colors text-primary-500"
             >Fanficx</a
         >
     </div>

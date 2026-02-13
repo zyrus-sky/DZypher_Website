@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Fanfic, ThemeData } from './csvParser';
-import { parseCSVLines, TEAM_CSV_URL, GALLERY_CSV_URL, COUNTDOWN_CSV_URL, parseFlexibleDate, fetchThemeLive } from './csvParser';
+import { parseCSVLines, TEAM_CSV_URL, GALLERY_CSV_URL, COUNTDOWN_CSV_URL, parseFlexibleDate, fetchThemeLive, fixDriveLink } from './csvParser';
 import type { TeamMember, GalleryItem, CountdownItem } from './data';
 
 export const isMenuOpen = writable(false);
@@ -10,19 +10,14 @@ export const selectedFanfic = writable<Fanfic | null>(null);
 export const teamStore = writable<{ faculty: TeamMember[], core: TeamMember[] }>({ faculty: [], core: [] });
 export const galleryStore = writable<GalleryItem[]>([]);
 export const countdownStore = writable<{ title: string, date: string } | null>(null);
-export const themeStore = writable<ThemeData | null>(null);
+// Default VORTIX Theme
+export const themeStore = writable<ThemeData | null>({
+    colors: ["#4E56C0", "#9B5DE0", "#D78FEE", "#FDCFFA"],
+    logo: "VORTIX"
+});
 
 // Helper to fix Google Drive Image Links
-function fixDriveLink(url: string) {
-    if (!url) return '';
-    if (url.includes('drive.google.com/file/d/')) {
-        const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-        if (idMatch && idMatch[1]) {
-            return `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
-        }
-    }
-    return url;
-}
+
 
 // Fetchers
 export async function fetchTeamData() {
@@ -49,8 +44,12 @@ export async function fetchTeamData() {
                 }
             };
 
-            if (member.category === 'Faculty') faculty.push(member);
-            else core.push(member);
+            // Loose check for Faculty to catch "Faculty Coordinators"
+            if (member.category && member.category.toLowerCase().includes('faculty')) {
+                faculty.push(member);
+            } else {
+                core.push(member);
+            }
         }
         teamStore.set({ faculty, core });
     } catch (e) {
@@ -114,6 +113,26 @@ export function loadThemeFromStorage() {
         const stored = localStorage.getItem('themeData');
         if (stored) {
             const data: ThemeData = JSON.parse(stored);
+
+            // CRITICAL FIX: If stored theme is the old RED theme, IGNORE IT.
+            // Check if the first color is the old default red or if logo is NOT Vortix
+            // CRITICAL FIX: Aggressive Sanitation
+            // If the logo is 'VORTIX', we MUST ensure the color is the correct Purple.
+            // Old configurations might have 'VORTIX' with Red colors.
+            const isVortix = data?.logo === 'VORTIX';
+            const isPurple = data?.colors?.[0]?.toLowerCase() === '#4e56c0';
+
+            // Allow VORTIX to have other colors if the user explicitly chose them.
+            // Only sanitize if structure is missing.
+            // We trust the storage now.
+
+            // General Legacy Check - ALLOW Red Theme now.
+            if ((data?.logo !== 'VORTIX' && data?.logo !== 'DZypher') && !data?.colors) {
+                console.warn("Ignoring invalid theme.");
+                localStorage.removeItem('themeData');
+                return;
+            }
+
             if (data && data.colors && data.logo) {
                 themeStore.set(data);
                 console.log("Theme loaded from storage:", data);
@@ -127,6 +146,15 @@ export function loadThemeFromStorage() {
 export async function initTheme() {
     // Try to load from storage first if not already loaded (optional, but good for redundancy)
     // loadThemeFromStorage(); 
+
+    // Check if user has a saved preference allowed
+    const stored = localStorage.getItem('themeData');
+    if (stored) {
+        console.log("User preference found, skipping live theme sync to preserve selection.");
+        // We already loaded from storage in +layout.svelte, so we just return.
+        // This ensures User Choice > Live Default.
+        return;
+    }
 
     const theme = await fetchThemeLive();
     if (theme) {

@@ -36,7 +36,7 @@
         class="absolute -top-20 -left-20 w-64 h-64 bg-primary-900/20 rounded-full blur-[100px]"
     ></div>
     <div
-        class="absolute -bottom-20 -right-20 w-64 h-64 bg-blue-900/20 rounded-full blur-[100px]"
+        class="absolute -bottom-20 -right-20 w-64 h-64 bg-primary-900/10 rounded-full blur-[100px]"
     ></div>
 
     <div class="container mx-auto max-w-6xl relative z-10">
@@ -58,6 +58,7 @@
                             href={url}
                             target="_blank"
                             class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-stone-400 hover:text-white hover:bg-primary-600 transition-all"
+                            aria-label="Visit our {key} page"
                         >
                             <i class="fab fa-{key}"></i>
                         </a>
@@ -88,28 +89,28 @@
                 <ul class="space-y-3">
                     <li>
                         <a
-                            href="#"
+                            href="/"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Blog</a
                         >
                     </li>
                     <li>
                         <a
-                            href="#"
+                            href="/"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Documentation</a
                         >
                     </li>
                     <li>
                         <a
-                            href="#"
+                            href="/"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Privacy Policy</a
                         >
                     </li>
                     <li>
                         <a
-                            href="#"
+                            href="/"
                             class="text-stone-400 hover:text-primary-400 transition-colors text-sm"
                             >Terms of Service</a
                         >
@@ -125,7 +126,10 @@
                     announcements.
                 </p>
                 <form
-                    on:submit|preventDefault={handleSubscribe}
+                    onsubmit={(e) => {
+                        e.preventDefault();
+                        handleSubscribe();
+                    }}
                     class="space-y-3"
                 >
                     <input
@@ -137,7 +141,7 @@
                     />
                     <button
                         type="submit"
-                        class="w-full px-4 py-3 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-lg transition-all shadow-[0_0_15px_rgba(220,38,38,0.3)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)]"
+                        class="w-full px-4 py-3 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-lg transition-all shadow-[0_0_15px_rgb(var(--color-primary-600-rgb)/0.3)] hover:shadow-[0_0_25px_rgb(var(--color-primary-600-rgb)/0.5)]"
                     >
                         {isSubscribed ? "Subscribed!" : "Subscribe"}
                     </button>

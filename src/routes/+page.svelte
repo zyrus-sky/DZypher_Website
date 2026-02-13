@@ -1,22 +1,22 @@
 <script lang="ts">
-    import HomeSection from "$lib/sections/HomeSection.svelte";
-    import ProgramsSection from "$lib/sections/ProgramsSection.svelte";
-    import RoadmapSection from "$lib/sections/RoadmapSection.svelte";
-    import ShowcaseSection from "$lib/sections/ShowcaseSection.svelte";
-    import TeamSection from "$lib/sections/TeamSection.svelte";
-    import FanficSection from "$lib/sections/FanficSection.svelte";
-    import OriginSection from "$lib/sections/OriginSection.svelte";
-    import FAQSection from "$lib/sections/FAQSection.svelte";
+    import UnifiedHome from "$lib/unified/UnifiedHome.svelte";
+    import UnifiedPrograms from "$lib/unified/UnifiedPrograms.svelte";
+    import UnifiedRoadmap from "$lib/unified/UnifiedRoadmap.svelte";
+    import UnifiedResources from "$lib/unified/UnifiedResources.svelte";
+    import UnifiedShowcase from "$lib/unified/UnifiedShowcase.svelte";
+    import UnifiedCommunity from "$lib/unified/UnifiedCommunity.svelte";
+    import UnifiedLore from "$lib/unified/UnifiedLore.svelte";
+    import UnifiedFAQ from "$lib/unified/UnifiedFAQ.svelte";
 </script>
 
 <!-- Main Scroll Container -->
 <div class="relative text-white selection:bg-primary-500 selection:text-white">
-    <HomeSection />
-    <ProgramsSection />
-    <RoadmapSection />
-    <ShowcaseSection />
-    <OriginSection />
-    <TeamSection />
-    <FanficSection />
-    <FAQSection />
+    <UnifiedHome />
+    <UnifiedPrograms />
+    <UnifiedRoadmap />
+    <UnifiedResources />
+    <UnifiedShowcase />
+    <UnifiedLore />
+    <UnifiedCommunity />
+    <UnifiedFAQ />
 </div>

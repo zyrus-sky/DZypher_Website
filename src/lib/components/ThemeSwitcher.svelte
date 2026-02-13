@@ -1,16 +1,15 @@
-<script>
+<script lang="ts">
     import { themeStore } from "$lib/stores";
     import { fade } from "svelte/transition";
 
-    let isOpen = false;
+    // Svelte 5: Use $state for reactive variables
+    let isOpen = $state(false);
 
     // Hardcoded themes for now, later could be fetched
     const themes = [
         {
             name: "DZypher Red",
-            colors: ["#7f1d1d", "#ef4444", "#fca5a5", "#fef2f2"], // Darkest to Lightest roughly (matching parser order)
-            // Wait, logic expects: Dark, Mid, Light, Lightest
-            // Provided: [900, 500, 300, 50]
+            colors: ["#7f1d1d", "#ef4444", "#fca5a5", "#fef2f2"],
             logo: "DZypher",
         },
         {
@@ -20,8 +19,7 @@
         },
     ];
 
-    // @ts-ignore
-    function setTheme(theme) {
+    function setTheme(theme: (typeof themes)[0]) {
         const newTheme = {
             colors: theme.colors,
             logo: theme.logo,
@@ -46,7 +44,7 @@
             {#each themes as theme}
                 <button
                     class="flex items-center gap-3 p-2 hover:bg-white/10 rounded text-left transition-colors"
-                    on:click={() => setTheme(theme)}
+                    onclick={() => setTheme(theme)}
                 >
                     <div class="flex gap-1">
                         {#each theme.colors as color}
@@ -66,7 +64,7 @@
 
     <button
         class="w-10 h-10 bg-black/80 hover:bg-white/10 border border-white/20 rounded-full flex items-center justify-center text-white transition-all shadow-lg backdrop-blur-sm"
-        on:click={() => (isOpen = !isOpen)}
+        onclick={() => (isOpen = !isOpen)}
         title="Switch Theme"
     >
         <i
