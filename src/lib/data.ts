@@ -83,7 +83,7 @@ export const EVENTS: Event[] = [
 
 export const SOCIALS = {
     discord: "https://discord.gg/mTZAm8bz",
-    whatsapp: "https://chat.whatsapp.com/example",
+    whatsapp: "https://chat.whatsapp.com/DC4KgEcvJjF8z94p7qWbkg?mode=gi_t",
     linkedin: "https://linkedin.com/company/example",
     instagram: "https://www.instagram.com/dzypher.stist?igsh=ZnJ4cW5xNDA4Mnln",
     github: "https://github.com/example",
@@ -108,15 +108,7 @@ export const DS_ROADMAP: RoadmapItem[] = [
         title: "Yukthi'26 Tech Fest",
         description: "Jan 23 & 24 - A massive tech fest featuring workshops and competitions.",
         icon: "fas fa-laptop-code",
-        resources: []
-    },
-    {
-        id: "vortix-26",
-        title: "VORTIX'26 (by DZypher)",
-        description: "Feb 20 & 21 - Our flagship event with Datathons, workshops, and parties.",
-        icon: "fas fa-meteor",
-        resources: [
-            {
+        resources: [ {
                 title: "GIT GRINDING (GitHub + AI Workshop)",
                 link: "#",
                 registration_status: "OPEN",
@@ -132,7 +124,15 @@ export const DS_ROADMAP: RoadmapItem[] = [
                 title: "LAN PARTY (Mobile/PC Gaming)",
                 link: "#",
                 registration_status: "CLOSED"
-            }
+            }]
+    },
+    {
+        id: "vortix-26",
+        title: "VORTIX'26 (by DZypher)",
+        description: "Feb 20 & 21 - Our flagship event with Datathons, workshops, and parties.",
+        icon: "fas fa-meteor",
+        resources: [
+           
         ]
     }
 ];

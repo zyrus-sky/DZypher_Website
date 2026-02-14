@@ -9,7 +9,7 @@
         },
         {
             question: "How do I register for events?",
-            answer: "You can register for our workshops and events through the 'Programs' section on this website. We usually use platforms like MakeMyPass for ticketing.",
+            answer: "You can register for our workshops and events through the 'Programs' section on this website. We usually use platforms like Luma for ticketing.",
         },
         {
             question: "Is membership free?",
