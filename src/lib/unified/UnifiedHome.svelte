@@ -1,5 +1,10 @@
 <script lang="ts">
     import Logo from "$lib/components/Logo.svelte";
+    import ScrollProgress from "$lib/components/ScrollProgress.svelte";
+    import GlowBorder from "$lib/components/GlowBorder.svelte";
+    import TextScramble from "$lib/components/TextScramble.svelte";
+    import { magnetic } from "$lib/actions/magnetic";
+    import { spotlight } from "$lib/actions/spotlight";
     import { SOCIALS } from "$lib/data";
     import { reveal, typewriter } from "$lib/actions";
     import {
@@ -69,6 +74,7 @@
     id="home"
     class="min-h-screen flex flex-col items-center justify-center px-4 text-center snap-start relative"
 >
+    <ScrollProgress />
     <!-- Background Decor -->
     <div
         class="absolute inset-0 z-0 text-center flex items-center justify-center pointer-events-none"
@@ -130,11 +136,12 @@
                 {:else}
                     <div class="group relative">
                         <h1
-                            use:typewriter={{ speed: 100, delay: 200 }}
                             class="text-4xl md:text-7xl lg:text-8xl 2xl:text-9xl font-bold bg-clip-text text-transparent pb-2 tracking-tight relative z-20 min-h-[1.2em]"
                             style="background-image: linear-gradient(to right, var(--color-primary-500), var(--color-primary-600))"
                         >
-                            {$themeStore?.logo || "DZypher"}
+                            <TextScramble
+                                text={$themeStore?.logo || "DZypher"}
+                            />
                         </h1>
                         <h1
                             class="absolute top-0 left-0 text-4xl md:text-7xl lg:text-8xl 2xl:text-9xl font-bold text-primary-600 opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 z-10 pb-2 tracking-tight"
@@ -194,30 +201,28 @@
                     {#each Object.entries(timeLeft) as [unit, value]}
                         <div class="flex flex-col items-center">
                             <div class="relative group/box">
-                                <!-- Glowing Border -->
-                                <div
-                                    class="absolute -inset-1 bg-gradient-to-br from-primary-600 to-black rounded-xl opacity-50 blur-sm group-hover/box:opacity-100 transition-opacity duration-500"
-                                ></div>
-
-                                <div
-                                    class="w-20 h-20 md:w-32 md:h-32 bg-black border border-primary-500/30 rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl backdrop-blur-xl"
-                                >
-                                    <!-- Scanline -->
+                                <GlowBorder>
                                     <div
-                                        class="absolute inset-0 pointer-events-none"
-                                        style="background-image: linear-gradient(transparent 50%, rgba(var(--color-primary-500-rgb), 0.1) 50%); background-size: 100% 4px;"
-                                    ></div>
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-b from-primary-500/10 to-transparent opacity-0 group-hover/box:opacity-20 transition-opacity"
-                                    ></div>
-
-                                    <span
-                                        class="text-4xl md:text-6xl font-bold text-white font-mono z-10"
-                                        style="text-shadow: 0 0 20px rgba(var(--color-primary-600-rgb), 0.5);"
+                                        use:spotlight
+                                        class="w-20 h-20 md:w-32 md:h-32 bg-black border border-primary-500/30 rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl backdrop-blur-xl"
                                     >
-                                        {value.toString().padStart(2, "0")}
-                                    </span>
-                                </div>
+                                        <!-- Scanline -->
+                                        <div
+                                            class="absolute inset-0 pointer-events-none"
+                                            style="background-image: linear-gradient(transparent 50%, rgba(var(--color-primary-500-rgb), 0.1) 50%); background-size: 100% 4px;"
+                                        ></div>
+                                        <div
+                                            class="absolute inset-0 bg-gradient-to-b from-primary-500/10 to-transparent opacity-0 group-hover/box:opacity-20 transition-opacity"
+                                        ></div>
+
+                                        <span
+                                            class="text-4xl md:text-6xl font-bold text-white font-mono z-10"
+                                            style="text-shadow: 0 0 20px rgba(var(--color-primary-600-rgb), 0.5);"
+                                        >
+                                            {value.toString().padStart(2, "0")}
+                                        </span>
+                                    </div>
+                                </GlowBorder>
                             </div>
 
                             <span
@@ -267,6 +272,7 @@
             href={SOCIALS.discord}
             target="_blank"
             rel="noreferrer"
+            use:magnetic
             class="group relative px-8 py-3 bg-primary-700/80 hover:bg-primary-600 text-white rounded-full transition-all shadow-[0_0_20px_var(--color-primary-900)] hover:shadow-[0_0_30px_var(--color-primary-600)] font-semibold flex items-center gap-2 overflow-hidden"
             style="background-color: rgba(var(--color-primary-700-rgb), 0.8);"
         >
@@ -281,6 +287,7 @@
                 document
                     .getElementById("programs")
                     ?.scrollIntoView({ behavior: "smooth" })}
+            use:magnetic
             class="relative px-8 py-3 border border-primary-500/50 hover:border-primary-500 hover:bg-primary-950/30 text-primary-100 rounded-full transition-all font-semibold backdrop-blur-sm"
         >
             View Events

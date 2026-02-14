@@ -261,6 +261,96 @@ export function parseFlexibleDate(dateStr: string): string {
 
 const THEME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkAWq7TMm6Zn_ADLHbPYCEncybc4pA652fnQ5xaUzL4oWtQZfV1cJWFyjSeUHJ22v8SEedMS1bOaDK/pub?gid=98630973&single=true&output=csv";
 
+export interface ShowcaseItem {
+    title: string;
+    description: string;
+    image: string;
+    link: string;
+    github: string;
+    student: string;
+    techStack: string[];
+    category: "Code" | "Design" | "Art" | "Event" | "All";
+}
+
+export async function fetchShowcaseLive(): Promise<ShowcaseItem[]> {
+    try {
+        const response = await fetch(GALLERY_CSV_URL);
+        const text = await response.text();
+        return parseShowcaseCSV(text);
+    } catch (error) {
+        console.error("Failed to fetch showcase:", error);
+        return [];
+    }
+}
+
+function parseShowcaseCSV(csvText: string): ShowcaseItem[] {
+    const rows = parseCSVLines(csvText);
+    const items: ShowcaseItem[] = [];
+
+    if (rows.length < 2) return [];
+
+    // Headers: archive_name, project_by, archive_description, archive_photo_link, github_link
+
+    // Find header indices to be robust
+    const headers = rows[0].map(h => h.trim().toLowerCase());
+    const idxTitle = headers.indexOf('archive_name');
+    const idxDesc = headers.indexOf('archive_description');
+    const idxPhoto = headers.findIndex(h => h.includes('photo_link') || h.includes('photo'));
+    const idxGithub = headers.findIndex(h => h.includes('github'));
+    const idxLink = headers.indexOf('link'); // Likely missing
+    const idxStudent = headers.findIndex(h => h.includes('project_by') || h.includes('student'));
+
+    // Tech Stack and Category seem missing in new sheet, default them
+    const idxTech = headers.indexOf('tech_stack');
+    const idxCat = headers.indexOf('category');
+
+    for (const row of rows.slice(1)) {
+        if (row.length < 2) continue;
+
+        const title = row[idxTitle]?.trim();
+        if (!title) continue;
+
+        const description = row[idxDesc]?.trim() || '';
+        let image = row[idxPhoto]?.trim() || '';
+        image = fixDriveLink(image);
+
+        const github = row[idxGithub]?.trim() || '';
+        const link = row[idxLink]?.trim() || '';
+        const student = row[idxStudent]?.trim() || 'Anonymous';
+
+        let techStack: string[] = [];
+        if (idxTech !== -1) {
+            const techStackRaw = row[idxTech]?.trim() || '';
+            techStack = techStackRaw.split(/[,;\n]/).map(t => t.trim()).filter(t => t.length > 0);
+        }
+
+        let category: ShowcaseItem['category'] = 'All';
+        if (idxCat !== -1) {
+            let categoryRaw = row[idxCat]?.trim() || 'All';
+            const normCat = categoryRaw.toLowerCase();
+            if (normCat.includes('code')) category = 'Code';
+            else if (normCat.includes('design')) category = 'Design';
+            else if (normCat.includes('art')) category = 'Art';
+            else if (normCat.includes('event')) category = 'Event';
+        } else {
+            // Heuristic: If github link exists, it's likely Code
+            if (github) category = 'Code';
+        }
+
+        items.push({
+            title,
+            description,
+            image,
+            github,
+            link,
+            student,
+            techStack,
+            category
+        });
+    }
+    return items;
+}
+
 export interface ThemeData {
     colors: string[];
     logo: string;

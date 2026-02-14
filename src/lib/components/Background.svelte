@@ -1,8 +1,11 @@
 <script lang="ts">
   import { afterNavigate } from "$app/navigation";
   import { untrack } from "svelte";
+  import HeroBkg from "$lib/components/svgs/HeroBkg.svelte";
+  import ParticleScroll from "$lib/components/svgs/ParticleScroll.svelte";
 
   let canvas = $state<HTMLCanvasElement>();
+
   let ctx = $state<CanvasRenderingContext2D | null>();
 
   interface Star {

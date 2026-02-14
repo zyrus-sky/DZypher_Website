@@ -1,14 +1,14 @@
 import { writable } from 'svelte/store';
 import type { Fanfic, ThemeData } from './csvParser';
 import { parseCSVLines, TEAM_CSV_URL, GALLERY_CSV_URL, COUNTDOWN_CSV_URL, parseFlexibleDate, fetchThemeLive, fixDriveLink } from './csvParser';
-import type { TeamMember, Project, CountdownItem } from './data';
+import type { TeamMember, GalleryItem, CountdownItem } from './data';
 
 export const isMenuOpen = writable(false);
 export const selectedFanfic = writable<Fanfic | null>(null);
 
 // Data Stores
 export const teamStore = writable<{ faculty: TeamMember[], core: TeamMember[] }>({ faculty: [], core: [] });
-export const showcaseStore = writable<Project[]>([]);
+export const galleryStore = writable<GalleryItem[]>([]);
 export const countdownStore = writable<{ title: string, date: string } | null>(null);
 // Default VORTIX Theme
 export const themeStore = writable<ThemeData | null>({
@@ -57,34 +57,29 @@ export async function fetchTeamData() {
     }
 }
 
-export async function fetchShowcaseData() {
+export async function fetchGalleryData() {
     try {
         const res = await fetch(GALLERY_CSV_URL);
         const text = await res.text();
         const rows = parseCSVLines(text);
-        const items: Project[] = [];
+        const items: GalleryItem[] = [];
 
         for (const row of rows.slice(1)) {
             if (row.length < 2) continue;
             // Headers: archive_name, archive_description, archive_phone_link
-            // Map: Name -> Title, Desc -> Description, Link -> Image
+            // Map: Name -> Alt, Link -> Src
             const src = fixDriveLink(row[2]);
             if (!src) continue;
 
             items.push({
-                title: row[0] || 'Untitled Project',
-                student: 'Vortix Community',
-                description: row[1] || 'No description available.',
-                image: src,
-                techStack: [], // CSV doesn't have this, default to empty
-                category: 'Art', // Default category for gallery items
-                link: '',
-                github: ''
+                src: src,
+                alt: row[0] || 'Gallery Image',
+                size: 'medium' // Default size
             });
         }
-        showcaseStore.set(items);
+        galleryStore.set(items);
     } catch (e) {
-        console.error("Failed to fetch showcase data", e);
+        console.error("Failed to fetch gallery data", e);
     }
 }
 
