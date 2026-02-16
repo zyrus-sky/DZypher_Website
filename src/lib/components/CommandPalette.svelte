@@ -6,7 +6,7 @@
     let isOpen = $state(false);
     let query = $state("");
     let selectedIndex = $state(0);
-    let searchInput: HTMLInputElement;
+    let searchInput = $state<HTMLInputElement>();
 
     const items = [
         {
@@ -125,6 +125,7 @@
         onkeydown={(e) => e.key === "Escape" && close()}
         role="dialog"
         aria-modal="true"
+        tabindex="-1"
         transition:fade={{ duration: 150 }}
     >
         <div

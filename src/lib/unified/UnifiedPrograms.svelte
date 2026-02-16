@@ -1,8 +1,9 @@
 <script lang="ts">
     import { reveal } from "$lib/actions";
-    import TiltCard from "$lib/components/TiltCard.svelte"; // Kept external due to physics state
     import { fetchEventsLive, type Event } from "$lib/csvParser";
     import { generateGoogleCalendarUrl } from "$lib/calendarUtils";
+    import Marquee from "$lib/components/Marquee.svelte";
+    import UnifiedRegistration from "$lib/unified/UnifiedRegistration.svelte";
 
     let allEvents = $state<Event[]>([]);
     let loading = $state(true);
@@ -73,137 +74,55 @@
 
 <div
     id="programs"
-    class="min-h-screen w-full flex flex-col justify-center py-12 md:py-24 snap-start relative"
+    class="min-h-screen w-full flex flex-col justify-start snap-start relative"
+    style="padding-top: clamp(2rem, 5vw, 6rem); padding-bottom: clamp(3rem, 10vh, 6rem);"
 >
-    <div class="container mx-auto px-4 md:px-6 h-full flex flex-col">
-        <h1
-            class="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12 text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-white shrink-0"
+    <!-- Marquee Section (Double Tilted) -->
+    <div
+        class="w-full mb-12 md:mb-16 overflow-hidden relative"
+        style="height: 200px;"
+    >
+        <div
+            class="absolute w-[120%] -left-[10%] top-1/2 -translate-y-1/2 -rotate-6 flex flex-col gap-4"
         >
-            Programs & Events
-        </h1>
-
-        <div class="flex flex-col items-center h-full">
-            <div class="w-full max-w-4xl space-y-6" bind:this={eventsContainer}>
-                {#if loading}
-                    <div class="space-y-6">
-                        {#each Array(3) as _}
-                            <div
-                                class="w-full h-48 rounded-2xl bg-white/5 animate-pulse border border-white/5"
-                            ></div>
-                        {/each}
-                    </div>
-                {:else if filteredEvents.length === 0}
-                    <div
-                        class="text-center py-12 border border-white/10 rounded-2xl bg-black/30"
+            <!-- Top Marquee (Left) -->
+            <Marquee speed={25} direction="left">
+                <div class="flex items-center gap-32 pr-96">
+                    <span
+                        class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-stone-500 to-white/50 uppercase tracking-widest font-alan-sans whitespace-nowrap"
                     >
-                        <p class="text-stone-400">No events scheduled.</p>
-                    </div>
-                {/if}
-
-                {#each filteredEvents.slice(0, 3) as event (event.title)}
-                    <TiltCard>
-                        <div
-                            class="h-full relative overflow-hidden rounded-2xl border border-primary-900/30 bg-gradient-to-r from-primary-950/10 to-black p-6 md:p-8 hover:border-primary-500/40 transition-all group"
-                        >
-                            <div
-                                class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none"
-                            >
-                                <div
-                                    class="text-6xl md:text-8xl text-primary-500 rotate-12 font-bold select-none"
-                                >
-                                    {event.type === "workshop" ? "W" : "E"}
-                                </div>
-                            </div>
-
-                            <div
-                                class="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-6"
-                            >
-                                <div
-                                    class="flex flex-col md:flex-row gap-6 w-full"
-                                >
-                                    {#if event.image}
-                                        <div
-                                            class="w-full md:w-32 h-32 shrink-0 rounded-lg overflow-hidden border border-white/10"
-                                        >
-                                            <img
-                                                src={event.image}
-                                                alt={event.title}
-                                                class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                                            />
-                                        </div>
-                                    {/if}
-
-                                    <div class="flex-1">
-                                        <span
-                                            class="inline-block px-3 py-1 text-xs font-bold tracking-wider text-primary-200 bg-primary-900/50 rounded-full mb-3 uppercase"
-                                            >{event.type}</span
-                                        >
-                                        <h3
-                                            class="text-xl md:text-2xl font-bold text-white mb-2 leading-tight"
-                                        >
-                                            {event.title}
-                                        </h3>
-                                        <p
-                                            class="text-stone-400 mb-4 text-sm md:text-base leading-relaxed"
-                                        >
-                                            {event.description}
-                                        </p>
-                                        <div
-                                            class="flex items-center text-sm text-primary-400 gap-2 font-mono"
-                                        >
-                                            <i class="far fa-calendar"></i>
-                                            <span>{event.date}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="mt-4 md:mt-0 md:self-center shrink-0 w-full md:w-auto"
-                                >
-                                    {#if event.registration_status === "OPEN"}
-                                        <a
-                                            href={event.registration_link}
-                                            target="_blank"
-                                            class="block w-full md:w-auto px-6 py-3 bg-primary-700 hover:bg-primary-600 text-white rounded-lg font-semibold transition-colors text-center shadow-lg shadow-primary-900/20"
-                                            style="background-color: rgb(var(--color-primary-700-rgb));"
-                                        >
-                                            Register
-                                        </a>
-                                    {:else}
-                                        <button
-                                            disabled
-                                            class="block w-full md:w-auto px-6 py-3 bg-white/5 text-stone-600 rounded-lg font-semibold cursor-not-allowed border border-white/5"
-                                        >
-                                            Closed
-                                        </button>
-                                    {/if}
-
-                                    <a
-                                        href={getGoogleCalLink(event)}
-                                        target="_blank"
-                                        class="block w-full md:w-auto px-4 py-2 mt-2 text-sm text-stone-400 hover:text-white border border-white/10 hover:border-primary-500 rounded-lg transition-colors text-center"
-                                    >
-                                        <i class="far fa-calendar-plus mr-2"
-                                        ></i> Add to Google Cal
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </TiltCard>
-                {/each}
-
-                <!-- View More Button -->
-                <div class="flex justify-center pt-8">
-                    <a
-                        href="/events"
-                        class="px-8 py-3 bg-white/5 border border-white/10 rounded-full text-white font-bold hover:bg-white/10 hover:border-primary-500/50 hover:text-primary-400 transition-all duration-300 group"
-                    >
-                        View All Events <i
-                            class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"
-                        ></i>
-                    </a>
+                        WORKSHOP • COMPETITION • ENTERTAINMENT • PROGRAMS
+                    </span>
+                    <img
+                        src="/assets/DZypher_extend.svg"
+                        alt="DZypher"
+                        class="h-12 md:h-20 w-auto opacity-50 block"
+                    />
                 </div>
-            </div>
+            </Marquee>
+
+            <!-- Bottom Marquee (Right) -->
+            <Marquee speed={25} direction="right">
+                <div class="flex items-center gap-32 pr-96">
+                    <span
+                        class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white/50 to-stone-500 uppercase tracking-widest font-alan-sans whitespace-nowrap"
+                    >
+                        WORKSHOP • COMPETITION • ENTERTAINMENT • PROGRAMS
+                    </span>
+                    <img
+                        src="/assets/DZypher_extend.svg"
+                        alt="DZypher"
+                        class="h-12 md:h-20 w-auto opacity-50 block"
+                    />
+                </div>
+            </Marquee>
         </div>
+    </div>
+
+    <div
+        class="container mx-auto px-4 md:px-6 h-full flex flex-col items-center"
+    >
+        <!-- Registration Enhancement -->
+        <UnifiedRegistration events={filteredEvents} />
     </div>
 </div>

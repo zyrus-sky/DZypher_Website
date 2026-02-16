@@ -120,14 +120,19 @@
                 {@const githubUser = extractGithubUser(item.github)}
                 {@const isActive = activeProjectId === item.title}
                 <div
+                    use:reveal
                     animate:flip={{ duration: 300 }}
                     in:fade={{ duration: 300, delay: i * 50 }}
-                    class="h-auto"
+                    class="h-auto idle-float reveal-fade-up {i % 2 === 1
+                        ? 'md:mt-12'
+                        : ''}"
+                    style="animation-delay: {i * 0.4}s; transition-delay: {i *
+                        80}ms;"
                 >
                     <!-- INLINED PROJECT CARD COMPONENT -->
                     <TiltCard>
                         <div
-                            class="group relative overflow-hidden rounded-xl border border-white/10 bg-black/50 backdrop-blur-sm w-full cursor-pointer transition-all duration-300 transform"
+                            class="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-lg w-full cursor-pointer transition-all duration-300 transform shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:border-primary-500/30 hover:shadow-[0_0_30px_rgba(var(--color-primary-500-rgb),0.1)]"
                             onclick={() => toggleProject(item.title)}
                             onkeydown={(e) =>
                                 e.key === "Enter" && toggleProject(item.title)}
@@ -344,3 +349,18 @@
         </div>
     </div>
 </div>
+
+<style>
+    .idle-float {
+        animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-6px);
+        }
+    }
+</style>

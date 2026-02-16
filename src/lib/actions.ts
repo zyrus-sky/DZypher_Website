@@ -161,3 +161,26 @@ export function parallax(
         }
     };
 }
+/**
+ * Viewport Action
+ * Dispatches 'enterViewport' and 'exitViewport' events
+ */
+export function viewport(node: HTMLElement) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                node.dispatchEvent(new CustomEvent('enterViewport'));
+            } else {
+                node.dispatchEvent(new CustomEvent('exitViewport'));
+            }
+        });
+    });
+
+    observer.observe(node);
+
+    return {
+        destroy() {
+            observer.disconnect();
+        }
+    };
+}

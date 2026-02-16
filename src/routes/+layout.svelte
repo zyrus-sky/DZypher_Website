@@ -1,5 +1,8 @@
 <script lang="ts">
     import { page } from "$app/stores";
+    import type { Snippet } from "svelte";
+
+    let { children }: { children: Snippet } = $props();
     import "../app.css";
     import Background from "$lib/components/Background.svelte";
     import CustomCursor from "$lib/components/CustomCursor.svelte";
@@ -33,6 +36,11 @@
     let lastError = $state("");
 
     let activeSection = $state("");
+    let scrolled = $state(false);
+
+    function handleScroll() {
+        scrolled = window.scrollY > 250;
+    }
 
     // Svelte 5: Use $effect instead of onMount
     $effect(() => {
@@ -106,7 +114,52 @@
     function clearError() {
         lastError = "";
     }
+
+    let innerWidth = $state(0);
+    let scrollY = $state(0);
+    let lastScrollY = 0;
+    let headerProgress = $state(0);
+
+    // Easing: cubic-bezier(0.19,1,0.22,1) approx via code or just smoothstep
+    // Let's use a simple ease-out for the scrub
+    let easedProgress = $derived(1 - Math.pow(1 - headerProgress, 3));
+
+    // Calculate width: Start at innerWidth (minus padding), End at 500px
+    // safeWidth ensures we don't break SSR (default to 1000 or handle via onMount)
+    let targetWidth = $derived(Math.min(500, innerWidth - 32));
+    let currentWidth = $derived(
+        browser
+            ? innerWidth - (innerWidth - targetWidth) * easedProgress
+            : 1200,
+    );
+
+    $effect(() => {
+        // Only run logic if browser is available
+        if (!browser) return;
+
+        // Force expanded state at the very top
+        if (scrollY < 50) {
+            headerProgress = 0;
+            scrolled = false;
+            lastScrollY = scrollY;
+            return;
+        }
+
+        scrolled = true;
+        const delta = scrollY - lastScrollY;
+        const range = 400; // Total scroll distance to complete animation
+        const change = delta / range;
+
+        // Update progress based on direction:
+        // Scroll Down (+) -> Increase Progress -> Converge
+        // Scroll Up (-) -> Decrease Progress -> Diverge
+        headerProgress = Math.min(1, Math.max(0, headerProgress + change));
+
+        lastScrollY = scrollY;
+    });
 </script>
+
+<svelte:window bind:scrollY bind:innerWidth />
 
 <!-- Fixed Overlay Elements (Outside perspective context) -->
 <ThemeManager />
@@ -121,93 +174,64 @@
 <BookReader />
 <ProgressBar />
 
+<!-- Dynamic Header -->
 <nav
-    class="fixed top-0 w-full z-50 p-6 backdrop-blur-md bg-black/40 transition-all duration-300"
+    class="fixed top-0 left-0 w-full z-50 flex justify-center pointer-events-none transition-all duration-500"
+    class:pt-8={scrollY < 50}
+    class:pt-4={scrollY >= 50}
 >
-    <!-- Container for width constraint (7xl matches typical max-w for content) -->
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <!-- 
+        WIDTH is now driven directly by SCROLL (Scrubbing).
+        This removes "timing" and relies on "distance". 
+    -->
+    <div
+        class="flex items-center gap-16 pointer-events-auto transition-colors duration-500"
+        style="width: {currentWidth}px;"
+        class:bg-black_40={scrolled}
+        class:backdrop-blur-xl={scrolled}
+        class:shadow-lg={scrolled}
+        class:rounded-full={true}
+        class:px-6={scrolled}
+        class:py-2={scrolled}
+        class:px-10={!scrolled}
+        class:py-6={!scrolled}
+        class:justify-between={true}
+        class:bg-transparent={!scrolled}
+    >
         <Magnetic>
             <a
                 href="/"
-                class="text-xl font-bold tracking-tighter text-primary-500 relative z-50 hover:text-primary-400 transition-colors cursor-pointer block"
+                class="block relative z-50 transition-transform duration-300 hover:scale-105"
                 onclick={closeMenu}
             >
-                {$themeStore?.logo || "DZypher"}
+                <img
+                    src={$themeStore?.logo === "VORTIX"
+                        ? "/assets/Vortix_text.svg"
+                        : "/assets/DZypher_extend.svg"}
+                    alt="Logo"
+                    class="h-8 w-auto object-contain transition-all duration-500"
+                    class:h-6={scrolled}
+                />
             </a>
         </Magnetic>
 
-        <!-- Desktop Menu -->
-        <div class="hidden md:flex gap-6 text-sm font-medium items-center">
-            <Magnetic>
-                <a
-                    href="/"
-                    class="transition-colors py-2 px-1 block {activeSection ===
-                        'home' ||
-                    (!$page.url.hash && $page.url.pathname === '/')
-                        ? 'text-primary-500 font-bold'
-                        : 'text-stone-300 hover:text-primary-400'}">Home</a
+        <Magnetic>
+            <a
+                href="/events"
+                class="btn-glass px-6 py-2 group hover:bg-white/20"
+            >
+                <span
+                    class="text-xs font-bold tracking-wider uppercase text-center"
+                    >View<br />Events</span
                 >
-            </Magnetic>
-            <Magnetic>
-                <a
-                    href="/#programs"
-                    class="transition-colors py-2 px-1 block {activeSection ===
-                        'programs' || $page.url.pathname === '/events'
-                        ? 'text-primary-500 font-bold'
-                        : 'text-stone-300 hover:text-primary-400'}">Programs</a
-                >
-            </Magnetic>
-            <Magnetic>
-                <a
-                    href="/#roadmap"
-                    class="transition-colors py-2 px-1 block {activeSection ===
-                    'roadmap'
-                        ? 'text-primary-500 font-bold'
-                        : 'text-stone-300 hover:text-primary-400'}">Roadmap</a
-                >
-            </Magnetic>
-            <Magnetic>
-                <a
-                    href="/#resources"
-                    class="transition-colors py-2 px-1 block {activeSection ===
-                    'resources'
-                        ? 'text-primary-500 font-bold'
-                        : 'text-stone-300 hover:text-primary-400'}">Library</a
-                >
-            </Magnetic>
-            <Magnetic>
-                <a
-                    href="/#gallery"
-                    class="transition-colors py-2 px-1 block {activeSection ===
-                    'gallery'
-                        ? 'text-primary-500 font-bold'
-                        : 'text-stone-300 hover:text-primary-400'}">Showcase</a
-                >
-            </Magnetic>
-            <Magnetic>
-                <a
-                    href="/#team"
-                    class="transition-colors py-2 px-1 block {activeSection ===
-                    'team'
-                        ? 'text-primary-500 font-bold'
-                        : 'text-stone-300 hover:text-primary-400'}">Team</a
-                >
-            </Magnetic>
-            <Magnetic>
-                <a
-                    href="/#fanficx"
-                    class="transition-colors py-2 px-1 block {activeSection ===
-                    'fanficx'
-                        ? 'text-primary-500 font-bold'
-                        : 'text-stone-300 hover:text-primary-400'}">Fanficx</a
-                >
-            </Magnetic>
-        </div>
+            </a>
+        </Magnetic>
     </div>
 </nav>
 
 <div
-    class="min-h-screen relative z-10 overflow-x-hidden text-white selection:bg-primary-900 selection:text-white perspective-container"
+    class="min-h-screen relative z-10 text-white selection:bg-primary-900 selection:text-white perspective-container"
+    style={$isMenuOpen ? "perspective: 1000px;" : "perspective: none;"}
 >
     <!-- Background was here, causing the issue -->
 
@@ -275,14 +299,14 @@
         {$isMenuOpen
             ? 'transform scale-[0.85] translate-y-[100px] -translate-x-[20px] opacity-50 blur-[1px] rotate-[-5deg]'
             : ''}"
-        style="transform-style: preserve-3d;"
+        style={$isMenuOpen ? "transform-style: preserve-3d;" : ""}
     >
         {#key $page.url.pathname}
             <div
                 in:fly={{ y: 20, duration: 600, delay: 300, easing: cubicOut }}
                 out:fly={{ y: -20, duration: 300, easing: cubicOut }}
             >
-                <slot />
+                {@render children()}
             </div>
         {/key}
     </div>
@@ -290,7 +314,7 @@
 
 <style>
     .perspective-container {
-        perspective: 1000px;
+        /* perspective: 1000px;  Moved to inline style for conditional application */
         /* overflow-y: auto;  Removed to allow body scroll */
         min-height: 100vh; /* Changed from height: 100vh */
         /* scroll-snap-type: y mandatory; Removed */

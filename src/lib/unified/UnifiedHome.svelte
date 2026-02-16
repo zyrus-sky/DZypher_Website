@@ -3,10 +3,13 @@
     import ScrollProgress from "$lib/components/ScrollProgress.svelte";
     import GlowBorder from "$lib/components/GlowBorder.svelte";
     import TextScramble from "$lib/components/TextScramble.svelte";
+    import Marquee from "$lib/components/Marquee.svelte";
+    import ScrollBookSection from "$lib/components/ScrollBookSection.svelte";
     import { magnetic } from "$lib/actions/magnetic";
     import { spotlight } from "$lib/actions/spotlight";
     import { SOCIALS } from "$lib/data";
     import { reveal, typewriter } from "$lib/actions";
+    import { gyro } from "$lib/actions/gyro";
     import {
         countdownStore,
         fetchCountdownData,
@@ -86,7 +89,12 @@
     </div>
 
     <!-- LOGO COMPONENT -->
-    <Logo className="w-full max-w-2xl mb-8 animate-fade-in-up relative z-10" />
+    <div
+        use:gyro={{ intensity: 10 }}
+        class="w-full max-w-2xl mb-8 animate-fade-in-up relative z-10 flex justify-center"
+    >
+        <Logo className="w-full" />
+    </div>
 
     <!-- REVEAL/INTERACTIVE VORTIX TEXT -->
     <div
@@ -160,6 +168,7 @@
             {/key}
         </div>
     </div>
+
     <p
         use:reveal
         class="reveal-fade-up delay-300 text-xl md:text-2xl text-stone-300 mt-4 max-w-2xl font-light relative z-10"
@@ -173,10 +182,20 @@
         {/if}
     </p>
 
+    <!-- MARQUEE -->
+    <div
+        class="w-full my-12 relative z-10 reveal-fade-up delay-200"
+        use:reveal
+        use:gyro={{ intensity: 5 }}
+    >
+        <Marquee speed={15} direction="left" />
+    </div>
+
     <!-- INLINED COUNTDOWN COMPONENT -->
     <div
         class="w-full mt-8 reveal-fade-up delay-500 flex flex-col items-center relative z-10"
         use:reveal
+        use:gyro={{ intensity: 8 }}
     >
         {#if $countdownStore}
             <!-- Countdown Markup -->
@@ -204,7 +223,7 @@
                                 <GlowBorder>
                                     <div
                                         use:spotlight
-                                        class="w-20 h-20 md:w-32 md:h-32 bg-black border border-primary-500/30 rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl backdrop-blur-xl"
+                                        class="w-20 h-20 md:w-32 md:h-32 bg-black/20 hover:bg-black/40 border border-white/10 hover:border-primary-500/50 rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl backdrop-blur-md transition-all duration-300"
                                     >
                                         <!-- Scanline -->
                                         <div
@@ -267,18 +286,18 @@
     <div
         class="mt-12 flex flex-wrap gap-4 justify-center reveal-fade-up delay-500 relative z-10"
         use:reveal
+        use:gyro={{ intensity: 12 }}
     >
         <a
             href={SOCIALS.discord}
             target="_blank"
             rel="noreferrer"
             use:magnetic
-            class="group relative px-8 py-3 bg-primary-700/80 hover:bg-primary-600 text-white rounded-full transition-all shadow-[0_0_20px_var(--color-primary-900)] hover:shadow-[0_0_30px_var(--color-primary-600)] font-semibold flex items-center gap-2 overflow-hidden"
-            style="background-color: rgba(var(--color-primary-700-rgb), 0.8);"
+            class="group btn-glass bg-primary-700/50 hover:bg-primary-600/70"
         >
             <span class="relative z-10">Join Discord</span>
             <div
-                class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                class="absolute inset-0 bg-gradient-to-r from-primary-600/50 to-primary-500/50 opacity-0 group-hover:opacity-100 transition-opacity"
             ></div>
         </a>
 
@@ -288,7 +307,7 @@
                     .getElementById("programs")
                     ?.scrollIntoView({ behavior: "smooth" })}
             use:magnetic
-            class="relative px-8 py-3 border border-primary-500/50 hover:border-primary-500 hover:bg-primary-950/30 text-primary-100 rounded-full transition-all font-semibold backdrop-blur-sm"
+            class="btn-glass hover:bg-primary-500/20 text-primary-100"
         >
             View Events
         </button>
@@ -297,6 +316,7 @@
     <!-- FOOTER LINKS -->
     <div
         class="mt-16 flex flex-wrap justify-center gap-6 md:gap-8 text-xl md:text-2xl text-stone-400 px-4 w-full relative z-10"
+        use:gyro={{ intensity: 5 }}
     >
         <a
             href={SOCIALS.linkedin}
@@ -316,5 +336,10 @@
             ><i class="fab fa-github"></i>
             <span class="hidden sm:inline">GitHub</span></a
         >
+    </div>
+
+    <!-- 3D BOOK SECTION (Moved to Bottom) -->
+    <div class="w-full relative z-10 mt-16 mb-12" id="book-section">
+        <ScrollBookSection />
     </div>
 </div>

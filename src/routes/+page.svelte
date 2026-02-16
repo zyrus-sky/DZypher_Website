@@ -4,9 +4,15 @@
     import UnifiedRoadmap from "$lib/unified/UnifiedRoadmap.svelte";
     import UnifiedResources from "$lib/unified/UnifiedResources.svelte";
     import UnifiedShowcase from "$lib/unified/UnifiedShowcase.svelte";
-    import UnifiedCommunity from "$lib/unified/UnifiedCommunity.svelte";
+    import CoordinatorSection from "$lib/components/CoordinatorSection.svelte";
     import UnifiedLore from "$lib/unified/UnifiedLore.svelte";
     import UnifiedFAQ from "$lib/unified/UnifiedFAQ.svelte";
+    import { onMount } from "svelte";
+    import { fetchTeamData } from "$lib/stores";
+
+    onMount(() => {
+        fetchTeamData();
+    });
 </script>
 
 <!-- Main Scroll Container -->
@@ -17,6 +23,6 @@
     <UnifiedResources />
     <UnifiedShowcase />
     <UnifiedLore />
-    <UnifiedCommunity />
+    <CoordinatorSection />
     <UnifiedFAQ />
 </div>

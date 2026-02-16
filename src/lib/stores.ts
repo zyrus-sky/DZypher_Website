@@ -7,7 +7,7 @@ export const isMenuOpen = writable(false);
 export const selectedFanfic = writable<Fanfic | null>(null);
 
 // Data Stores
-export const teamStore = writable<{ faculty: TeamMember[], core: TeamMember[] }>({ faculty: [], core: [] });
+export const teamStore = writable<{ faculty: TeamMember[], core: TeamMember[], vortix: TeamMember[] }>({ faculty: [], core: [], vortix: [] });
 export const galleryStore = writable<GalleryItem[]>([]);
 export const countdownStore = writable<{ title: string, date: string } | null>(null);
 // Default VORTIX Theme
@@ -28,6 +28,7 @@ export async function fetchTeamData() {
 
         const faculty: TeamMember[] = [];
         const core: TeamMember[] = [];
+        const vortix: TeamMember[] = [];
 
         // Skip header
         for (const row of rows.slice(1)) {
@@ -47,11 +48,13 @@ export async function fetchTeamData() {
             // Loose check for Faculty to catch "Faculty Coordinators"
             if (member.category && member.category.toLowerCase().includes('faculty')) {
                 faculty.push(member);
+            } else if (member.role && member.role.toLowerCase().includes("vortix'26 coordinator")) {
+                vortix.push(member);
             } else {
                 core.push(member);
             }
         }
-        teamStore.set({ faculty, core });
+        teamStore.set({ faculty, core, vortix });
     } catch (e) {
         console.error("Failed to fetch team data", e);
     }

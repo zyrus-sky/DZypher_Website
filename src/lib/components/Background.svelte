@@ -3,6 +3,7 @@
   import { untrack } from "svelte";
   import HeroBkg from "$lib/components/svgs/HeroBkg.svelte";
   import ParticleScroll from "$lib/components/svgs/ParticleScroll.svelte";
+  import { selectedFanfic } from "$lib/stores";
 
   let canvas = $state<HTMLCanvasElement>();
 
@@ -138,8 +139,8 @@
   function animate() {
     if (!ctx) return;
 
-    // Check if tab is active to pause animation
-    if (document.hidden) {
+    // Check if tab is active OR if heavy overlay (BookReader) is active
+    if (document.hidden || $selectedFanfic) {
       animationFrame = requestAnimationFrame(animate);
       return;
     }

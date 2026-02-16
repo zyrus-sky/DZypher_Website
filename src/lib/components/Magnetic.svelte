@@ -1,8 +1,13 @@
 <script lang="ts">
     import { spring } from "svelte/motion";
 
+    import type { Snippet } from "svelte";
+
     // Svelte 5: Props using $props()
-    let { strength = 0.5 }: { strength?: number } = $props();
+    let {
+        strength = 0.5,
+        children,
+    }: { strength?: number; children?: Snippet } = $props();
 
     // Svelte 5: Reactive state using $state()
     let coords = spring(
@@ -37,5 +42,5 @@
     role="button"
     tabindex="0"
 >
-    <slot />
+    {@render children?.()}
 </div>

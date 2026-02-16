@@ -1,6 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import TiltCard from "$lib/components/TiltCard.svelte";
+    import SpotlightCard from "$lib/components/SpotlightCard.svelte";
+    import Ticket3D from "$lib/components/Ticket3D/index.svelte";
+    import EventListCard from "$lib/components/EventListCard.svelte";
     import { fetchEventsLive, type Event } from "$lib/csvParser";
     import { generateGoogleCalendarUrl } from "$lib/calendarUtils";
     import { fly, fade } from "svelte/transition";
@@ -121,9 +123,15 @@
             location: "Vortix '26 Venue",
         });
     }
+
+    let scrollY = 0;
 </script>
 
-<div class="min-h-screen pt-24 pb-12 px-4 md:px-8 relative overflow-hidden">
+<svelte:window bind:scrollY />
+
+<div
+    class="min-h-screen pt-24 pb-12 px-4 md:px-8 relative flex flex-col items-center"
+>
     <!-- Background Elements -->
     <div class="fixed inset-0 pointer-events-none -z-10">
         <div
@@ -134,160 +142,114 @@
         ></div>
     </div>
 
-    <div class="max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="text-center mb-12">
-            <h1
-                class="text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-primary-200 to-primary-500"
-            >
-                Events Calendar
-            </h1>
-            <p class="text-stone-400 text-lg max-w-2xl mx-auto">
-                Discover workshops, competitions, and entertainment events
-                happening at DZypher.
-            </p>
-        </div>
-
-        <!-- Filters -->
-        <div class="flex flex-wrap justify-center gap-4 mb-12">
-            {#each categories as category}
-                <Magnetic>
-                    <button
-                        on:click={() => filterEvents(category)}
-                        class="px-6 py-2 rounded-full border transition-all duration-300 relative overflow-hidden group {selectedCategory ===
-                        category
-                            ? 'border-primary-500 bg-primary-500/10 text-white shadow-[0_0_20px_rgb(var(--color-primary-500-rgb)/0.3)]'
-                            : 'border-white/10 text-stone-400 hover:border-white/30 hover:text-white'}"
-                    >
-                        <span class="relative z-10">{category}</span>
-                        {#if selectedCategory === category}
-                            <div
-                                class="absolute inset-0 bg-primary-500/10 blur-sm"
-                                transition:fade
-                            ></div>
-                        {/if}
-                    </button>
-                </Magnetic>
-            {/each}
-        </div>
-
-        <!-- Grid -->
-        {#if loading}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {#each Array(6) as _}
-                    <div
-                        class="h-96 rounded-2xl bg-white/5 animate-pulse border border-white/5"
-                    ></div>
-                {/each}
+    <div class="container mx-auto px-6 relative z-10">
+        <div
+            class="flex flex-col lg:flex-row items-start"
+            style="gap: clamp(3rem, 6vw, 6rem);"
+        >
+            <!-- LEFT: 3D TICKET SCENE (Fixed on Desktop) -->
+            <!-- 
+                Using 'sticky' allowed it to scroll with padding. 
+                Switching to a phantom spacer + fixed element approach ensures it stays locked.
+            -->
+            <div class="hidden lg:block lg:w-1/2 relative order-1 lg:order-1">
+                <!-- Spacer to occupy flow -->
             </div>
-        {:else if filteredEvents.length === 0}
+
             <div
-                class="text-center py-24 border border-white/10 rounded-2xl bg-black/30 backdrop-blur-sm"
+                class="w-full max-w-[100vw] lg:w-1/2 fixed top-0 left-0 h-screen hidden lg:flex justify-center items-center z-0"
             >
-                <i class="fas fa-calendar-times text-4xl text-stone-600 mb-4"
-                ></i>
-                <p class="text-stone-400 text-xl">
-                    No events found in this category.
-                </p>
+                <div
+                    class="absolute inset-0 bg-primary-500/5 blur-[100px] rounded-full pointer-events-none"
+                ></div>
+                <!-- Threlte 3D Ticket -->
+                <div class="w-full h-full">
+                    <Ticket3D {scrollY} customCameraZ={11} />
+                </div>
             </div>
-        {:else}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {#each filteredEvents as event, i (event.title)}
-                    <div in:fly={{ y: 20, delay: i * 50, duration: 400 }}>
-                        <TiltCard>
-                            <div
-                                class="h-full group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md hover:border-primary-500/50 transition-all duration-500 flex flex-col"
+
+            <!-- Mobile Only Ticket (Non-fixed) -->
+            <!-- Added mx-8 to create safe scroll zones on sides -->
+            <div
+                class="w-full relative flex lg:hidden justify-center items-center h-[300px] px-8"
+            >
+                <!-- Threlte 3D Ticket -->
+                <div class="w-full h-full">
+                    <Ticket3D {scrollY} customCameraZ={20} />
+                </div>
+            </div>
+
+            <!-- RIGHT: EVENT LIST -->
+            <div
+                class="w-full max-w-[100vw] lg:w-1/2 order-2 lg:order-2 space-y-8"
+            >
+                <!-- Header -->
+                <div class="text-left mb-8 w-full">
+                    <span
+                        class="text-primary-400 font-mono text-sm tracking-widest uppercase mb-2 block"
+                    >
+                        Events
+                    </span>
+                    <h1
+                        class="font-bold text-white mb-6 leading-tight break-words"
+                        style="font-size: clamp(1.75rem, 5vw, 3.75rem); word-break: break-word;"
+                    >
+                        Explore All Events
+                    </h1>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap gap-2 md:gap-3 mb-8">
+                    {#each categories as category}
+                        <Magnetic>
+                            <button
+                                on:click={() => filterEvents(category)}
+                                class="rounded-full border font-bold transition-all duration-300 relative overflow-hidden group {selectedCategory ===
+                                category
+                                    ? 'border-primary-500 bg-primary-500/10 text-white shadow-[0_0_20px_rgb(var(--color-primary-500-rgb)/0.3)]'
+                                    : 'border-white/10 text-stone-400 hover:border-white/30 hover:text-white'}"
+                                style="
+                                    font-size: clamp(0.7rem, 1.5vw, 0.875rem);
+                                    padding: clamp(0.3rem, 1vw, 0.5rem) clamp(0.75rem, 2vw, 1.25rem);
+                                "
                             >
-                                <!-- Image -->
-                                <div
-                                    class="w-full aspect-square overflow-hidden relative"
-                                >
-                                    {#if event.image}
-                                        <img
-                                            src={event.image}
-                                            alt={event.title}
-                                            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                                            referrerpolicy="no-referrer"
-                                        />
-                                    {:else}
-                                        <div
-                                            class="w-full h-full bg-gradient-to-br from-stone-900 to-black flex items-center justify-center"
-                                        >
-                                            <i
-                                                class="fas fa-image text-3xl text-stone-700"
-                                            ></i>
-                                        </div>
-                                    {/if}
+                                <span class="relative z-10">{category}</span>
+                                {#if selectedCategory === category}
                                     <div
-                                        class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"
+                                        class="absolute inset-0 bg-primary-500/10 blur-sm"
+                                        transition:fade
                                     ></div>
+                                {/if}
+                            </button>
+                        </Magnetic>
+                    {/each}
+                </div>
 
-                                    <span
-                                        class="absolute top-4 right-4 px-3 py-1 text-xs font-bold tracking-wider text-white bg-primary-600 rounded-full shadow-lg z-10"
-                                    >
-                                        {event.type}
-                                    </span>
-                                </div>
-
-                                <!-- Content -->
-                                <div
-                                    class="p-6 flex-1 flex flex-col relative z-10"
-                                >
-                                    <h3
-                                        class="text-xl font-bold text-white mb-2 line-clamp-2 leading-tight group-hover:text-primary-400 transition-colors"
-                                    >
-                                        {event.title}
-                                    </h3>
-
-                                    <div
-                                        class="flex items-center gap-2 text-sm text-stone-400 mb-4 font-mono"
-                                    >
-                                        <i
-                                            class="far fa-calendar text-primary-500"
-                                        ></i>
-                                        <span>{event.date}</span>
-                                    </div>
-
-                                    <p
-                                        class="text-stone-400 text-sm mb-6 line-clamp-3 leading-relaxed flex-1"
-                                    >
-                                        {event.description}
-                                    </p>
-
-                                    <div class="space-y-3 mt-auto">
-                                        {#if event.registration_status === "OPEN"}
-                                            <a
-                                                href={event.registration_link}
-                                                target="_blank"
-                                                class="w-full block py-2.5 bg-white text-black font-bold text-center rounded-lg hover:bg-stone-200 transition-colors"
-                                            >
-                                                Register Now
-                                            </a>
-                                        {:else}
-                                            <button
-                                                disabled
-                                                class="w-full py-2.5 bg-white/5 text-stone-500 font-bold text-center rounded-lg cursor-not-allowed"
-                                            >
-                                                Registration Closed
-                                            </button>
-                                        {/if}
-
-                                        <a
-                                            href={getGoogleCalLink(event)}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="w-full flex items-center justify-center gap-2 py-2.5 border border-white/10 text-stone-300 font-medium text-center rounded-lg hover:border-white/30 hover:text-white transition-colors text-sm"
-                                        >
-                                            <i class="far fa-calendar-plus"></i>
-                                            Add to Calendar
-                                        </a>
-                                    </div>
-                                </div>
+                <!-- Grid/List -->
+                <div class="grid gap-6">
+                    {#if loading}
+                        {#each Array(4) as _}
+                            <div
+                                class="h-48 rounded-3xl bg-white/5 animate-pulse border border-white/5"
+                            ></div>
+                        {/each}
+                    {:else if filteredEvents.length === 0}
+                        <div
+                            class="p-8 text-center text-stone-500 bg-white/5 rounded-3xl border border-white/10"
+                        >
+                            No events found in this category.
+                        </div>
+                    {:else}
+                        {#each filteredEvents as event, i (event.title)}
+                            <div
+                                in:fly={{ y: 20, delay: i * 50, duration: 400 }}
+                            >
+                                <EventListCard {event} />
                             </div>
-                        </TiltCard>
-                    </div>
-                {/each}
+                        {/each}
+                    {/if}
+                </div>
             </div>
-        {/if}
+        </div>
     </div>
 </div>

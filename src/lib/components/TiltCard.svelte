@@ -1,5 +1,8 @@
 <script lang="ts">
     import { spring } from "svelte/motion";
+    import type { Snippet } from "svelte";
+
+    let { children }: { children?: Snippet } = $props();
 
     let el: HTMLDivElement;
     let rotation = spring({ x: 0, y: 0 }, { stiffness: 0.1, damping: 0.4 });
@@ -63,16 +66,15 @@
         --mouse-y: {m.y}px;
     "
 >
-    <!-- Holographic/Sheen Overlay -->
+    <!-- Frost Spotlight Effect -->
     <div
-        class="absolute inset-0 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl overflow-hidden"
+        class="absolute inset-0 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl overflow-hidden"
         style="
             background: radial-gradient(
-                circle at var(--mouse-x) var(--mouse-y), 
-                rgba(255,255,255,0.1) 0%, 
-                transparent 60%
+                600px circle at var(--mouse-x) var(--mouse-y), 
+                rgba(255,255,255,0.15), 
+                transparent 40%
             );
-            mix-blend-mode: overlay;
         "
     ></div>
 
@@ -94,7 +96,7 @@
         "
     ></div>
 
-    <slot />
+    {@render children?.()}
 </div>
 
 <style>

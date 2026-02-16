@@ -7,8 +7,16 @@
         "scatter" | "materialize" | "reassemble" | "glow" | "done"
     >("scatter");
 
+    interface LogoPath {
+        d: string;
+        fill: string;
+        opacity?: number;
+        fillOpacity?: string;
+        filter?: string;
+    }
+
     // === DZypher Logo Paths ===
-    const PATHS = [
+    const PATHS: LogoPath[] = [
         {
             d: "M2945.21 3700.28H2814.72V3680.18L2919.3 3531.78L2918.34 3528.9H2818.54V3510.39H2944.56V3530.51L2839.98 3679.21L2840.93 3681.78H2945.21V3700.28Z",
             fill: "url(#paint0_linear_1_17808)",
@@ -100,7 +108,7 @@
     ];
 
     // === VORTIX Logo Paths ===
-    const VORTIX_PATHS = [
+    const VORTIX_PATHS: LogoPath[] = [
         {
             d: "M302.433 145.774C302.433 145.774 254.868 78.5936 166.001 42.7949L166.001 79.9102C189.187 96.3301 210.084 116.989 228.023 144.317L243.42 112.066L302.433 145.774Z",
             fill: "#E80A89",
@@ -218,16 +226,19 @@
     // Build inline style per path
     function getPathStyle(index: number): string {
         const s = scatterStates[index];
-        if (!s) return "";
+        const p = activePaths[index];
+        if (!s || !p) return "";
+
+        const targetOpacity = p.opacity !== undefined ? p.opacity : 1;
 
         if (phase === "scatter") {
             return `opacity: 0; transform: translate(${s.tx}px, ${s.ty}px) rotate(${s.rotate}deg) scale(${s.scale}); transition: none;`;
         }
         if (phase === "materialize") {
-            return `opacity: 0.4; transform: translate(${s.tx}px, ${s.ty}px) rotate(${s.rotate}deg) scale(${s.scale}); transition: opacity 0.4s ease-out;`;
+            return `opacity: ${targetOpacity * 0.4}; transform: translate(${s.tx}px, ${s.ty}px) rotate(${s.rotate}deg) scale(${s.scale}); transition: opacity 0.4s ease-out;`;
         }
         if (phase === "reassemble" || phase === "glow") {
-            return `opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${s.delay}ms, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${s.delay}ms;`;
+            return `opacity: ${targetOpacity}; transform: translate(0, 0) rotate(0deg) scale(1); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${s.delay}ms, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${s.delay}ms;`;
         }
         return "";
     }
