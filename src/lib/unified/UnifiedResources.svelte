@@ -42,7 +42,7 @@
         },
     };
 
-    let innerWidth = 0;
+    let innerWidth = $state(0);
     let showAll = $state(false);
 
     // Determine limit based on screen size and showAll state

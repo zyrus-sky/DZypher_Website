@@ -12,7 +12,7 @@
     let rotateY = spring(0, { stiffness: 0.1, damping: 0.3 });
 
     let animationFrame: number;
-    let isMobile = false;
+    let isMobile = $state(false);
 
     function handleMouseMove(e: MouseEvent) {
         if (isMobile) return; // Disable mouse interaction if in mobile mode (though unlikely to fire)

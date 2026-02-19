@@ -12,7 +12,8 @@
         className?: string;
     } = $props();
 
-    let displayText = $state(text);
+    const getInitialText = () => text;
+    let displayText = $state(getInitialText());
     const chars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
 
@@ -46,8 +47,22 @@
         }, 30);
     }
 
-    onMount(() => {
+    // This closing brace and parenthesis was syntactically incorrect and has been removed.
+    // });
+
+    // Use $effect for initial scramble and to react to changes in 'text' prop
+    $effect(() => {
+        // React to text changes and start animation
+        // The dependency on 'text' is automatically registered here.
+        // If 'text' changes, this effect will re-run.
+        running = false; // Force restart of the scramble animation
         scramble();
+
+        // Cleanup function for the interval when the component is destroyed or effect re-runs
+        return () => {
+            clearInterval(interval);
+            running = false;
+        };
     });
 </script>
 
